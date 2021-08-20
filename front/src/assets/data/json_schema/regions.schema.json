@@ -1,0 +1,130 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Regions",
+    "description": "List of regions",
+    "type": "array",
+    "items": {
+        "description": "Region",
+        "type": "object",
+        "properties": {
+            "name": {
+                "description": "Name of region",
+                "type": "string"
+            },
+            "ring_increase": {
+                "description": "Ring for which the region grants an increase in rank",
+                "type": "string",
+                "enum": [
+                    "Air",
+                    "Earth",
+                    "Fire",
+                    "Void",
+                    "Water"
+                ]
+            },
+            "skill_increase": {
+                "description": "Skill for which the region grants an increase in rank",
+                "type": "string",
+                "enum": [
+                    "Aesthetics",
+                    "Command",
+                    "Commerce",
+                    "Composition",
+                    "Courtesy",
+                    "Culture",
+                    "Design",
+                    "Fitness",
+                    "Games",
+                    "Government",
+                    "Labor",
+                    "Martial Arts [Melee]",
+                    "Martial Arts [Ranged]",
+                    "Martial Arts [Unarmed]",
+                    "Medicine",
+                    "Meditation",
+                    "Performance",
+                    "Seafaring",
+                    "Sentiment",
+                    "Skulduggery",
+                    "Smithing",
+                    "Survival",
+                    "Tactics",
+                    "Theology"
+                ]
+            },
+            "glory": {
+                "description": "Baseline glory granted by region",
+                "type": "integer"
+            },
+            "type": {
+                "description": "Type of region (ronin or gaijin)",
+                "type": "string"
+            },
+            "subtype": {
+                "description": "Gaijin culture",
+                "type": "string"
+            },
+            "reference": {
+                "description": "Page reference for clan",
+                "type": "object",
+                "properties": {
+                    "book": {
+                        "description": "Book in which reference can be found",
+                        "type": "string",
+                        "enum": [
+                            "CR",
+                            "CoS",
+                            "Core",
+                            "DT",
+                            "EE",
+                            "GMK",
+                            "Mantis",
+                            "PoW",
+                            "SL",
+                            "FoV"
+                        ]
+                    },
+                    "page": {
+                        "description": "Page on which reference can be found",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "book",
+                    "page"
+                ],
+                "defaultSnippets": [
+                    {
+                        "label": "New Page reference for clan",
+                        "body": {
+                            "book": "$1",
+                            "page": "^$2"
+                        }
+                    }
+                ]
+            }
+        },
+        "required": [
+            "name",
+            "ring_increase",
+            "skill_increase",
+            "glory",
+            "type",
+            "reference"
+        ],
+        "defaultSnippets": [
+            {
+                "label": "New Region",
+                "body": {
+                    "name": "$1",
+                    "ring_increase": "$2",
+                    "skill_increase": "$3",
+                    "glory": "^$4",
+                    "type": "$5",
+                    "subtype": "$6",
+                    "reference": "^$7"
+                }
+            }
+        ]
+    }
+}
