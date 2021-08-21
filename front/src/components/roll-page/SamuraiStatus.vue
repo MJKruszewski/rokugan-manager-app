@@ -58,28 +58,28 @@
 </template>
 
 <script lang="ts">
-import {getClanColor, getHook} from "@/domain/common";
-import Vue from "vue";
-import {Ring} from "@/domain/types/ring.type";
-import {Player} from "@/domain/types/player.type";
+import {getClanColor, getHook} from '@/domain/common';
+import Vue from 'vue';
+import {Ring} from '@/domain/types/ring.type';
+import {Player} from '@/domain/types/player.type'; 
 
 export default Vue.extend({
-  name: "SamuraiStatus",
+  name: 'SamuraiStatus',
   data: () => {
     return {
-      webhook: require("webhook-discord"),
+      webhook: require('webhook-discord'),
       hook: getHook(),
-    }
+    };
   },
   computed: {
     comp () {
-      return this.$store.state.player?.currentStats?.composure
+      return this.$store.state.player?.currentStats?.composure;
     },
     endu () {
-      return this.$store.state.player?.currentStats?.endurance
+      return this.$store.state.player?.currentStats?.endurance;
     },
     void () {
-      return this.$store.state.player?.currentStats?.voidPoints
+      return this.$store.state.player?.currentStats?.voidPoints;
     },
   },
   watch: {
@@ -99,37 +99,37 @@ export default Vue.extend({
       const playerStore = this.$store.state.player;
       const hook = new this.webhook.Webhook(Buffer.from(getHook(), 'base64').toString());
       const msg = new this.webhook.MessageBuilder()
-          .setAvatar("https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png")
+          .setAvatar('https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png')
           .setTitle(playerStore.familyData.clan + ' ' + playerStore.familyData.name + ' from ' + playerStore.familyData.mon)
-          .setName("Kami Bayushi")
+          .setName('Kami Bayushi')
           .setColor(this.getColor())
-          .setDescription("Bends under pressure! (Unmasking)");
+          .setDescription('Bends under pressure! (Unmasking)');
 
       hook.send(msg);
-    }
+    },
   },
   methods: {
     getColor: function () {
-      return getClanColor(this.$store.state.player.familyData.clan)
+      return getClanColor(this.$store.state.player.familyData.clan);
     },
     sendInfo: function () {
       const playerStore: Player = this.$store.state.player;
       const hook = new this.webhook.Webhook(Buffer.from(getHook(), 'base64').toString());
       const msg = new this.webhook.MessageBuilder()
-          .setAvatar("https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png")
+          .setAvatar('https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png')
           .setTitle('Status of ' + playerStore.familyData.name + ' from ' + playerStore.familyData.mon)
-          .setName("Kami Bayushi")
+          .setName('Kami Bayushi')
           .setColor(this.getColor())
           .setDescription(
-               "Endurance: " + playerStore.currentStats.endurance + "/" + playerStore.stats.endurance + "\n"
-              + "Composure: " + playerStore.currentStats.composure + "/" + playerStore.stats.composure + "\n"
-              + "Void points: " + playerStore.currentStats.voidPoints + "/" + this.$store.state.player.rings.filter((val: Ring) => val.name === 'Void').shift().value + "\n\n"
+               'Endurance: ' + playerStore.currentStats.endurance + '/' + playerStore.stats.endurance + '\n'
+              + 'Composure: ' + playerStore.currentStats.composure + '/' + playerStore.stats.composure + '\n'
+              + 'Void points: ' + playerStore.currentStats.voidPoints + '/' + this.$store.state.player.rings.filter((val: Ring) => val.name === 'Void').shift().value + '\n\n',
           );
 
       hook.send(msg);
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <style scoped>

@@ -1,0 +1,9 @@
+{
+  "hostList": [
+    {
+      "text": "Test",
+      "value": "base64webhook"
+    },
+  ],
+  "host": "base64webhook",
+}

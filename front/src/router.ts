@@ -1,11 +1,11 @@
-import VueRouter from "vue-router";
-import RollPage from "@/components/RollPage.vue";
-import AdvancementPage from "@/components/AdvancementPage.vue";
-import EquipmentPage from "@/components/EquipmentPage.vue";
-import TechniquesPage from "@/components/TechniquesPage.vue";
-import BondsPage from "@/components/BondsPage.vue";
-import PersonalTraitsPage from "@/components/PersonalTraitsPage.vue";
-import BackgroundPage from "@/components/BackgroundPage.vue";
+import VueRouter from 'vue-router';
+import RollPage from '@/components/RollPage.vue';
+import AdvancementPage from '@/components/AdvancementPage.vue';
+import EquipmentPage from '@/components/EquipmentPage.vue';
+import TechniquesPage from '@/components/TechniquesPage.vue';
+import BondsPage from '@/components/BondsPage.vue';
+import PersonalTraitsPage from '@/components/PersonalTraitsPage.vue';
+import BackgroundPage from '@/components/BackgroundPage.vue';
 
 export function getRouter() {
     return new VueRouter({
@@ -18,6 +18,6 @@ export function getRouter() {
             { path: '/techniques', alias: 'techniques', component: TechniquesPage },
             { path: '/equipment', alias: 'equipment', component: EquipmentPage },
             { path: '/advancement', alias: 'advancement', component: AdvancementPage },
-        ]
-    })
-}
+        ],
+    });
+} 

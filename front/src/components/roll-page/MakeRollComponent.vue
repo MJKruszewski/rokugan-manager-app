@@ -3,7 +3,7 @@
       :dark="this.$store.state.colorVariant"
       :text-variant="this.$store.state.textVariant"
       class="container-color"
-  >
+  > 
     <v-card-title>
       <b>Make a roll:</b>
 
@@ -193,9 +193,14 @@
   </v-card>
 </template>
 <script lang="ts">
-import {getBlackImage, getClanColor, getExplosions, getHook, getWhiteImage, sendNotifications} from "@/domain/common";
-import mergeImages from "merge-images-horizontally-with-text/dist/index.es2015";
-import Vue from "vue";
+import {getBlackImage, getClanColor, getExplosions, getHook, getWhiteImage, sendNotifications} from '@/domain/common';
+import mergeImages from 'merge-images-horizontally-with-text/dist/index.es2015';
+import randomNumber from 'random-number-csprng-2';
+
+import Vue from 'vue';
+
+import axios from 'axios';
+
 
 const explosions = getExplosions();
 
@@ -203,10 +208,10 @@ export default Vue.extend({
   name: 'MakeRollComponent',
   data() {
     return {
-      webhook: require("webhook-discord"),
+      webhook: require('webhook-discord'),
       hook: getHook(),
-      uuid: require("uuid"),
-    }
+      uuid: require('uuid'),
+    };
   },
   computed: {
     hasAnyExplosions: function () {
@@ -254,15 +259,13 @@ export default Vue.extend({
       });
 
       return isPresent;
-    }
+    },
   },
   methods: {
     roll: async function () {
       if (this.$store.state.mainRoll.isDuringRoll) {
         return;
       }
-
-      const randomNumber = require("random-number-csprng-2");
 
       this.$store.state.mainRoll.isDuringRoll = true;
       this.$store.state.mainRoll.wDices = [];
@@ -288,7 +291,7 @@ export default Vue.extend({
 
         this.$store.state.mainRoll.wDices.push({
           id: this.uuid.v4(),
-          img: getWhiteImage(result)
+          img: getWhiteImage(result),
         });
       }
 
@@ -297,7 +300,7 @@ export default Vue.extend({
 
         this.$store.state.mainRoll.bDices.push({
           id: this.uuid.v4(),
-          img: getWhiteImage(result)
+          img: getWhiteImage(result),
         });
       }
 
@@ -306,7 +309,7 @@ export default Vue.extend({
 
         this.$store.state.mainRoll.bDices.push({
           id: this.uuid.v4(),
-          img: getBlackImage(result)
+          img: getBlackImage(result),
         });
       }
 
@@ -315,7 +318,7 @@ export default Vue.extend({
 
         this.$store.state.mainRoll.bDices.push({
           id: this.uuid.v4(),
-          img: getBlackImage(result)
+          img: getBlackImage(result),
         });
       }
 
@@ -325,18 +328,18 @@ export default Vue.extend({
 
         this.$store.state.mainRoll.bDices.push({
           id: id,
-          img: getBlackImage(result)
+          img: getBlackImage(result),
         });
-        this.$store.state.mainRoll.voidDicesHelper.push(id)
-        this.$store.state.mainRoll.selectedIds.push(id)
+        this.$store.state.mainRoll.voidDicesHelper.push(id);
+        this.$store.state.mainRoll.selectedIds.push(id);
         this.calculateStats();
       }
 
-      this.$bvToast.toast(`Please select dices to keep by clicking on them`, {
+      this.$bvToast.toast('Please select dices to keep by clicking on them', {
         title: 'Information',
         autoHideDelay: 2000,
-        appendToast: true
-      })
+        appendToast: true,
+      });
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
@@ -356,10 +359,10 @@ export default Vue.extend({
       ];
 
       const result = merged.filter(dice => {
-        return this.$store.state.mainRoll.selectedIds.includes(dice.id)
+        return this.$store.state.mainRoll.selectedIds.includes(dice.id);
       }).filter(dice => {
-        return explosions.includes(dice.img) && !this.$store.state.mainRoll.explodedHelper.includes(dice.id)
-      })
+        return explosions.includes(dice.img) && !this.$store.state.mainRoll.explodedHelper.includes(dice.id);
+      });
 
       if (result.length === 0) {
         return;
@@ -367,44 +370,43 @@ export default Vue.extend({
 
       const dice = result.pop();
       this.$store.state.mainRoll.explodedHelper.push(dice.id);
-      const randomNumber = require("random-number-csprng-2");
       let rand;
       let id;
 
       switch (dice.img) {
-        case "blacket.png":
+        case 'blacket.png':
           rand = await randomNumber(1, 6);
           id = this.uuid.v4();
 
           this.$store.state.mainRoll.bExplodedDices.push({
             id: id,
-            img: getBlackImage(rand)
+            img: getBlackImage(rand),
           });
-          this.$store.state.mainRoll.selectedIds.push(id)
+          this.$store.state.mainRoll.selectedIds.push(id);
           this.calculateStats();
 
           break;
-        case "whitee.png":
-        case "whiteeo.png":
-        case "whiteet.png":
+        case 'whitee.png':
+        case 'whiteeo.png':
+        case 'whiteet.png':
           rand = await randomNumber(1, 8);
           id = this.uuid.v4();
 
           this.$store.state.mainRoll.wExplodedDices.push({
             id: id,
-            img: getWhiteImage(rand)
+            img: getWhiteImage(rand),
           });
-          this.$store.state.mainRoll.selectedIds.push(id)
+          this.$store.state.mainRoll.selectedIds.push(id);
           this.calculateStats();
 
           break;
       }
 
-      this.$bvToast.toast(`Remember! You can unselect exploded dice!`, {
+      this.$bvToast.toast('Remember! You can unselect exploded dice!', {
         title: 'Information',
         autoHideDelay: 2000,
-        appendToast: true
-      })
+        appendToast: true,
+      });
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
@@ -418,37 +420,35 @@ export default Vue.extend({
       this.$store.state.mainRoll.currentReroll = selected;
       this.$store.state.mainRoll.rerollLock.push(selected);
 
-      this.$bvToast.toast(`Please select dices to keep by clicking on them`, {
+      this.$bvToast.toast('Please select dices to keep by clicking on them', {
         title: 'Information',
         autoHideDelay: 2000,
-        appendToast: true
-      })
+        appendToast: true,
+      });
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
     finishReroll: function (selected) {
-      const randomNumber = require("random-number-csprng-2");
-
       this.$store.state.mainRoll.wDices.filter(dice => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async dice => {
         let result = await randomNumber(1, 8);
 
-        dice.img = getWhiteImage(result)
-      })
+        dice.img = getWhiteImage(result);
+      });
       this.$store.state.mainRoll.bDices.filter(dice => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async dice => {
         let result = await randomNumber(1, 6);
 
-        dice.img = getBlackImage(result)
-      })
+        dice.img = getBlackImage(result);
+      });
 
       if (sendNotifications()) {
         const hook = new this.webhook.Webhook(Buffer.from(getHook(), 'base64').toString());
         const msg = new this.webhook.MessageBuilder()
-            .setAvatar("https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png")
+            .setAvatar('https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png')
             .setTitle(this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon)
-            .setName("Kami Bayushi")
+            .setName('Kami Bayushi')
             .setColor(this.getColor())
             .setDescription(
-                "Bushi makes a reroll of his/her " + this.$store.state.mainRoll.selectedToRerollIds.length + " dices due to: " + selected
+                'Bushi makes a reroll of his/her ' + this.$store.state.mainRoll.selectedToRerollIds.length + ' dices due to: ' + selected,
             );
 
         hook.send(msg);
@@ -460,7 +460,7 @@ export default Vue.extend({
     },
     selectToReroll: function (val) {
       if (this.$store.state.mainRoll.selectedToRerollIds.includes(val.id)) {
-        this.$store.state.mainRoll.selectedToRerollIds = this.$store.state.mainRoll.selectedToRerollIds.filter((id) => id !== val.id)
+        this.$store.state.mainRoll.selectedToRerollIds = this.$store.state.mainRoll.selectedToRerollIds.filter((id) => id !== val.id);
 
         return;
       }
@@ -492,7 +492,7 @@ export default Vue.extend({
           || val === null
           || this.$store.state.mainRoll.selectedRerollOptionList.length <= 0
           || this.$store.state.mainRoll.rerollStarted
-          || this.$store.state.mainRoll.rerollLock.includes(val)
+          || this.$store.state.mainRoll.rerollLock.includes(val);
     },
     finishRerollDisabled: function (val) {
 
@@ -507,7 +507,7 @@ export default Vue.extend({
       return this.$store.state.mainRoll.isDuringRoll
           || !this.$store.state.player.isLoaded
           || this.$store.state.mainRoll.selectedRing === 'none'
-          || this.$store.state.mainRoll.rerollStarted
+          || this.$store.state.mainRoll.rerollStarted;
     },
     selectDice: function (val, additional) {
       if (this.$store.state.mainRoll.isDuringRoll === false) {
@@ -522,11 +522,11 @@ export default Vue.extend({
 
       if (additional === true) {
         if (!this.$store.state.mainRoll.explodedHelper.includes(val.id)) {
-          const filtered = [...this.$store.state.mainRoll.bExplodedDices, ...this.$store.state.mainRoll.wExplodedDices].filter((dice) => dice.id === val.id)
+          const filtered = [...this.$store.state.mainRoll.bExplodedDices, ...this.$store.state.mainRoll.wExplodedDices].filter((dice) => dice.id === val.id);
 
           if (filtered.length > 0) {
             if (this.$store.state.mainRoll.selectedIds.includes(val.id)) {
-              this.$store.state.mainRoll.selectedIds = this.$store.state.mainRoll.selectedIds.filter((id) => id !== val.id)
+              this.$store.state.mainRoll.selectedIds = this.$store.state.mainRoll.selectedIds.filter((id) => id !== val.id);
               this.calculateStats();
 
               return;
@@ -547,7 +547,7 @@ export default Vue.extend({
       }
 
       if (this.$store.state.mainRoll.selectedIds.includes(val.id)) {
-        this.$store.state.mainRoll.selectedIds = this.$store.state.mainRoll.selectedIds.filter((id) => id !== val.id)
+        this.$store.state.mainRoll.selectedIds = this.$store.state.mainRoll.selectedIds.filter((id) => id !== val.id);
         this.calculateStats();
 
         return;
@@ -583,20 +583,19 @@ export default Vue.extend({
         ...this.$store.state.mainRoll.bDices,
         ...this.$store.state.mainRoll.bExplodedDices,
       ].filter(dice => {
-        return this.$store.state.mainRoll.selectedIds.includes(dice.id)
+        return this.$store.state.mainRoll.selectedIds.includes(dice.id);
       }).forEach((dice) => {
-        dices.push(require('./../../assets/img/mini/' + dice.img))
-      })
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        dices.push(require('./../../assets/img/mini/' + dice.img));
+      });
 
       const b64 = await mergeImages(dices, {color: '#f000'});
-      const axios = require('axios');
-
       const formData = new FormData();
       let imageBlob = await (await fetch(b64)).blob();
 
       formData.append('payload_json', JSON.stringify({
-        username: "Kami Bayushi",
-        avatar_url: "https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png",
+        username: 'Kami Bayushi',
+        avatar_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
         embeds: [
           {
             content: 'perkele',
@@ -611,18 +610,18 @@ export default Vue.extend({
                 + 'Strife: ' + this.$store.state.mainRoll.strife + '\n'
                 + 'Opportunities: ' + this.$store.state.mainRoll.opportunities + '\n',
             image: {
-              url: "attachment://roll.png"
+              url: 'attachment://roll.png',
             },
-          }
+          },
         ],
       }));
-      formData.append('file', imageBlob, 'roll.png')
+      formData.append('file', imageBlob, 'roll.png');
 
       await axios.post(Buffer.from(getHook(), 'base64').toString(), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-        }
-      })
+        },
+      });
 
       if (this.$store.state.mainRoll.dc === undefined || this.$store.state.mainRoll.dc === '' || this.$store.state.mainRoll.dc <= 0) {
         this.$store.state.player.currentStats.voidPoints = parseInt(this.$store.state.player.currentStats.voidPoints) + 1;
@@ -650,7 +649,7 @@ export default Vue.extend({
       localStorage.setItem('player', JSON.stringify(this.$store.state.player));
     },
     getColor: function () {
-      return getClanColor(this.$store.state.player.familyData.clan)
+      return getClanColor(this.$store.state.player.familyData.clan);
     },
     calculateStats: function () {
       const merged = [
@@ -665,7 +664,7 @@ export default Vue.extend({
       let opportunity = 0;
 
       merged.filter(dice => {
-        return this.$store.state.mainRoll.selectedIds.includes(dice.id)
+        return this.$store.state.mainRoll.selectedIds.includes(dice.id);
       }).forEach((dice) => {
         switch (dice.img) {
           case 'black.png':
@@ -722,13 +721,13 @@ export default Vue.extend({
       ];
 
       return merged.filter(dice => {
-        return this.$store.state.mainRoll.selectedIds.includes(dice.id)
+        return this.$store.state.mainRoll.selectedIds.includes(dice.id);
       }).filter(dice => {
-        return explosions.includes(dice.img)
+        return explosions.includes(dice.img);
       }).length;
-    }
-  }
-})
+    },
+  },
+});
 </script>
 <style>
 

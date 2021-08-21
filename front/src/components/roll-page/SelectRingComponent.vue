@@ -25,7 +25,7 @@
           :items="this.$store.state.player.rings"
           @click:row="ringSelect"
       >
-        <template v-slot:item.name="{ item }">
+        <template v-slot:[`item.name`]="{ item }">
           <v-row justify="start" align="center">
             <v-col :md="2">
               <v-img :id="item.name.toLowerCase() + '-ring'" width="35px"
@@ -38,7 +38,7 @@
             <b-tooltip :target="item.name.toLowerCase() + '-ring'" :title="getLocalStanceTooltip(item.name.toLowerCase())"></b-tooltip>
           </v-row>
         </template>
-        <template v-slot:item.value="{ item }">
+        <template v-slot:[`item.value`]="{ item }">
           <b>{{item.value}}</b>
         </template>
       </v-data-table>
@@ -51,16 +51,16 @@
   </v-card>
 </template>
 <script lang="ts">
-import {Ring} from "@/domain/types/ring.type";
-import {getStanceTooltip} from "@/domain/common";
-import Vue from "vue";
+import {Ring} from '@/domain/types/ring.type';
+import {getStanceTooltip} from '@/domain/common';
+import Vue from 'vue'; 
 
 export default Vue.extend({
   name: 'SelectRingComponent',
   data() {
     return {
-      uuid: require("uuid"),
-    }
+      uuid: require('uuid'),
+    };
   },
   methods: {
     ringSelect: function (val: Ring) {
@@ -77,7 +77,7 @@ export default Vue.extend({
       for (let i = 0; i < this.$store.state.mainRoll.selectedRingValue; i++) {
         this.$store.state.mainRoll.bDices.push({
           id: this.uuid.v4(),
-          img: "black.png"
+          img: 'black.png',
         });
       }
 
@@ -86,8 +86,8 @@ export default Vue.extend({
     getLocalStanceTooltip: function (stance: string) {
       return getStanceTooltip(stance);
     },
-  }
-})
+  },
+});
 </script>
 <style>
 

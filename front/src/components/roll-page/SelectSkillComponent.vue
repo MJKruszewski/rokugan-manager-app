@@ -1,7 +1,6 @@
 <template>
   <v-card
       :dark="this.$store.state.colorVariant"
-
       :text-variant="this.$store.state.textVariant"
       class="container-color"
   >
@@ -38,15 +37,15 @@
   </v-card>
 </template>
 <script lang="ts">
-import {Skill} from "@/domain/types/skill.type";
-import Vue from "vue";
+import {Skill} from '@/domain/types/skill.type';
+import Vue from 'vue';
 
 export default Vue.extend({
   name: 'SelectSkillComponent',
   data() {
     return {
-      uuid: require("uuid"),
-    }
+      uuid: require('uuid'),
+    };
   },
   methods: {
     skillSelect: function (val: Skill) {
@@ -63,14 +62,14 @@ export default Vue.extend({
       for (let i = 0; i < this.$store.state.mainRoll.selectedSkillValue; i++) {
         this.$store.state.mainRoll.wDices.push({
           id: this.uuid.v4(),
-          img: "white.png"
+          img: 'white.png',
         });
       }
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
-  }
-})
+  },
+});
 </script>
 <style>
 

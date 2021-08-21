@@ -34,12 +34,12 @@
 </template>
 
 <script lang="ts">
-import SamuraiStatus from "@/components/roll-page/SamuraiStatus.vue";
-import Vue from "vue";
-import MakeRollComponent from "@/components/roll-page/MakeRollComponent.vue";
-import SelectRingComponent from "@/components/roll-page/SelectRingComponent.vue";
-import SelectSkillComponent from "@/components/roll-page/SelectSkillComponent.vue";
-import OportunitiesComponent from "@/components/roll-page/OportunitiesComponent.vue";
+import SamuraiStatus from '@/components/roll-page/SamuraiStatus.vue';
+import Vue from 'vue';
+import MakeRollComponent from '@/components/roll-page/MakeRollComponent.vue';
+import SelectRingComponent from '@/components/roll-page/SelectRingComponent.vue';
+import SelectSkillComponent from '@/components/roll-page/SelectSkillComponent.vue';
+import OportunitiesComponent from '@/components/roll-page/OportunitiesComponent.vue';
 
 export default Vue.extend({
   name: 'RollPage',
@@ -48,7 +48,7 @@ export default Vue.extend({
     SelectSkillComponent,
     SelectRingComponent,
     MakeRollComponent,
-    SamuraiStatus
-  },
-})
+    SamuraiStatus,
+  }, 
+});
 </script>

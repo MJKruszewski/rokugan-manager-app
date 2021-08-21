@@ -182,7 +182,7 @@
 <script lang="ts">
 import {getClanColor, getClanMon, getHook} from "@/domain/common";
 import Vue from "vue";
-import {LoadCard} from "@/domain/services/load-card";
+import {LoadCardService} from "@/domain/services/load-card.service";
 
 export default Vue.extend({
   name: 'App',
@@ -211,7 +211,7 @@ export default Vue.extend({
       }
 
       const xml = new DOMParser().parseFromString(await val.text(), "application/xml");
-      this.$store.state.player = await LoadCard.importCard(xml);
+      this.$store.state.player = await LoadCardService.importCard(xml);
 
     }
   },

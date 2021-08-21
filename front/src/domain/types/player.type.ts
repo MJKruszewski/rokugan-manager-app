@@ -1,5 +1,5 @@
-import {Skill} from "@/domain/types/skill.type";
-import {Ring} from "@/domain/types/ring.type";
+import {Skill} from '@/domain/types/skill.type';
+import {Ring} from '@/domain/types/ring.type';
 
 export interface Player {
     currentVersion: string;
@@ -28,6 +28,7 @@ export interface Player {
     equipment: (Equipment | Armor | Weapon)[];
 
     isLoaded: boolean;
+
 }
 
 export type FamilyData = {
@@ -78,6 +79,8 @@ export type Ability = {
     source: string;
     book: Book;
     page: string;
+    rank: number;
+    isBond: boolean
 }
 
 export type Technique = {
@@ -85,7 +88,7 @@ export type Technique = {
     desc: string;
     shortDesc: string;
     restriction: string;
-    type: "Kata" | "Kih\u014d" | "Invocations" | "Rituals" | "Sh\u016bji" | "Mah\u014d" | "Ninjutsu" | "Signature Scrolls" | "Astradhari Techniques" | "Inversions";
+    type: 'Kata' | 'Kih\u014d' | 'Invocations' | 'Rituals' | 'Sh\u016bji' | 'Mah\u014d' | 'Ninjutsu' | 'Signature Scrolls' | 'Astradhari Techniques' | 'Inversions';
     subtype: string;
     book: Book;
     page: string;
@@ -111,7 +114,7 @@ export type Equipment = {
     shortDesc: string;
     qualities: string;
     price: number;
-    unit: "koku" | "bu" | "zeni";
+    unit: 'koku' | 'bu' | 'zeni';
     book: Book;
     page: string;
 }
@@ -131,4 +134,4 @@ export interface Weapon extends Equipment {
     damage: number;
 }
 
-export type Book = "CR" | "CoS" | "Core" | "DT" | "EE" | "FoV" | "GMK" | "Mantis" | "PoW" | "SL"
+export type Book = 'CR' | 'CoS' | 'Core' | 'DT' | 'EE' | 'FoV' | 'GMK' | 'Mantis' | 'PoW' | 'SL'

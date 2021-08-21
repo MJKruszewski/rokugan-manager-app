@@ -1,4 +1,4 @@
-import {LocalStore} from "@/domain/services/store";
+import {LocalStore} from '@/domain/services/store';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -6,8 +6,8 @@ declare module '@vue/runtime-core' {
   }
 }
 
-declare module "vue/types/vue" {
+declare module 'vue/types/vue' {
   interface Vue {
     $store: LocalStore;
   }
-}
+} 

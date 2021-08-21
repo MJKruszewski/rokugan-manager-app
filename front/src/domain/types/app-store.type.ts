@@ -1,5 +1,5 @@
-import {MainRoll} from "@/domain/types/main-roll.type";
-import {Player} from "@/domain/types/player.type";
+import {MainRoll} from '@/domain/types/main-roll.type';
+import {Player} from '@/domain/types/player.type';
 
 export interface AppStore {
     colorVariant: boolean;
@@ -16,4 +16,4 @@ export interface AppStore {
 
     mainRoll: MainRoll;
     player?: Player;
-};
+}

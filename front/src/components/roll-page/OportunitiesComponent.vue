@@ -22,7 +22,7 @@
           :fields="['cost', 'category', 'description']"
           small striped hover :items="getOpportunitiesList"
       >
-        <template v-slot:item.price="{ item }">
+        <template v-slot:[`item.price`]="{ item }">
           <v-row align="center" justify="center" style="min-width: 45px">
             <template v-for="k in item.price">
               <v-img width="20px" v-bind:key="k + uuid.v4()" src="../../assets/img/dice/opportunity_red.png"/>
@@ -31,10 +31,10 @@
             <v-icon :color="'#cc2338'" v-if="item.extended">mdi-plus-box-outline</v-icon>
           </v-row>
         </template>
-        <template v-slot:item.category="{ item }">
+        <template v-slot:[`item.category`]="{ item }">
           {{ item.category }}
         </template>
-        <template v-slot:item.description="{ item }">
+        <template v-slot:[`item.description`]="{ item }">
           <div v-html="item.description" style="display:inline;"></div>
         </template>
       </v-data-table>
@@ -42,16 +42,16 @@
   </v-card>
 </template>
 <script lang="ts" >
-import opportunities, {OpportunityParams} from "@/domain/consts/opportunities";
-import Vue from "vue";
-import {RingEnum} from "@/domain/types/ring.type";
+import opportunities, {OpportunityParams} from '@/domain/consts/opportunities';
+import Vue from 'vue';
+import {RingEnum} from '@/domain/types/ring.type';
 
 export default Vue.extend({
   name: 'OportunitiesComponent',
   data() {
     return {
-      uuid: require("uuid"),
-    }
+      uuid: require('uuid'),
+    };
   },
   computed: {
     getOpportunitiesList: function () {
@@ -59,7 +59,7 @@ export default Vue.extend({
         return [];
       }
 
-      const selectedRing: RingEnum = this.$store.state.mainRoll.selectedRing.toLowerCase()
+      const selectedRing: RingEnum = this.$store.state.mainRoll.selectedRing.toLowerCase();
 
       let result = [];
       let general: OpportunityParams[] = opportunities.general[selectedRing] || [];
@@ -68,20 +68,20 @@ export default Vue.extend({
       general = general.filter(val => val.price <= this.$store.state.mainRoll.opportunities).map((val) => {
         return {
           ...val,
-          category: 'General'
-        }
+          category: 'General',
+        };
       });
       downtime = downtime.filter(val => val.price <= this.$store.state.mainRoll.opportunities).map((val) => {
         return {
           ...val,
-          category: 'Free time'
-        }
+          category: 'Free time',
+        };
       });
       common = common.filter(val => val.price <= this.$store.state.mainRoll.opportunities).map((val) => {
         return {
           ...val,
-          category: 'General (Common)'
-        }
+          category: 'General (Common)',
+        };
       });
 
 
@@ -90,8 +90,8 @@ export default Vue.extend({
         initiative = initiative.filter(val => val.price <= this.$store.state.mainRoll.opportunities).map((val) => {
           return {
             ...val,
-            category: 'Initiative'
-          }
+            category: 'Initiative',
+          };
         });
 
         result.push(...initiative);
@@ -102,8 +102,8 @@ export default Vue.extend({
         martial = martial.filter(val => val.price <= this.$store.state.mainRoll.opportunities).map((val) => {
           return {
             ...val,
-            category: 'Conflict'
-          }
+            category: 'Conflict',
+          };
         });
 
         result.push(...martial);
@@ -116,5 +116,5 @@ export default Vue.extend({
       return result;
     },
   },
-})
+});
 </script>

@@ -1,6 +1,6 @@
-import {getStore} from "@/domain/services/store";
-import {Ring} from "@/domain/types/ring.type";
-import {Skill} from "@/domain/types/skill.type";
+import {getStore} from '@/domain/services/store';
+import {Ring} from '@/domain/types/ring.type';
+import {Skill} from '@/domain/types/skill.type';
 
 export function getWhiteImage(val: number) {
     switch (val) {
@@ -20,7 +20,7 @@ export function getWhiteImage(val: number) {
             return 'whitest.png';
         case 8:
             return 'whiteeo.png';
-    }
+    } 
 
     return '';
 }
@@ -68,28 +68,28 @@ export function getClanMon(clan: string) {
             return require('../assets/img/mon/unicorn.webp');
     }
 
-    return require('../assets/img/mon/emperor.webp')
+    return require('../assets/img/mon/emperor.webp');
 }
 
 export function getClanColor(clan: string) {
     switch (clan) {
         case 'Lion':
-            return "#cb9e2b";
+            return '#cb9e2b';
         case 'Crane':
-            return "#81b9f8";
+            return '#81b9f8';
         case 'Scorpion':
-            return "#a4262b";
+            return '#a4262b';
         case 'Unicorn':
-            return "#754294";
+            return '#754294';
         case 'Dragon':
-            return "#28bf25";
+            return '#28bf25';
         case 'Phoenix':
-            return "#ff0000";
+            return '#ff0000';
         case 'Crab':
-            return "#0163b1";
+            return '#0163b1';
     }
 
-    return "#696969";
+    return '#696969';
 }
 
 export function getStanceTooltip(stance: string) {
@@ -119,55 +119,55 @@ export function getHook() {
 
 export function getBaseSkills(): Skill[] {
     return [
-        {"name": "Aesthetics", "value": "0", "group": "Artisan skills"},
-        {"name": "Composition", "value": "0", "group": "Artisan skills"},
-        {"name": "Design", "value": "0", "group": "Artisan skills"},
-        {"name": "Smithing", "value": "0", "group": "Artisan skills"},
-        {"name": "Command", "value": "0", "group": "Social skills"},
-        {"name": "Courtesy", "value": "0", "group": "Social skills"},
-        {"name": "Games", "value": "0", "group": "Social skills"},
-        {"name": "Performance", "value": "0", "group": "Social skills"},
-        {"name": "Culture", "value": "0", "group": "Scholar skills"},
-        {"name": "Government", "value": "0", "group": "Scholar skills"},
-        {"name": "Medicine", "value": "0", "group": "Scholar skills"},
-        {"name": "Sentiment", "value": "0", "group": "Scholar skills"},
-        {"name": "Theology", "value": "0", "group": "Scholar skills"},
-        {"name": "Fitness", "value": "0", "group": "Martial skills"},
-        {"name": "Martial Arts [Melee]", "value": "0", "group": "Martial skills"},
-        {"name": "Martial Arts [Ranged]", "value": "0", "group": "Martial skills"},
-        {"name": "Martial Arts [Unarmed]", "value": "0", "group": "Martial skills"},
-        {"name": "Meditation", "value": "0", "group": "Martial skills"},
-        {"name": "Tactics", "value": "0", "group": "Martial skills"},
-        {"name": "Commerce", "value": "0", "group": "Trade skills"},
-        {"name": "Labor", "value": "0", "group": "Trade skills"},
-        {"name": "Seafaring", "value": "0", "group": "Trade skills"},
-        {"name": "Skulduggery", "value": "0", "group": "Trade skills"},
-        {"name": "Survival", "value": "0", "group": "Trade skills"}
+        {'name': 'Aesthetics', 'value': '0', 'group': 'Artisan skills'},
+        {'name': 'Composition', 'value': '0', 'group': 'Artisan skills'},
+        {'name': 'Design', 'value': '0', 'group': 'Artisan skills'},
+        {'name': 'Smithing', 'value': '0', 'group': 'Artisan skills'},
+        {'name': 'Command', 'value': '0', 'group': 'Social skills'},
+        {'name': 'Courtesy', 'value': '0', 'group': 'Social skills'},
+        {'name': 'Games', 'value': '0', 'group': 'Social skills'},
+        {'name': 'Performance', 'value': '0', 'group': 'Social skills'},
+        {'name': 'Culture', 'value': '0', 'group': 'Scholar skills'},
+        {'name': 'Government', 'value': '0', 'group': 'Scholar skills'},
+        {'name': 'Medicine', 'value': '0', 'group': 'Scholar skills'},
+        {'name': 'Sentiment', 'value': '0', 'group': 'Scholar skills'},
+        {'name': 'Theology', 'value': '0', 'group': 'Scholar skills'},
+        {'name': 'Fitness', 'value': '0', 'group': 'Martial skills'},
+        {'name': 'Martial Arts [Melee]', 'value': '0', 'group': 'Martial skills'},
+        {'name': 'Martial Arts [Ranged]', 'value': '0', 'group': 'Martial skills'},
+        {'name': 'Martial Arts [Unarmed]', 'value': '0', 'group': 'Martial skills'},
+        {'name': 'Meditation', 'value': '0', 'group': 'Martial skills'},
+        {'name': 'Tactics', 'value': '0', 'group': 'Martial skills'},
+        {'name': 'Commerce', 'value': '0', 'group': 'Trade skills'},
+        {'name': 'Labor', 'value': '0', 'group': 'Trade skills'},
+        {'name': 'Seafaring', 'value': '0', 'group': 'Trade skills'},
+        {'name': 'Skulduggery', 'value': '0', 'group': 'Trade skills'},
+        {'name': 'Survival', 'value': '0', 'group': 'Trade skills'},
     ];
 }
 
 export function getRings(): Ring[] {
     return [
-        {"name": "Air", "value": 1},
-        {"name": "Earth", "value": 1},
-        {"name": "Fire",  "value": 1},
-        {"name": "Water",  "value": 1},
-        {"name": "Void", "value": 1}
+        {'name': 'Air', 'value': 1},
+        {'name': 'Earth', 'value': 1},
+        {'name': 'Fire',  'value': 1},
+        {'name': 'Water',  'value': 1},
+        {'name': 'Void', 'value': 1},
     ];
 }
 
 export function getRingDescription(ring: string): string {
     switch (ring.toLowerCase()) {
         case 'air':
-            return "Grace, eloquence or empathy";
+            return 'Grace, eloquence or empathy';
         case 'earth':
-            return "Thoroughness, patience or calm";
+            return 'Thoroughness, patience or calm';
         case 'fire':
-            return "Creativity, passion or drive";
+            return 'Creativity, passion or drive';
         case 'water':
-            return "Adaptability, friendliness or awareness";
+            return 'Adaptability, friendliness or awareness';
         case 'void':
-            return "Self-awareness, insight or mysticism";
+            return 'Self-awareness, insight or mysticism';
     }
 
     return '';

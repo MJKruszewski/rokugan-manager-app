@@ -16,6 +16,7 @@
 //    "declaration": true,
 //    "declarationMap": true,
 //    "noImplicitAny": true,
+    "resolveJsonModule": true,
 
     "importHelpers": true,
     "allowJs": true,
