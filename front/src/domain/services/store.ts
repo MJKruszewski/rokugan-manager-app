@@ -1,9 +1,9 @@
 import Vuex from 'vuex';
-import {AppStore} from '@/domain/types/app-store.type';
+import {AppStore, Server} from '@/domain/types/app-store.type';
 import {MainRoll} from '@/domain/types/main-roll.type';
 import * as servers from '@/servers.json';
 
-const currentVersion = 'v6';
+const currentVersion = 'v7';
 let store: LocalStore|undefined = undefined;
 
 export class LocalStore extends Vuex.Store<AppStore> {
@@ -24,7 +24,19 @@ export function getStore(): LocalStore {
             hostList: servers.hostList,
             currentVersion: currentVersion,
             host: servers.host,
-        } as AppStore['server'],
+            bookFiles: {
+                CR: null,
+                CoS: null,
+                Core: null,
+                DT: null,
+                EE: null,
+                FoV: null,
+                GMK: null,
+                Mantis: null,
+                PoW: null,
+                SL: null,
+            },
+        } as Server,
 
         mainRoll: {
             currentVersion: currentVersion,

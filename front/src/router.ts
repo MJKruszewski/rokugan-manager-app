@@ -15,7 +15,6 @@ export function getRouter(): VueRouter {
             { path: '/main', alias: 'main', component: RollPage },
             { path: '/background', alias: 'background', component: BackgroundPage },
             { path: '/personal-traits', alias: 'personal-traits', component: PersonalTraitsPage },
-            { path: '/bonds', alias: 'bonds', component: BondsPage },
             { path: '/techniques', alias: 'techniques', component: TechniquesPage },
             { path: '/equipment', alias: 'equipment', component: EquipmentPage },
             { path: '/advancement', alias: 'advancement', component: AdvancementPage },

@@ -6,7 +6,7 @@
   >
     <v-card-title style="justify-content: space-between;">
       <b>Samurai status:</b>
-      <v-btn variant="info" v-on:click="sendInfo()" :disabled="this.$store.state.player === undefined">Send</v-btn>
+      <v-btn color="info" v-on:click="sendInfo()" :disabled="this.$store.state.player === undefined">Send</v-btn>
 
     </v-card-title>
     <v-divider/>

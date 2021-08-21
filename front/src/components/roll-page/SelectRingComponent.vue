@@ -28,14 +28,23 @@
         <template v-slot:[`item.name`]="{ item }">
           <v-row justify="start" align="center">
             <v-col :md="2">
-              <v-img :id="item.name.toLowerCase() + '-ring'" width="35px"
-                     :src="require('../../assets/img/ring/' + item.name.toLowerCase() + '.png')"/>
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-img v-bind="attrs"
+                         v-on="on"
+                         :id="item.name.toLowerCase() + '-ring'"
+                         width="35px"
+                         :src="require('../../assets/img/ring/' + item.name.toLowerCase() + '.png')"/>
+                </template>
+                <span>{{ getLocalStanceTooltip(item.name.toLowerCase()) }}</span>
+              </v-tooltip>
+
+
             </v-col>
             <v-col class="hidden-sm-and-down" :md="3">
               {{ item.name }}
             </v-col>
 
-            <b-tooltip :target="item.name.toLowerCase() + '-ring'" :title="getLocalStanceTooltip(item.name.toLowerCase())"></b-tooltip>
           </v-row>
         </template>
         <template v-slot:[`item.value`]="{ item }">
@@ -53,7 +62,7 @@
 <script lang="ts">
 import {Ring} from '@/domain/types/ring.type';
 import {getStanceTooltip} from '@/domain/common';
-import Vue from 'vue'; 
+import Vue from 'vue';
 
 export default Vue.extend({
   name: 'SelectRingComponent',

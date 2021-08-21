@@ -102,11 +102,12 @@
           />
         </v-col>
         <v-col>
-          <v-btn variant="warning"
+          <v-btn color="warning"
                  :disabled="startRerollDisabled($store.state.mainRoll.selectedRerollReasonOption)"
+                 :loading="this.$store.state.mainRoll.rerollStarted"
                  v-on:click="startReroll($store.state.mainRoll.selectedRerollReasonOption)">Start
           </v-btn>&nbsp;&nbsp;
-          <v-btn variant="info"
+          <v-btn color="info"
                  :disabled="finishRerollDisabled($store.state.mainRoll.selectedRerollReasonOption)"
                  v-on:click="finishReroll($store.state.mainRoll.selectedRerollReasonOption)">Finish
           </v-btn>&nbsp;&nbsp;
@@ -149,15 +150,17 @@
       <br/>
       <br/>
 
-      <v-btn id="roll" variant="primary"
+      <v-btn id="roll" color="primary"
+             :loading="this.$store.state.mainRoll.isDuringRoll"
              :disabled="this.canRoll()" v-on:click="roll">
         Roll
       </v-btn>&nbsp;&nbsp;
-      <v-btn variant="warning" :disabled="!this.hasAnyExplosions || this.$store.state.mainRoll.rerollStarted"
+      <v-btn color="warning" :disabled="!this.hasAnyExplosions || this.$store.state.mainRoll.rerollStarted"
              v-on:click="explode">Explode
       </v-btn>&nbsp;&nbsp;
-      <v-btn variant="success"
+      <v-btn color="success"
              :disabled="!this.$store.state.mainRoll.isDuringRoll || this.$store.state.mainRoll.selectedIds.length === 0 || this.$store.state.mainRoll.rerollStarted"
+             :loading="isSendingResult"
              v-on:click="sendResultDiscord">Finish
       </v-btn>
       <br/>
@@ -214,6 +217,7 @@ export default Vue.extend({
       webhook: require('webhook-discord'),
       hook: getHook(),
       uuid: require('uuid'),
+      isSendingResult: false,
     };
   },
   computed: {
@@ -338,11 +342,11 @@ export default Vue.extend({
         this.calculateStats();
       }
 
-      this.$bvToast.toast('Please select dices to keep by clicking on them', {
-        title: 'Information',
-        autoHideDelay: 2000,
-        appendToast: true,
-      });
+      // this.$bvToast.toast('Please select dices to keep by clicking on them', {
+      //   title: 'Information',
+      //   autoHideDelay: 2000,
+      //   appendToast: true,
+      // });
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
@@ -405,11 +409,11 @@ export default Vue.extend({
           break;
       }
 
-      this.$bvToast.toast('Remember! You can unselect exploded dice!', {
-        title: 'Information',
-        autoHideDelay: 2000,
-        appendToast: true,
-      });
+      // this.$bvToast.toast('Remember! You can unselect exploded dice!', {
+      //   title: 'Information',
+      //   autoHideDelay: 2000,
+      //   appendToast: true,
+      // });
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
@@ -423,11 +427,11 @@ export default Vue.extend({
       this.$store.state.mainRoll.currentReroll = selected;
       this.$store.state.mainRoll.rerollLock.push(selected);
 
-      this.$bvToast.toast('Please select dices to keep by clicking on them', {
-        title: 'Information',
-        autoHideDelay: 2000,
-        appendToast: true,
-      });
+      // this.$bvToast.toast('Please select dices to keep by clicking on them', {
+      //   title: 'Information',
+      //   autoHideDelay: 2000,
+      //   appendToast: true,
+      // });
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
@@ -575,6 +579,7 @@ export default Vue.extend({
       if (this.$store.state.mainRoll.isDuringRoll === false) {
         return;
       }
+      this.isSendingResult = true;
 
       this.calculateStats();
 
@@ -650,6 +655,8 @@ export default Vue.extend({
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
       localStorage.setItem('player', JSON.stringify(this.$store.state.player));
+
+      this.isSendingResult = false;
     },
     getColor: function () {
       return getClanColor(this.$store.state.player.familyData.clan);

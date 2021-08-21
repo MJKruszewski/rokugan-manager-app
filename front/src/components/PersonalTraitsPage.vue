@@ -25,7 +25,11 @@
                   :headers="headers"
                   :dark="this.$store.state.colorVariant"
                   :items="this.$store.state.player.distinctions"
-              ></v-data-table>
+              >
+                <template v-slot:[`item.book`]="{ item }">
+                  <OpenBookComponent :item="item"/>
+                </template>
+              </v-data-table>
             </v-card-text>
             <v-card-text v-else>
               <v-skeleton-loader type="table"></v-skeleton-loader>
@@ -55,7 +59,11 @@
                   :headers="headers"
                   :dark="this.$store.state.colorVariant"
                   :items="this.$store.state.player.passions"
-              ></v-data-table>
+              >
+                <template v-slot:[`item.book`]="{ item }">
+                  <OpenBookComponent :item="item"/>
+                </template>
+              </v-data-table>
             </v-card-text>
             <v-card-text v-else>
               <v-skeleton-loader type="table"></v-skeleton-loader>
@@ -89,7 +97,11 @@
                   :headers="headers"
                   :dark="this.$store.state.colorVariant"
                   :items="this.$store.state.player.adversities"
-              ></v-data-table>
+              >
+                <template v-slot:[`item.book`]="{ item }">
+                  <OpenBookComponent :item="item"/>
+                </template>
+              </v-data-table>
             </v-card-text>
             <v-card-text v-else>
               <v-skeleton-loader type="table"></v-skeleton-loader>
@@ -119,7 +131,11 @@
                   :headers="headers"
                   :dark="this.$store.state.colorVariant"
                   :items="this.$store.state.player.anxieties"
-              ></v-data-table>
+              >
+                <template v-slot:[`item.book`]="{ item }">
+                  <OpenBookComponent :item="item"/>
+                </template>
+              </v-data-table>
             </v-card-text>
             <v-card-text v-else>
               <v-skeleton-loader type="table"></v-skeleton-loader>
@@ -133,9 +149,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import OpenBookComponent from '@/components/OpenBookComponent.vue';
 
 export default Vue.extend({
   name: 'PersonalTraitsPage',
+  components: {
+    OpenBookComponent,
+  },
   data: () => {
     return { 
       headers: [
@@ -152,16 +172,12 @@ export default Vue.extend({
           value: 'type',
         },
         {
-          text: 'Book',
-          value: 'book',
-        },
-        {
-          text: 'Page',
-          value: 'page',
-        },
-        {
           text: 'Types',
           value: 'types',
+        },
+        {
+          text: 'Book',
+          value: 'book',
         },
       ],
     };

@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col sm="12" md="6">
+    <v-col sm="12" md="7">
       <v-row>
         <v-col>
           <v-card
@@ -21,7 +21,11 @@
                   :headers="techniquesHeaders"
                   :dark="this.$store.state.colorVariant"
                   :items="this.$store.state.player.techniques"
-              ></v-data-table>
+              >
+                <template v-slot:[`item.book`]="{ item }">
+                  <OpenBookComponent :item="item"/>
+                </template>
+              </v-data-table>
             </v-card-text>
             <v-card-text v-else>
               <v-skeleton-loader type="table"></v-skeleton-loader>
@@ -30,7 +34,7 @@
         </v-col>
       </v-row>
     </v-col>
-    <v-col sm="12" md="6">
+    <v-col sm="12" md="5">
       <v-row>
         <v-col>
           <v-card
@@ -51,7 +55,11 @@
                   :headers="abilitiesHeaders"
                   :dark="this.$store.state.colorVariant"
                   :items="this.$store.state.player.abilities"
-              ></v-data-table>
+              >
+                <template v-slot:[`item.book`]="{ item }">
+                  <OpenBookComponent :item="item"/>
+                </template>
+              </v-data-table>
             </v-card-text>
             <v-card-text v-else>
               <v-skeleton-loader type="table"></v-skeleton-loader>
@@ -66,9 +74,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import {Book} from '@/domain/types/player.type';
+import OpenBookComponent from '@/components/OpenBookComponent.vue';
 
 export default Vue.extend({
   name: 'TechniquesPage',
+  components: {
+    OpenBookComponent,
+  },
   data: () => {
     return {
       techniquesHeaders: [
@@ -89,16 +101,13 @@ export default Vue.extend({
           value: 'rank',
         },
         {
-          text: 'Book',
-          value: 'book',
-        },
-        {
-          text: 'Page',
-          value: 'page',
-        },
-        {
           text: 'Restriction',
           value: 'restriction',
+        },
+
+        {
+          text: 'Book',
+          value: 'book',
         },
       ],
       abilitiesHeaders: [
@@ -114,13 +123,9 @@ export default Vue.extend({
           text: 'Book',
           value: 'book',
         },
-        {
-          text: 'Page',
-          value: 'page',
-        },
       ],
     };
-  }, 
+  },
 });
 </script>
 

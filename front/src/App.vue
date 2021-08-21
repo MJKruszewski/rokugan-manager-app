@@ -6,13 +6,12 @@
         permanent
         expand-on-hover
         style="max-height: 100%"
+        :mini-variant.sync="clipped"
         :dark="this.$store.state.colorVariant"
     >
       <v-list v-if="this.$store.state.player !== undefined">
         <v-list-item class="px-2">
-          <v-list-item-avatar>
-            <v-img size="128" :src="playerAvatar"/>
-          </v-list-item-avatar>
+          <v-img style="border-radius: 5px" :src="playerAvatar"/>
         </v-list-item>
 
         <v-list-item>
@@ -53,13 +52,6 @@
               <v-icon>mdi-yin-yang</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Personal Traits</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item link v-on:click="$router.push('bonds')" :disabled="this.$store.state.player === undefined">
-            <v-list-item-icon>
-              <v-icon>mdi-account-switch</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Bonds</v-list-item-title>
           </v-list-item>
 
           <v-list-item link v-on:click="$router.push('techniques')" :disabled="this.$store.state.player === undefined">
@@ -108,13 +100,13 @@
         </template>
 
         <v-list :dark="this.$store.state.colorVariant">
-          <v-list-item link>
+          <v-list-item link disabled>
             <v-list-item-title>New</v-list-item-title>
           </v-list-item>
-          <v-list-item link>
+          <v-list-item link disabled>
             <v-list-item-title>Open</v-list-item-title>
           </v-list-item>
-          <v-list-item link>
+          <v-list-item link disabled>
             <v-list-item-title>Save</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -130,7 +122,7 @@
         </template>
 
         <v-list :dark="this.$store.state.colorVariant">
-          <v-list-item link>
+          <v-list-item link disabled>
             <v-list-item-title>Open application data folder</v-list-item-title>
           </v-list-item>
           <v-list-item link>
@@ -142,6 +134,7 @@
 
       <v-spacer></v-spacer>
 
+      <v-btn v-if="!isElectron()" color="success">Download</v-btn>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
@@ -165,18 +158,13 @@
     </v-app-bar>
 
     <v-main>
-      <v-file-input
-          id="openXml"
+      <input
           ref="openXml"
-          v-model="xmlFile"
-          :state="Boolean(xmlFile)"
-          placeholder="Load your character..."
-          :variant="this.$store.state.colorVariant"
+          type="file"
           accept=".xml"
-          drop-placeholder="Drop file here..."
+          @change="onFileChanged"
           style="display: none"
-      ></v-file-input>
-
+      >
       <v-container fluid>
         <transition name="fade">
           <router-view/>
@@ -210,6 +198,7 @@ export default Vue.extend({
       selectedMenu: 0,
       xmlFile: undefined,
       hook: getHook(),
+      clipped: true,
     };
   },
   watch: {
@@ -224,8 +213,18 @@ export default Vue.extend({
     },
   },
   methods: {
+    onFileChanged: function (file: File | null) {
+      if (file === null) {
+        return;
+      }
+
+      this.xmlFile = file.target.files[0];
+    },
+    isElectron: function (): boolean {
+      return navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
+    },
     loadXml: function () {
-      document.getElementById('openXml')?.click();
+      this.$refs.openXml?.click();
     },
     // detectMimeType: function (b64: string) {
     //   const signatures = {
@@ -294,7 +293,7 @@ body {
   /*overflow: auto;*/
 }
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity .2s ease;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
