@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12">
+    <v-col sm="12" md="6">
       <v-row>
         <v-col>
           <v-card
@@ -18,9 +18,39 @@
                   disable-pagination
                   hide-default-footer
                   single-select
-                  :headers="headers"
+                  :headers="techniquesHeaders"
                   :dark="this.$store.state.colorVariant"
                   :items="this.$store.state.player.techniques"
+              ></v-data-table>
+            </v-card-text>
+            <v-card-text v-else>
+              <v-skeleton-loader type="table"></v-skeleton-loader>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-col>
+    <v-col sm="12" md="6">
+      <v-row>
+        <v-col>
+          <v-card
+              :dark="this.$store.state.colorVariant"
+              :text-variant="this.$store.state.textVariant"
+          >
+            <v-card-title style="justify-content: space-between;">
+              <b>Abilities:</b>
+            </v-card-title>
+            <v-divider/>
+
+            <v-card-text v-if="$store.state.player !== undefined">
+              <v-data-table
+                  class="elevation-4"
+                  disable-pagination
+                  hide-default-footer
+                  single-select
+                  :headers="abilitiesHeaders"
+                  :dark="this.$store.state.colorVariant"
+                  :items="this.$store.state.player.abilities"
               ></v-data-table>
             </v-card-text>
             <v-card-text v-else>
@@ -35,12 +65,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import {Book} from '@/domain/types/player.type';
 
 export default Vue.extend({
   name: 'TechniquesPage',
   data: () => {
     return {
-      headers: [
+      techniquesHeaders: [
         {
           text: 'Name',
           value: 'name',
@@ -69,9 +100,23 @@ export default Vue.extend({
           text: 'Restriction',
           value: 'restriction',
         },
+      ],
+      abilitiesHeaders: [
         {
-          text: 'Description',
-          value: 'desc',
+          text: 'Name',
+          value: 'name',
+        },
+        {
+          text: 'Source',
+          value: 'source',
+        },
+        {
+          text: 'Book',
+          value: 'book',
+        },
+        {
+          text: 'Page',
+          value: 'page',
         },
       ],
     };

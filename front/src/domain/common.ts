@@ -2,7 +2,7 @@ import {getStore} from '@/domain/services/store';
 import {Ring} from '@/domain/types/ring.type';
 import {Skill} from '@/domain/types/skill.type';
 
-export function getWhiteImage(val: number) {
+export function getWhiteImage(val: number): string {
     switch (val) {
         case 1:
             return 'white.png';
@@ -25,13 +25,13 @@ export function getWhiteImage(val: number) {
     return '';
 }
 
-export function sendNotifications() {
+export function sendNotifications(): boolean {
     const value = localStorage.getItem('notifications') || 'true';
 
     return value === 'true';
 }
 
-export function getBlackImage(val: number) {
+export function getBlackImage(val: number): string {
     switch (val) {
         case 1:
             return 'black.png';
@@ -50,7 +50,7 @@ export function getBlackImage(val: number) {
     return '';
 }
 
-export function getClanMon(clan: string) {
+export function getClanMon(clan: string): any {
     switch (clan) {
         case 'Crab':
             return require('../assets/img/mon/crab.webp');
@@ -71,7 +71,7 @@ export function getClanMon(clan: string) {
     return require('../assets/img/mon/emperor.webp');
 }
 
-export function getClanColor(clan: string) {
+export function getClanColor(clan: string): string {
     switch (clan) {
         case 'Lion':
             return '#cb9e2b';
@@ -92,7 +92,7 @@ export function getClanColor(clan: string) {
     return '#696969';
 }
 
-export function getStanceTooltip(stance: string) {
+export function getStanceTooltip(stance: string): string {
     switch (stance) {
         case 'air':
             return '+1 to TN of Attack and Scheme checks targeting you (+2 at rank 4+).';
@@ -109,11 +109,11 @@ export function getStanceTooltip(stance: string) {
     return '';
 }
 
-export function getExplosions() {
+export function getExplosions(): string[] {
     return ['blacket.png', 'whitee.png', 'whiteet.png', 'whiteeo.png'];
 }
 
-export function getHook() {
+export function getHook(): string {
     return getStore().state.server.host;
 }
 

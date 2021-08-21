@@ -9,6 +9,10 @@
           >
             <v-card-title style="justify-content: space-between;">
               <b>Distinctions:</b>
+              <div style="display: inline-flex;">
+                <v-btn style="margin-right: 7px">Add</v-btn>
+                <v-btn>Remove</v-btn>
+              </div>
             </v-card-title>
             <v-divider/>
 
@@ -35,6 +39,10 @@
           >
             <v-card-title style="justify-content: space-between;">
               <b>Passions:</b>
+              <div style="display: inline-flex;">
+                <v-btn style="margin-right: 7px">Add</v-btn>
+                <v-btn>Remove</v-btn>
+              </div>
             </v-card-title>
             <v-divider/>
 
@@ -65,6 +73,10 @@
           >
             <v-card-title style="justify-content: space-between;">
               <b>Adversities:</b>
+              <div style="display: inline-flex;">
+                <v-btn style="margin-right: 7px">Add</v-btn>
+                <v-btn>Remove</v-btn>
+              </div>
             </v-card-title>
             <v-divider/>
 
@@ -91,6 +103,10 @@
           >
             <v-card-title style="justify-content: space-between;">
               <b>Anxieties:</b>
+              <div style="display: inline-flex;">
+                <v-btn style="margin-right: 7px">Add</v-btn>
+                <v-btn>Remove</v-btn>
+              </div>
             </v-card-title>
             <v-divider/>
 

@@ -1,3 +1,5 @@
+import {Dice} from '@/domain/types/dice.type';
+
 export type MainRoll = {
     currentVersion: string;
     isDuringRoll: boolean,
@@ -8,13 +10,13 @@ export type MainRoll = {
     selectedDistinction: string | null;
     currentReroll: string | null;
     rerollStarted: boolean;
-    selectedToRerollIds: any[];
+    selectedToRerollIds: string[];
     rerollLock: any[];
 
     dc: number | undefined;
     selectedRerollOption: string | null,
     selectedRerollReasonOption: string | null,
-    selectedRerollOptionList: any[],
+    selectedRerollOptionList: string[],
     isExplosionStarted: boolean;
     selectedIds: [];
     success: number;
@@ -28,16 +30,10 @@ export type MainRoll = {
     selectedRingValue: number;
     selectedSkill: string;
     selectedRing: string;
-    wDices: {
-        id: string;
-        img: string;
-    }[];
-    bDices: {
-        id: string;
-        img: string;
-    }[];
-    wExplodedDices: any[];
-    bExplodedDices: any[];
-    explodedHelper: any[];
-    voidDicesHelper: any[];
+    wDices: Dice[];
+    bDices: Dice[];
+    wExplodedDices: Dice[];
+    bExplodedDices: Dice[];
+    explodedHelper: string[];
+    voidDicesHelper: string[];
 };

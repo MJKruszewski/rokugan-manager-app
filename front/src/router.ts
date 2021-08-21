@@ -6,8 +6,9 @@ import TechniquesPage from '@/components/TechniquesPage.vue';
 import BondsPage from '@/components/BondsPage.vue';
 import PersonalTraitsPage from '@/components/PersonalTraitsPage.vue';
 import BackgroundPage from '@/components/BackgroundPage.vue';
+import SettingsPage from '@/components/SettingsPage.vue';
 
-export function getRouter() {
+export function getRouter(): VueRouter {
     return new VueRouter({
         routes: [
             { path: '/', component: RollPage },
@@ -18,6 +19,7 @@ export function getRouter() {
             { path: '/techniques', alias: 'techniques', component: TechniquesPage },
             { path: '/equipment', alias: 'equipment', component: EquipmentPage },
             { path: '/advancement', alias: 'advancement', component: AdvancementPage },
+            { path: '/settings', alias: 'settings', component: SettingsPage },
         ],
     });
 } 

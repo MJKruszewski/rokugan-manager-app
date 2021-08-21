@@ -18,9 +18,9 @@
                   disable-pagination
                   hide-default-footer
                   single-select
-                  :headers="headers"
+                  :headers="bondsHeaders"
                   :dark="this.$store.state.colorVariant"
-                  :items="getBonds"
+                  :items="this.getBonds()"
               ></v-data-table>
             </v-card-text>
             <v-card-text v-else>
@@ -41,7 +41,7 @@ export default Vue.extend({
   name: 'BondsPage', 
   data: () => {
     return {
-      headers: [
+      bondsHeaders: [
         {
           text: 'Name',
           value: 'name',
@@ -49,14 +49,6 @@ export default Vue.extend({
         {
           text: 'Rank',
           value: 'rank',
-        },
-        {
-          text: 'Description',
-          value: 'description',
-        },
-        {
-          text: 'Source',
-          value: 'source',
         },
         {
           text: 'Book',
@@ -69,9 +61,15 @@ export default Vue.extend({
       ],
     };
   },
-  computed: {
+  methods: {
     getBonds() {
-      return PlayerService.getBonds(this.$store.state.player);
+      console.log('Bonds called', this.$store.state.player);
+
+      if (this.$store.state.player === undefined) {
+        return [];
+      }
+
+      return this.$store.state.player.bonds;
     },
   },
 });

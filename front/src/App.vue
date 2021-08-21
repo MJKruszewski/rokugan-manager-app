@@ -38,7 +38,7 @@
             <v-list-item-icon>
               <v-icon>mdi-dice-multiple</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Home</v-list-item-title>
+            <v-list-item-title>Roll</v-list-item-title>
           </v-list-item>
 
           <v-list-item link v-on:click="$router.push('background')" :disabled="this.$store.state.player === undefined">
@@ -83,6 +83,14 @@
             <v-list-item-title>Advancement</v-list-item-title>
           </v-list-item>
 
+          <v-spacer/>
+
+          <v-list-item link v-on:click="$router.push('settings')">
+            <v-list-item-icon>
+              <v-icon>mdi-cog</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Settings</v-list-item-title>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -180,9 +188,9 @@
 </template>
 
 <script lang="ts">
-import {getClanColor, getClanMon, getHook} from "@/domain/common";
-import Vue from "vue";
-import {LoadCardService} from "@/domain/services/load-card.service";
+import {getClanColor, getClanMon, getHook} from '@/domain/common';
+import Vue from 'vue';
+import {LoadCardService} from '@/domain/services/load-card.service';
 
 export default Vue.extend({
   name: 'App',
@@ -194,15 +202,15 @@ export default Vue.extend({
 
       // return 'data:' + this.detectMimeType(this.$store.state.player.image) + 'image/png;charset=utf-8;base64,' + this.$store.state.player.image;
       return 'data:image/png;charset=utf-8;base64,' + this.$store.state.player.portraitImage;
-    }
+    },
   },
   data: () => {
     return {
-      uuid: require("uuid"),
+      uuid: require('uuid'),
       selectedMenu: 0,
       xmlFile: undefined,
       hook: getHook(),
-    }
+    };
   },
   watch: {
     xmlFile: async function (val) {
@@ -210,14 +218,14 @@ export default Vue.extend({
         return;
       }
 
-      const xml = new DOMParser().parseFromString(await val.text(), "application/xml");
+      const xml = new DOMParser().parseFromString(await val.text(), 'application/xml');
       this.$store.state.player = await LoadCardService.importCard(xml);
 
-    }
+    },
   },
   methods: {
     loadXml: function () {
-      document.getElementById("openXml")?.click();
+      document.getElementById('openXml')?.click();
     },
     // detectMimeType: function (b64: string) {
     //   const signatures = {
@@ -239,14 +247,14 @@ export default Vue.extend({
       localStorage.setItem('server', JSON.stringify(this.$store.state.server));
     },
     getClanImage: function () {
-      console.log('getClanMon(this.$store.state.player.familyData.clan)', getClanMon(this.$store.state.player?.familyData?.clan))
-      return getClanMon(this.$store.state.player?.familyData?.clan)
+      console.log('getClanMon(this.$store.state.player.familyData.clan)', getClanMon(this.$store.state.player?.familyData?.clan));
+      return getClanMon(this.$store.state.player?.familyData?.clan);
     },
     getColor: function () {
-      return getClanColor(this.$store.state.player?.familyData?.clan)
+      return getClanColor(this.$store.state.player?.familyData?.clan);
     },
-  }
-})
+  },
+});
 </script>
 
 <style>

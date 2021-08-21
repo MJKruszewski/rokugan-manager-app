@@ -13,6 +13,7 @@ export interface Player {
     experience: Experience;
 
     abilities: Ability[];
+    bonds: Bond[];
     techniques: Technique[];
 
     anxieties: PersonalTrait[];
@@ -79,8 +80,14 @@ export type Ability = {
     source: string;
     book: Book;
     page: string;
+}
+
+export type Bond = {
+    name: string;
+    ability: string;
+    book: Book;
+    page: string;
     rank: number;
-    isBond: boolean
 }
 
 export type Technique = {

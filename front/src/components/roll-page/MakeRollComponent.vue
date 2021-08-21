@@ -200,6 +200,9 @@ import randomNumber from 'random-number-csprng-2';
 import Vue from 'vue';
 
 import axios from 'axios';
+import {Dice} from '@/domain/types/dice.type';
+import {Ability, PersonalTrait} from '@/domain/types/player.type';
+import { Ring } from '@/domain/types/ring.type';
 
 
 const explosions = getExplosions();
@@ -221,7 +224,7 @@ export default Vue.extend({
 
       let isPresent = false;
 
-      this.$store.state.mainRoll.bDices.forEach(dice => {
+      this.$store.state.mainRoll.bDices.forEach((dice: Dice) => {
         if (!this.$store.state.mainRoll.selectedIds.includes(dice.id)) {
           return;
         }
@@ -230,7 +233,7 @@ export default Vue.extend({
           isPresent = true;
         }
       });
-      this.$store.state.mainRoll.wDices.forEach(dice => {
+      this.$store.state.mainRoll.wDices.forEach((dice: Dice) => {
         if (!this.$store.state.mainRoll.selectedIds.includes(dice.id)) {
           return;
         }
@@ -239,7 +242,7 @@ export default Vue.extend({
           isPresent = true;
         }
       });
-      this.$store.state.mainRoll.wExplodedDices.forEach(dice => {
+      this.$store.state.mainRoll.wExplodedDices.forEach((dice: Dice) => {
         if (!this.$store.state.mainRoll.selectedIds.includes(dice.id)) {
           return;
         }
@@ -248,7 +251,7 @@ export default Vue.extend({
           isPresent = true;
         }
       });
-      this.$store.state.mainRoll.bExplodedDices.forEach(dice => {
+      this.$store.state.mainRoll.bExplodedDices.forEach((dice: Dice) => {
         if (!this.$store.state.mainRoll.selectedIds.includes(dice.id)) {
           return;
         }
@@ -428,13 +431,13 @@ export default Vue.extend({
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
-    finishReroll: function (selected) {
-      this.$store.state.mainRoll.wDices.filter(dice => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async dice => {
+    finishReroll: function (selected: string | null) {
+      this.$store.state.mainRoll.wDices.filter((dice: Dice) => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async (dice: Dice) => {
         let result = await randomNumber(1, 8);
 
         dice.img = getWhiteImage(result);
       });
-      this.$store.state.mainRoll.bDices.filter(dice => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async dice => {
+      this.$store.state.mainRoll.bDices.filter((dice: Dice) => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async (dice: Dice) => {
         let result = await randomNumber(1, 6);
 
         dice.img = getBlackImage(result);
@@ -458,9 +461,9 @@ export default Vue.extend({
       this.$store.state.mainRoll.rerollStarted = false;
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
-    selectToReroll: function (val) {
+    selectToReroll: function (val: Dice) {
       if (this.$store.state.mainRoll.selectedToRerollIds.includes(val.id)) {
-        this.$store.state.mainRoll.selectedToRerollIds = this.$store.state.mainRoll.selectedToRerollIds.filter((id) => id !== val.id);
+        this.$store.state.mainRoll.selectedToRerollIds = this.$store.state.mainRoll.selectedToRerollIds.filter((id: string) => id !== val.id);
 
         return;
       }
@@ -471,22 +474,22 @@ export default Vue.extend({
     selectRerollOptions: function (val: string) {
       switch (val.toLowerCase()) {
         case 'ability':
-          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.abilities;
+          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.abilities.map((item: Ability) => item.name);
           break;
         case 'anxiety':
-          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.anxieties;
+          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.anxieties.map((item: PersonalTrait) => item.name);
           break;
         case 'adversity':
-          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.adversities;
+          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.adversities.map((item: PersonalTrait) => item.name);
           break;
         case 'distinction':
-          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.distinctions;
+          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.distinctions.map((item: PersonalTrait) => item.name);
           break;
       }
 
       this.$store.state.mainRoll.selectedRerollReasonOption = null;
     },
-    startRerollDisabled: function (val) {
+    startRerollDisabled: function (val: string | null) {
       return !this.$store.state.mainRoll.isDuringRoll
           || this.$store.state.mainRoll.selectedIds.length > 0
           || val === null
@@ -494,7 +497,7 @@ export default Vue.extend({
           || this.$store.state.mainRoll.rerollStarted
           || this.$store.state.mainRoll.rerollLock.includes(val);
     },
-    finishRerollDisabled: function (val) {
+    finishRerollDisabled: function (val: string | null) {
 
       return !this.$store.state.mainRoll.isDuringRoll
           || this.$store.state.mainRoll.selectedIds.length > 0
@@ -509,7 +512,7 @@ export default Vue.extend({
           || this.$store.state.mainRoll.selectedRing === 'none'
           || this.$store.state.mainRoll.rerollStarted;
     },
-    selectDice: function (val, additional) {
+    selectDice: function (val: Dice) {
       if (this.$store.state.mainRoll.isDuringRoll === false) {
         return;
       }
@@ -520,40 +523,40 @@ export default Vue.extend({
         return;
       }
 
-      if (additional === true) {
-        if (!this.$store.state.mainRoll.explodedHelper.includes(val.id)) {
-          const filtered = [...this.$store.state.mainRoll.bExplodedDices, ...this.$store.state.mainRoll.wExplodedDices].filter((dice) => dice.id === val.id);
-
-          if (filtered.length > 0) {
-            if (this.$store.state.mainRoll.selectedIds.includes(val.id)) {
-              this.$store.state.mainRoll.selectedIds = this.$store.state.mainRoll.selectedIds.filter((id) => id !== val.id);
-              this.calculateStats();
-
-              return;
-            }
-
-            this.$store.state.mainRoll.selectedIds.push(val.id);
-            this.calculateStats();
-          }
-
-          return;
-        }
-
-        return;
-      }
+      // if (additional === true) {
+      //   if (!this.$store.state.mainRoll.explodedHelper.includes(val.id)) {
+      //     const filtered = [...this.$store.state.mainRoll.bExplodedDices, ...this.$store.state.mainRoll.wExplodedDices].filter((dice) => dice.id === val.id);
+      //
+      //     if (filtered.length > 0) {
+      //       if (this.$store.state.mainRoll.selectedIds.includes(val.id)) {
+      //         this.$store.state.mainRoll.selectedIds = this.$store.state.mainRoll.selectedIds.filter((id) => id !== val.id);
+      //         this.calculateStats();
+      //
+      //         return;
+      //       }
+      //
+      //       this.$store.state.mainRoll.selectedIds.push(val.id);
+      //       this.calculateStats();
+      //     }
+      //
+      //     return;
+      //   }
+      //
+      //   return;
+      // }
 
       if (this.$store.state.mainRoll.isExplosionStarted) {
         return;
       }
 
       if (this.$store.state.mainRoll.selectedIds.includes(val.id)) {
-        this.$store.state.mainRoll.selectedIds = this.$store.state.mainRoll.selectedIds.filter((id) => id !== val.id);
+        this.$store.state.mainRoll.selectedIds = this.$store.state.mainRoll.selectedIds.filter((id: string) => id !== val.id);
         this.calculateStats();
 
         return;
       }
 
-      const modifier = this.$store.state.mainRoll.selectedIds.filter(id => this.$store.state.mainRoll.voidDicesHelper.includes(id));
+      const modifier = this.$store.state.mainRoll.selectedIds.filter((id: string) => this.$store.state.mainRoll.voidDicesHelper.includes(id));
 
       if (this.$store.state.mainRoll.selectedIds.length - modifier.length >= this.$store.state.mainRoll.selectedRingValue && !this.$store.state.mainRoll.voidDicesHelper.includes(val.id)) {
         return;
@@ -575,7 +578,7 @@ export default Vue.extend({
 
       this.calculateStats();
 
-      const dices = [];
+      const dices: string[] = [];
 
       [
         ...this.$store.state.mainRoll.wDices,
@@ -627,8 +630,8 @@ export default Vue.extend({
         this.$store.state.player.currentStats.voidPoints = parseInt(this.$store.state.player.currentStats.voidPoints) + 1;
       }
 
-      if (this.$store.state.player.currentStats.voidPoints > this.$store.state.player.rings.filter(val => val.name === 'Void').shift().value) {
-        this.$store.state.player.currentStats.voidPoints = this.$store.state.player.rings.filter(val => val.name === 'Void').shift().value;
+      if (this.$store.state.player.currentStats.voidPoints > this.$store.state.player.rings.filter((val: Ring) => val.name === 'Void').shift().value) {
+        this.$store.state.player.currentStats.voidPoints = this.$store.state.player.rings.filter((val: Ring) => val.name === 'Void').shift().value;
       }
 
       this.$store.state.player.currentStats.composure = this.$store.state.player.currentStats.composure - this.$store.state.mainRoll.strife;

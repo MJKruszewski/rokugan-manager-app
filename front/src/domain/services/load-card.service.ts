@@ -1,6 +1,6 @@
 //Import card from paper blossoms XML
 import {getClanColor, getHook, sendNotifications} from '@/domain/common';
-import {Ability, Armor, Book, Equipment, Player, Technique, Weapon} from '@/domain/types/player.type';
+import {Ability, Armor, Bond, Book, Equipment, Player, Technique, Weapon} from '@/domain/types/player.type';
 import * as bonds from '../../assets/data/json/bonds.json';
 import webhook from 'webhook-discord';
 
@@ -82,26 +82,53 @@ export class LoadCardService {
     }
 
     private static prepareAbilities(xml: Document, placeholder: Player) {
-        const map = bonds.map(item => item.name);
-
         for (const child of xml.getElementsByTagName('Abilities')[0].children) {
-            const ability: Ability = {
+            placeholder.abilities.push({
                 name: child.getAttribute('name') || '',
                 book: (child.getAttribute('ref_book') || 'Core') as Book,
                 description: child.getAttribute('description') || '',
                 page: child.getAttribute('ref_page') || '',
                 source: child.getAttribute('source') || '',
-                rank: 1,
-                isBond: map.includes(child.getAttribute('name') || ''),
-            };
-
-            ability.rank = LoadCardService.calculateAbilityRank(xml, ability);
-
-            placeholder.abilities.push(ability);
+            });
         }
     }
 
-    private static calculateAbilityRank(xml: Document, ability: Ability): number {
+    private static prepareBonds(xml: Document, placeholder: Player) {
+        const map = bonds.map(item => item.name);
+
+        for (const child of xml.getElementsByTagName('Advances')[0].children) {
+            const advance: string = child.getAttribute('value') || '';
+
+            if (!advance.startsWith('Bond|')) {
+                continue;
+            }
+
+            const parts = advance.split('|');
+
+            if (undefined === parts[1]) {
+                continue;
+            }
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const template: any = (bonds as Array<any>).find(item => item.name === parts[1]);
+
+            const bond: Bond = {
+                name: parts[1],
+                book: template.reference.book as Book,
+                page: template.reference.page,
+                rank: 1,
+                ability: template.ability,
+            };
+
+            bond.rank = LoadCardService.calculateBondRank(xml, bond);
+
+            placeholder.bonds.push(bond);
+        }
+
+        console.log('placeholder.abilities', placeholder.abilities);
+    }
+
+    private static calculateBondRank(xml: Document, ability: Bond): number {
         let rank = 1;
 
         for (const child of xml.getElementsByTagName('Advances')[0].children) {
@@ -216,6 +243,7 @@ export class LoadCardService {
             anxieties: [],
             adversities: [],
             distinctions: [],
+            bonds: [],
             passions: [],
             social: {
                 glory: Number.parseInt(xml.getElementsByTagName('Social')[0].getAttribute('glory') || '0'),
@@ -255,6 +283,7 @@ export class LoadCardService {
         LoadCardService.prepareInventory(xml, placeholder);
         LoadCardService.prepareAbilities(xml, placeholder);
         LoadCardService.preparePersonalTraits(xml, placeholder);
+        LoadCardService.prepareBonds(xml, placeholder);
 
         placeholder.currentStats.voidPoints = placeholder?.rings?.filter(val => val.name === 'Void').shift()?.value || 0;
         placeholder.isLoaded = true;
