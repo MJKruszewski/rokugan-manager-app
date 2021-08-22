@@ -61,13 +61,12 @@
 import {getClanColor, getHook} from '@/domain/common';
 import Vue from 'vue';
 import {Ring} from '@/domain/types/ring.type';
-import {Player} from '@/domain/types/player.type'; 
+import {Player} from '@/domain/types/player.type';
 
 export default Vue.extend({
   name: 'SamuraiStatus',
   data: () => {
     return {
-      webhook: require('webhook-discord'),
       hook: getHook(),
     };
   },
@@ -97,15 +96,28 @@ export default Vue.extend({
       }
 
       const playerStore = this.$store.state.player;
-      const hook = new this.webhook.Webhook(Buffer.from(getHook(), 'base64').toString());
-      const msg = new this.webhook.MessageBuilder()
-          .setAvatar('https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png')
-          .setTitle(playerStore.familyData.clan + ' ' + playerStore.familyData.name + ' from ' + playerStore.familyData.mon)
-          .setName('Kami Bayushi')
-          .setColor(this.getColor())
-          .setDescription('Bends under pressure! (Unmasking)');
+      const hook = Buffer.from(getHook(), 'base64').toString();
 
-      hook.send(msg);
+      fetch(hook + '/slack', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          attachments: [
+            {
+              fields: [],
+              title: playerStore.familyData.clan + ' ' + playerStore.familyData.name + ' from ' + playerStore.familyData.mon,
+              color: this.getColor(),
+              text: 'Bends under pressure! (Unmasking)',
+            },
+          ],
+          icon_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
+          username: 'Kami Bayushi',
+        }),
+      });
     },
   },
   methods: {
@@ -114,19 +126,30 @@ export default Vue.extend({
     },
     sendInfo: function () {
       const playerStore: Player = this.$store.state.player;
-      const hook = new this.webhook.Webhook(Buffer.from(getHook(), 'base64').toString());
-      const msg = new this.webhook.MessageBuilder()
-          .setAvatar('https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png')
-          .setTitle('Status of ' + playerStore.familyData.name + ' from ' + playerStore.familyData.mon)
-          .setName('Kami Bayushi')
-          .setColor(this.getColor())
-          .setDescription(
-               'Endurance: ' + playerStore.currentStats.endurance + '/' + playerStore.stats.endurance + '\n'
-              + 'Composure: ' + playerStore.currentStats.composure + '/' + playerStore.stats.composure + '\n'
-              + 'Void points: ' + playerStore.currentStats.voidPoints + '/' + this.$store.state.player.rings.filter((val: Ring) => val.name === 'Void').shift().value + '\n\n',
-          );
+      const hook = Buffer.from(getHook(), 'base64').toString();
 
-      hook.send(msg);
+      fetch(hook + '/slack', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          attachments: [
+            {
+              fields: [],
+              title: 'Status of ' + playerStore.familyData.name + ' from ' + playerStore.familyData.mon,
+              color: this.getColor(),
+              text: 'Endurance: ' + playerStore.currentStats.endurance + '/' + playerStore.stats.endurance + '\n'
+                  + 'Composure: ' + playerStore.currentStats.composure + '/' + playerStore.stats.composure + '\n'
+                  + 'Void points: ' + playerStore.currentStats.voidPoints + '/' + this.$store.state.player.rings.filter((val: Ring) => val.name === 'Void').shift().value + '\n\n',
+            },
+          ],
+          icon_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
+          username: 'Kami Bayushi',
+        }),
+      });
     },
   },
 });

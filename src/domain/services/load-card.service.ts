@@ -1,8 +1,8 @@
 //Import card from paper blossoms XML
 import {getClanColor, getHook, sendNotifications} from '@/domain/common';
-import {Ability, Armor, Bond, Book, Equipment, Player, Technique, Weapon} from '@/domain/types/player.type';
-import * as bonds from '../../assets/data/json/bonds.json';
-import webhook from 'webhook-discord';
+import {Armor, Bond, Book, Equipment, Player, Technique, Weapon} from '@/domain/types/player.type';
+import parsedBonds from '../../assets/data/json/bonds.json';
+import axios from 'axios';
 
 export class LoadCardService {
     private static preparePersonalTraits(xml: Document, placeholder: Player) {
@@ -94,8 +94,6 @@ export class LoadCardService {
     }
 
     private static prepareBonds(xml: Document, placeholder: Player) {
-        const map = bonds.map(item => item.name);
-
         for (const child of xml.getElementsByTagName('Advances')[0].children) {
             const advance: string = child.getAttribute('value') || '';
 
@@ -109,14 +107,16 @@ export class LoadCardService {
                 continue;
             }
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const template: any = (bonds as Array<any>).find(item => item.name === parts[1]);
 
+            const template = parsedBonds.find(item => item.name === parts[1]);
             const bond: Bond = {
                 name: parts[1],
+                //@ts-ignore
                 book: template.reference.book as Book,
+                //@ts-ignore
                 page: template.reference.page,
                 rank: 1,
+                //@ts-ignore
                 ability: template.ability,
             };
 
@@ -188,7 +188,7 @@ export class LoadCardService {
                     damage: parseInt(child.getAttribute('w_dam') || '0'),
                     minRange: parseInt(child.getAttribute('w_minrange') || '0'),
                     maxRange: parseInt(child.getAttribute('w_maxrange') || '0'),
-                } as Weapon); 
+                } as Weapon);
 
                 continue;
             }
@@ -292,21 +292,32 @@ export class LoadCardService {
         placeholder.isLoaded = true;
 
         if (sendNotifications()) {
-            const hook = new webhook.Webhook(Buffer.from(getHook(), 'base64').toString());
+            const hook = Buffer.from(getHook(), 'base64').toString();
             const social = xml.getElementsByTagName('Social')[0];
-            const msg = new webhook.MessageBuilder()
-                .setAvatar('https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png')
-                .setTitle(placeholder.familyData.clan + ' ' + placeholder.familyData.name + ' from ' + placeholder.familyData.mon)
-                .setName('Kami Bayushi')
-                .setColor(getClanColor(placeholder.familyData.clan))
-                .setDescription(
-                    'Enters a dojo in glory!\n\n'
-                    + 'Glory: ' + social.getAttribute('glory') + '\n'
-                    + 'Honor: ' + social.getAttribute('honor') + '\n'
-                    + 'Status: ' + social.getAttribute('status') + '\n',
-                );
 
-            await hook.send(msg);
+            await fetch(hook + '/slack', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    attachments: [
+                        {
+                            fields: [],
+                            title: placeholder.familyData.clan + ' ' + placeholder.familyData.name + ' from ' + placeholder.familyData.mon,
+                            color: getClanColor(placeholder.familyData.clan),
+                            text: 'Enters a dojo in glory!\n\n'
+                                + 'Glory: ' + social.getAttribute('glory') + '\n'
+                                + 'Honor: ' + social.getAttribute('honor') + '\n'
+                                + 'Status: ' + social.getAttribute('status') + '\n',
+                        },
+                    ],
+                    icon_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
+                    username: 'Kami Bayushi',
+                }),
+            });
         }
 
         console.log('player', placeholder);

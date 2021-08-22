@@ -158,8 +158,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import OpenBookComponent from '@/components/OpenBookComponent.vue';
-import * as qualities from '../assets/data/json/qualities.json';
 import {Book} from '@/domain/types/player.type';
+import parsedQualities from '../assets/data/json/qualities.json';
 
 export default Vue.extend({
   name: 'EquipmentPage',
@@ -298,7 +298,8 @@ export default Vue.extend({
       let book: Book | null = null;
       let page: number | null = null;
 
-      qualities.forEach(item => {
+      //@ts-ignore
+      parsedQualities.forEach(item => {
         if (item.name !== quality) {
           return;
         }
@@ -307,7 +308,7 @@ export default Vue.extend({
         page = parseInt(item.reference.page.toString()) + 1;
       });
 
-      if (book === null || page === null) {
+      if (book === null || page === null || this.$store.state.server.bookFiles[book] === null) {
         return;
       }
 

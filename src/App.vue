@@ -134,7 +134,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="!isElectron()" color="success">Download</v-btn>
+      <v-btn v-if="!isElectron()" color="success" v-on:click="window.open('https://github.com/MJKruszewski/rokugan-manager-app/releases', '_blank')">Download</v-btn>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
@@ -219,13 +219,15 @@ export default Vue.extend({
         return;
       }
 
+      //@ts-ignore
       this.xmlFile = file?.target?.files[0];
     },
     isElectron: function (): boolean {
       return navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
     },
     loadXml: function () {
-      const result = this.$refs.openXml?.click();
+      //@ts-ignore
+      this.$refs.openXml?.click();
     },
     // detectMimeType: function (b64: string) {
     //   const signatures = {

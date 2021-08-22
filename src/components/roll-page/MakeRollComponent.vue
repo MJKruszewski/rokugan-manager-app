@@ -197,7 +197,11 @@
 </template>
 <script lang="ts">
 import {getBlackImage, getClanColor, getExplosions, getHook, getWhiteImage, sendNotifications} from '@/domain/common';
+// noinspection TypeScriptCheckImport
+//@ts-ignore
 import mergeImages from 'merge-images-horizontally-with-text/dist/index.es2015';
+// noinspection TypeScriptCheckImport
+//@ts-ignore
 import randomNumber from 'random-number-csprng-2';
 
 import Vue from 'vue';
@@ -214,7 +218,6 @@ export default Vue.extend({
   name: 'MakeRollComponent',
   data() {
     return {
-      webhook: require('webhook-discord'),
       hook: getHook(),
       uuid: require('uuid'),
       isSendingResult: false,
@@ -448,17 +451,28 @@ export default Vue.extend({
       });
 
       if (sendNotifications()) {
-        const hook = new this.webhook.Webhook(Buffer.from(getHook(), 'base64').toString());
-        const msg = new this.webhook.MessageBuilder()
-            .setAvatar('https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png')
-            .setTitle(this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon)
-            .setName('Kami Bayushi')
-            .setColor(this.getColor())
-            .setDescription(
-                'Bushi makes a reroll of his/her ' + this.$store.state.mainRoll.selectedToRerollIds.length + ' dices due to: ' + selected,
-            );
+        const hook = Buffer.from(getHook(), 'base64').toString();
 
-        hook.send(msg);
+        fetch(hook + '/slack', {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            attachments: [
+              {
+                fields: [],
+                title: this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon,
+                color: this.getColor(),
+                text: 'Bushi makes a reroll of his/her ' + this.$store.state.mainRoll.selectedToRerollIds.length + ' dices due to: ' + selected,
+              },
+            ],
+            icon_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
+            username: 'Kami Bayushi',
+          }),
+        });
       }
 
       this.$store.state.mainRoll.selectedToRerollIds = [];
