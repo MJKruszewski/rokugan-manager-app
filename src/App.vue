@@ -134,7 +134,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="!isElectron()" color="success" v-on:click="window.open('https://github.com/MJKruszewski/rokugan-manager-app/releases', '_blank')">Download</v-btn>
+      <v-btn v-if="!isElectron()" color="success" v-on:click="openGithub()">Download</v-btn>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
@@ -254,6 +254,9 @@ export default Vue.extend({
     },
     getColor: function () {
       return getClanColor(this.$store.state.player?.familyData?.clan);
+    },
+    openGithub: function () {
+      window.open('https://github.com/MJKruszewski/rokugan-manager-app/releases', '_blank');
     },
   },
 });
