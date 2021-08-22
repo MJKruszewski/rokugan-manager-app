@@ -1,8 +1,7 @@
 //Import card from paper blossoms XML
 import {getClanColor, getHook, sendNotifications} from '@/domain/common';
-import {Armor, Bond, Book, Equipment, Player, Technique, Weapon} from '@/domain/types/player.type';
+import {Advance, Armor, Bond, Book, Equipment, Player, Technique, Weapon} from '@/domain/types/player.type';
 import parsedBonds from '../../assets/data/json/bonds.json';
-import axios from 'axios';
 
 export class LoadCardService {
     private static preparePersonalTraits(xml: Document, placeholder: Player) {
@@ -89,6 +88,32 @@ export class LoadCardService {
                 description: child.getAttribute('description') || '',
                 page: child.getAttribute('ref_page') || '',
                 source: child.getAttribute('source') || '',
+            });
+        }
+    }
+
+    private static prepareTitles(xml: Document, placeholder: Player) {
+        for (const child of xml.getElementsByTagName('Titles')[0].children) {
+            const title = child.getAttribute('value') || '';
+
+            if (title.length <= 0) {
+                continue;
+            }
+
+            placeholder.titles.push(title);
+            placeholder.currentTitle = title;
+        }
+    }
+
+    private static prepareAdvances(xml: Document, placeholder: Player) {
+        for (const child of xml.getElementsByTagName('Advances')[0].children) {
+            const advance = (child.getAttribute('value') || '').split('|');
+
+            placeholder.advances.push({
+                cost: parseInt(advance[3]),
+                kind: advance[2].toLowerCase() as Advance['kind'],
+                name: advance[1],
+                type: advance[0],
             });
         }
     }
@@ -239,10 +264,13 @@ export class LoadCardService {
                 mon: xml.getElementsByTagName('Family')[0].getAttribute('value') || '',
                 school: xml.getElementsByTagName('School')[0].getAttribute('value') || '',
             },
+            currentTitle: null,
             isLoaded: false,
             portraitImage: xml.getElementsByTagName('Portrait')[0].getAttribute('base64image') || '',
             rings: [],
             skills: [],
+            advances: [],
+            titles: [],
             anxieties: [],
             adversities: [],
             distinctions: [],
@@ -287,6 +315,8 @@ export class LoadCardService {
         LoadCardService.prepareAbilities(xml, placeholder);
         LoadCardService.preparePersonalTraits(xml, placeholder);
         LoadCardService.prepareBonds(xml, placeholder);
+        LoadCardService.prepareAdvances(xml, placeholder);
+        LoadCardService.prepareTitles(xml, placeholder);
 
         placeholder.currentStats.voidPoints = placeholder?.rings?.filter(val => val.name === 'Void').shift()?.value || 0;
         placeholder.isLoaded = true;

@@ -68,7 +68,7 @@
             <v-list-item-title>Equipment</v-list-item-title>
           </v-list-item>
 
-          <v-list-item link v-on:click="$router.push('advancement')" :disabled="true || this.$store.state.player === undefined">
+          <v-list-item link v-on:click="$router.push('advancement')" :disabled="this.$store.state.player === undefined">
             <v-list-item-icon>
               <v-icon>mdi-school</v-icon>
             </v-list-item-icon>

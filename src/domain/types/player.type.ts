@@ -21,6 +21,10 @@ export interface Player {
     distinctions: PersonalTrait[];
     passions: PersonalTrait[];
 
+    advances: Advance[];
+    titles: string[];
+    currentTitle: string | null;
+
     stats: Statistics;
     currentStats: CurrentStatistics;
 
@@ -31,6 +35,13 @@ export interface Player {
     isLoaded: boolean;
 
 }
+
+export type Advance = {
+    type: string;
+    name: string;
+    kind: 'curriculum' | 'title' | 'none'
+    cost: number
+};
 
 export type FamilyData = {
     name: string;

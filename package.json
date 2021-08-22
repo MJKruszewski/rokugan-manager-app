@@ -1,7 +1,7 @@
 {
   "name": "rokugan-manager-app",
   "description": "App to help organize RPG tabletop sessions in L5R",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "private": true,
   "author": {
     "name": "MJKruszewski",
