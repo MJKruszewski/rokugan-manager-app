@@ -9,6 +9,8 @@
           >
             <v-card-title style="justify-content: space-between;">
               <b>Character:</b>
+              <v-btn color="info" v-on:click="changeAvatar()">Change avatar</v-btn>
+              <input type="file" style="display: none" ref="avatar">
             </v-card-title>
             <v-divider/>
 
@@ -161,6 +163,9 @@ export default Vue.extend({
       }
 
       return this.$store.state.player.bonds;
+    },
+    changeAvatar() {
+      //todo
     },
   },
 });

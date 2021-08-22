@@ -115,6 +115,7 @@ export type PersonalTrait = {
 
 export type Equipment = {
     name: string;
+    kind: 'armor' | 'weapon' | 'other'
     type: string;
     rarity: number;
     desc: string;

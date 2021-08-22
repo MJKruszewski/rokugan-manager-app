@@ -1,5 +1,5 @@
 <template>
-  <div style="display: inline-flex;">
+  <div style="display: inline-flex;" v-if="item.book !== '' && item.book !== null">
     <div style="display: inline-flex" v-if="$store.state.server.bookFiles[item.book] === null">{{ item.book + ' (' + item.page + ')'}}</div>
     <v-btn v-else v-on:click="openBook(item.book, item.page)" color="primary">Open</v-btn>
   </div>

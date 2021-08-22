@@ -151,16 +151,17 @@ export class LoadCardService {
                     name: child.getAttribute('name') || '',
                     book: child.getAttribute('book') as Book,
                     desc: child.getAttribute('desc') || '',
-                    page: child.getAttribute('type') || '',
+                    page: child.getAttribute('page') || '',
                     price: parseInt(child.getAttribute('price') || '0'),
                     qualities: child.getAttribute('qualities') || '',
                     rarity: parseInt(child.getAttribute('rarity') || '0'),
                     shortDesc: child.getAttribute('short_desc') || '',
                     type: child.getAttribute('type') || '',
-                    unit: child.getAttribute('type') || '',
+                    unit: child.getAttribute('unit') || '',
+                    kind: 'armor',
 
                     physRes: parseInt(child.getAttribute('a_physres') || '0'),
-                    superRes: parseInt(child.getAttribute('type') || '0'),
+                    superRes: parseInt(child.getAttribute('a_superres') || '0'),
                 } as Armor);
 
                 continue;
@@ -171,13 +172,14 @@ export class LoadCardService {
                     name: child.getAttribute('name') || '',
                     book: child.getAttribute('book') as Book,
                     desc: child.getAttribute('desc') || '',
-                    page: child.getAttribute('type') || '',
+                    page: child.getAttribute('page') || '',
                     price: parseInt(child.getAttribute('price') || '0'),
                     qualities: child.getAttribute('qualities') || '',
                     rarity: parseInt(child.getAttribute('rarity') || '0'),
                     shortDesc: child.getAttribute('short_desc') || '',
                     type: child.getAttribute('type') || '',
-                    unit: child.getAttribute('type') || '',
+                    unit: child.getAttribute('unit') || '',
+                    kind: 'weapon',
 
                     skill: child.getAttribute('w_skill') || '',
                     grip: child.getAttribute('w_grip') || '',
@@ -196,13 +198,14 @@ export class LoadCardService {
                     name: child.getAttribute('name') || '',
                     book: child.getAttribute('book') as Book,
                     desc: child.getAttribute('desc') || '',
-                    page: child.getAttribute('type') || '',
+                    page: child.getAttribute('page') || '',
                     price: parseInt(child.getAttribute('price') || '0'),
                     qualities: child.getAttribute('qualities') || '',
                     rarity: parseInt(child.getAttribute('rarity') || '0'),
                     shortDesc: child.getAttribute('short_desc') || '',
                     type: child.getAttribute('type') || '',
-                    unit: child.getAttribute('type') || '',
+                    unit: child.getAttribute('unit') || '',
+                    kind: 'other',
                 } as Equipment);
 
                 continue;
