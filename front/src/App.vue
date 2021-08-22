@@ -68,7 +68,7 @@
             <v-list-item-title>Equipment</v-list-item-title>
           </v-list-item>
 
-          <v-list-item link v-on:click="$router.push('advancement')" :disabled="this.$store.state.player === undefined">
+          <v-list-item link v-on:click="$router.push('advancement')" :disabled="true || this.$store.state.player === undefined">
             <v-list-item-icon>
               <v-icon>mdi-school</v-icon>
             </v-list-item-icon>
@@ -125,8 +125,8 @@
           <v-list-item link disabled>
             <v-list-item-title>Open application data folder</v-list-item-title>
           </v-list-item>
-          <v-list-item link>
-            <v-list-item-title v-on:click="loadXml()">Import XML</v-list-item-title>
+          <v-list-item link v-on:click="loadXml()">
+            <v-list-item-title>Import XML</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -147,18 +147,19 @@
         <v-list :dark="this.$store.state.colorVariant">
             <template v-for="server in $store.state.server.hostList">
               <v-list-item link :key="server.text + uuid.v4()" v-on:click="saveHook(server.value)">
-                <v-list-item-title>{{server.text}}</v-list-item-title>
+                <v-list-item-title>
+                  <v-icon v-if="$store.state.server.host === server.value">mdi-chevron-right</v-icon>
+                  {{server.text}}
+                </v-list-item-title>
               </v-list-item>
             </template>
         </v-list>
       </v-menu>
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
     </v-app-bar>
 
     <v-main>
       <input
+          id="openXml"
           ref="openXml"
           type="file"
           accept=".xml"
@@ -218,13 +219,13 @@ export default Vue.extend({
         return;
       }
 
-      this.xmlFile = file.target.files[0];
+      this.xmlFile = file?.target?.files[0];
     },
     isElectron: function (): boolean {
       return navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
     },
     loadXml: function () {
-      this.$refs.openXml?.click();
+      const result = this.$refs.openXml?.click();
     },
     // detectMimeType: function (b64: string) {
     //   const signatures = {

@@ -58,7 +58,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="7">
+      <v-col sm="12" md="7">
         <v-row>
           <v-col>
             <v-card
@@ -110,7 +110,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="5">
+      <v-col sm="12" md="5">
         <v-row>
           <v-col>
             <v-card
@@ -312,7 +312,7 @@ export default Vue.extend({
       }
 
       console.log('open: ', this.$store.state.server.bookFiles[book] + '#page=' + page);
-      window.open(this.$store.state.server.bookFiles[book] + '#page=' + page, '_blank');
+      window.open(this.$store.state.server.bookFiles[book] + '#page=' + page, 'modal', 'width=1000,height=800,nodeIntegration=no');
     },
     getQualityColor: function (quality: string) {
       switch (quality) {

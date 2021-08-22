@@ -1,11 +1,12 @@
 module.exports = {
   pluginOptions: {
-    quasar: {
-      importStrategy: 'kebab',
-      rtlSupport: true
-    }
+    electronBuilder: {
+      builderOptions: {
+        publish: ['github'],
+      },
+    },
   },
   transpileDependencies: [
-    'vuetify'
-  ]
-}
+    'vuetify',
+  ], 
+};

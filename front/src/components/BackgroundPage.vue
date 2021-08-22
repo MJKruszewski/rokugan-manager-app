@@ -75,6 +75,85 @@
               :text-variant="this.$store.state.textVariant"
           >
             <v-card-title style="justify-content: space-between;">
+              <b>Attributes:</b>
+            </v-card-title>
+            <v-divider/>
+
+            <v-card-text v-if="$store.state.player !== undefined">
+              <v-row>
+                <v-col>
+                  <v-text-field
+                      label="Endurance:"
+                      disabled
+                      v-model="$store.state.player.stats.endurance"
+                      placeholder="0"
+                  />
+                  <v-text-field
+                      label="Composure:"
+                      disabled
+                      v-model="$store.state.player.stats.composure"
+                      placeholder="0"
+                  />
+                  <v-text-field
+                      label="Vigilance:"
+                      disabled
+                      v-model="$store.state.player.stats.vigilance"
+                      placeholder="0"
+                  />
+                  <v-text-field
+                      label="Focus:"
+                      disabled
+                      v-model="$store.state.player.stats.focus"
+                      placeholder="0"
+                  />
+                </v-col>
+                <v-col>
+                  <v-slider
+                      label="Glory:"
+                      v-model="$store.state.player.social.glory"
+                      :thumb-size="24"
+                      thumb-color="blue"
+                      color="blue"
+                      min="0"
+                      max="100"
+                      thumb-label="always"
+                  ></v-slider>
+                  <v-slider
+                      label="Honor:"
+                      v-model="$store.state.player.social.honor"
+                      :thumb-size="24"
+                      thumb-color="blue"
+                      color="blue"
+                      min="0"
+                      max="100"
+                      thumb-label="always"
+                  ></v-slider>
+                  <v-slider
+                      label="Status:"
+                      v-model="$store.state.player.social.status"
+                      :thumb-size="24"
+                      thumb-color="blue"
+                      color="blue"
+                      min="0"
+                      max="100"
+                      thumb-label="always"
+                  ></v-slider>
+                </v-col>
+              </v-row>
+            </v-card-text>
+            <v-card-text v-else>
+              <v-skeleton-loader type="card"></v-skeleton-loader>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-card
+              :dark="this.$store.state.colorVariant"
+              :text-variant="this.$store.state.textVariant"
+          >
+            <v-card-title style="justify-content: space-between;">
               <b>Bonds:</b>
             </v-card-title>
             <v-divider/>

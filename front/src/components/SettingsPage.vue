@@ -91,7 +91,38 @@
             <v-divider/>
 
             <v-card-text>
-
+              <v-row>
+                <v-col>
+                  <v-select
+                      label=""
+                      :items="$store.state.server.hostList"
+                      v-model="selectedHook"
+                  />
+                </v-col>
+                <v-col cols="3">
+                  <v-btn
+                      color="warning"
+                      :disabled="selectedHook === null"
+                      v-on:click="removeServer()"
+                  >Remove</v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                      label="Discord server name:"
+                      v-model="newServerName"
+                  />
+                  <v-text-field
+                      label="Discord webhook:"
+                      v-model="newServerWebhook"
+                  />
+                  <v-btn color="success"
+                         :disabled="newServerName === null || newServerWebhook === null || newServerName.lenght <= 0 || newServerWebhook.lenght <= 0 "
+                    v-on:click="addServer()"
+                  >Add</v-btn>
+                </v-col>
+              </v-row>
             </v-card-text>
           </v-card>
         </v-col>
@@ -107,6 +138,11 @@ export default Vue.extend({
   name: 'SettingsPage',
   data: function() {
     return {
+      selectedHook: null,
+      newServerName: null,
+      newServerWebhook: null,
+
+
       CR: this.$store.state.server.bookFiles.CR ? {
         name: this.$store.state.server.bookFiles.CR,
         path: this.$store.state.server.bookFiles.CR,
@@ -182,6 +218,32 @@ export default Vue.extend({
     },
   },
   methods: {
+    removeServer: function () {
+      if (this.selectedHook === null) {
+        return;
+      }
+
+      //@ts-ignore
+      this.$store.state.server.hostList = this.$store.state.server.hostList.filter(server => server.value !== this.selectedHook);
+
+      this.selectedHook = null;
+      localStorage.setItem('server', JSON.stringify(this.$store.state.server));
+    },
+    addServer: function () {
+      if (this.newServerName === null || this.newServerWebhook === null) {
+        return;
+      }
+
+      this.$store.state.server.hostList.push({
+        text: this.newServerName,
+        //@ts-ignore
+        value: btoa(unescape(encodeURIComponent(this.newServerWebhook))),
+      });
+
+      this.newServerName = null;
+      this.newServerWebhook = null;
+      localStorage.setItem('server', JSON.stringify(this.$store.state.server));
+    },
     saveFile: function (book: Book, file: File | null) {
       console.log('change of file', file);
 
