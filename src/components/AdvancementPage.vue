@@ -101,8 +101,8 @@ export default Vue.extend({
   name: 'AdvancementPage',
   data: () => {
     return {
-      schoolSteps: null,
-      titleSteps: null,
+      schoolSteps: [],
+      titleSteps: [],
       curriculumHeaders: [
         {
           text: 'Rank',
@@ -162,10 +162,6 @@ export default Vue.extend({
         }
       }
 
-      if (this.schoolSteps === null) {
-        this.schoolSteps = [];
-      }
-
       return this.schoolSteps;
     },
     getTitleAdvances() {
@@ -180,10 +176,6 @@ export default Vue.extend({
           this.titleSteps = title.advancements;
           break;
         }
-      }
-
-      if (this.titleSteps === null) {
-        this.titleSteps = [];
       }
 
       return this.titleSteps;
