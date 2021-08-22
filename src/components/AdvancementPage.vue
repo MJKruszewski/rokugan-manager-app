@@ -157,6 +157,7 @@ export default Vue.extend({
         const school = schools[schoolsKey];
 
         if (school.name === this.$store.state.player.familyData.school) {
+          //@ts-ignore
           this.schoolSteps = school.curriculum;
           break;
         }
@@ -173,6 +174,7 @@ export default Vue.extend({
         const title = titles[titlesKey];
 
         if (title.name === this.$store.state.player.currentTitle) {
+          //@ts-ignore
           this.titleSteps = title.advancements;
           break;
         }
