@@ -33,7 +33,7 @@
                   <v-img v-bind="attrs"
                          v-on="on"
                          :id="item.name.toLowerCase() + '-ring'"
-                         width="35px"
+                         width="55px"
                          :src="require('../../assets/img/ring/' + item.name.toLowerCase() + '.png')"/>
                 </template>
                 <span>{{ getLocalStanceTooltip(item.name.toLowerCase()) }}</span>
@@ -47,6 +47,9 @@
 
           </v-row>
         </template>
+<!--        <template v-slot:[`item.description`]="{ item }">-->
+<!--          <b>{{ getDescriptionRing(item.name) }}</b>-->
+<!--        </template>-->
         <template v-slot:[`item.value`]="{ item }">
           <b>{{item.value}}</b>
         </template>
@@ -61,7 +64,7 @@
 </template>
 <script lang="ts">
 import {Ring} from '@/domain/types/ring.type';
-import {getStanceTooltip} from '@/domain/common';
+import {getRingDescription, getStanceTooltip} from '@/domain/common';
 import Vue from 'vue';
 
 export default Vue.extend({
@@ -94,6 +97,9 @@ export default Vue.extend({
     },
     getLocalStanceTooltip: function (stance: string) {
       return getStanceTooltip(stance);
+    },
+    getDescriptionRing: function (ring: string) {
+      return getRingDescription(ring);
     },
   },
 });

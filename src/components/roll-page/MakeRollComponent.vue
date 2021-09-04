@@ -345,11 +345,47 @@ export default Vue.extend({
         this.calculateStats();
       }
 
-      // this.$bvToast.toast('Please select dices to keep by clicking on them', {
-      //   title: 'Information',
-      //   autoHideDelay: 2000,
-      //   appendToast: true,
-      // });
+      const dices: string[] = [];
+
+      [
+        ...this.$store.state.mainRoll.wDices,
+        ...this.$store.state.mainRoll.wExplodedDices,
+        ...this.$store.state.mainRoll.bDices,
+        ...this.$store.state.mainRoll.bExplodedDices,
+      ].forEach((dice) => {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        dices.push(require('./../../assets/img/mini/' + dice.img));
+      });
+
+      const b64 = await mergeImages(dices, {color: '#f000'});
+      const formData = new FormData();
+      let imageBlob = await (await fetch(b64)).blob();
+
+      formData.append('payload_json', JSON.stringify({
+        username: 'Kami Bayushi',
+        avatar_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
+        embeds: [
+          {
+            content: 'perkele',
+            title: this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon + ' first roll!',
+            color: this.HEXToVBColor(this.getColor()),
+            description: (this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '' ? ((this.$store.state.mainRoll.dc <= this.$store.state.mainRoll.success) ? 'Bushi overcomes challenge!' : 'Bushi is unsuccessful in his/her attempt') + '\n\n' : '')
+                + 'Samurai used ring of: ' + this.$store.state.mainRoll.selectedRing + '(' + this.$store.state.mainRoll.selectedRingValue + ')' + '\n'
+                + 'Samurai used skill of: ' + this.$store.state.mainRoll.selectedSkill + '(' + this.$store.state.mainRoll.selectedSkillValue + ')' + '\n\n'
+                + (this.$store.state.mainRoll.voidPoints > 0 ? 'Samurai used void points: ' + this.$store.state.mainRoll.voidPoints + '\n\n' : ''),
+            image: {
+              url: 'attachment://roll.png',
+            },
+          },
+        ],
+      }));
+      formData.append('file', imageBlob, 'roll.png');
+
+      await axios.post(Buffer.from(getHook(), 'base64').toString(), formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
@@ -412,12 +448,6 @@ export default Vue.extend({
           break;
       }
 
-      // this.$bvToast.toast('Remember! You can unselect exploded dice!', {
-      //   title: 'Information',
-      //   autoHideDelay: 2000,
-      //   appendToast: true,
-      // });
-
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
     startReroll: function (selected : string|null|undefined) {
@@ -429,12 +459,6 @@ export default Vue.extend({
       this.$store.state.mainRoll.selectedToRerollIds = [];
       this.$store.state.mainRoll.currentReroll = selected;
       this.$store.state.mainRoll.rerollLock.push(selected);
-
-      // this.$bvToast.toast('Please select dices to keep by clicking on them', {
-      //   title: 'Information',
-      //   autoHideDelay: 2000,
-      //   appendToast: true,
-      // });
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
     },
@@ -541,28 +565,6 @@ export default Vue.extend({
         return;
       }
 
-      // if (additional === true) {
-      //   if (!this.$store.state.mainRoll.explodedHelper.includes(val.id)) {
-      //     const filtered = [...this.$store.state.mainRoll.bExplodedDices, ...this.$store.state.mainRoll.wExplodedDices].filter((dice) => dice.id === val.id);
-      //
-      //     if (filtered.length > 0) {
-      //       if (this.$store.state.mainRoll.selectedIds.includes(val.id)) {
-      //         this.$store.state.mainRoll.selectedIds = this.$store.state.mainRoll.selectedIds.filter((id) => id !== val.id);
-      //         this.calculateStats();
-      //
-      //         return;
-      //       }
-      //
-      //       this.$store.state.mainRoll.selectedIds.push(val.id);
-      //       this.calculateStats();
-      //     }
-      //
-      //     return;
-      //   }
-      //
-      //   return;
-      // }
-
       if (this.$store.state.mainRoll.isExplosionStarted) {
         return;
       }
@@ -621,13 +623,10 @@ export default Vue.extend({
         embeds: [
           {
             content: 'perkele',
-            title: this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon + ' makes a move!',
+            title: this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon + ' resolved!',
             color: this.HEXToVBColor(this.getColor()),
             description: (this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '' && this.$store.state.mainRoll.dc > 0 ? 'TN of a roll: ' + this.$store.state.mainRoll.dc : 'TN is unknown - player gets 1 void point') + '\n'
                 + (this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '' ? ((this.$store.state.mainRoll.dc <= this.$store.state.mainRoll.success) ? 'Bushi overcomes challenge!' : 'Bushi is unsuccessful in his/her attempt') + '\n\n' : '')
-                + 'Samurai used ring of: ' + this.$store.state.mainRoll.selectedRing + '(' + this.$store.state.mainRoll.selectedRingValue + ')' + '\n'
-                + 'Samurai used skill of: ' + this.$store.state.mainRoll.selectedSkill + '(' + this.$store.state.mainRoll.selectedSkillValue + ')' + '\n\n'
-                + (this.$store.state.mainRoll.voidPoints > 0 ? 'Samurai used void points: ' + this.$store.state.mainRoll.voidPoints + '\n\n' : '')
                 + 'Success: ' + this.$store.state.mainRoll.success + '\n'
                 + 'Strife: ' + this.$store.state.mainRoll.strife + '\n'
                 + 'Opportunities: ' + this.$store.state.mainRoll.opportunities + '\n',

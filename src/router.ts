@@ -7,6 +7,7 @@ import BondsPage from '@/components/BondsPage.vue';
 import PersonalTraitsPage from '@/components/PersonalTraitsPage.vue';
 import BackgroundPage from '@/components/BackgroundPage.vue';
 import SettingsPage from '@/components/SettingsPage.vue';
+import GmPanel from '@/components/GmPanel.vue';
 
 export function getRouter(): VueRouter {
     return new VueRouter({
@@ -19,6 +20,7 @@ export function getRouter(): VueRouter {
             { path: '/equipment', alias: 'equipment', component: EquipmentPage },
             { path: '/advancement', alias: 'advancement', component: AdvancementPage },
             { path: '/settings', alias: 'settings', component: SettingsPage },
+            { path: '/gmpanel', alias: 'gmpanel', component: GmPanel },
         ],
     });
 } 

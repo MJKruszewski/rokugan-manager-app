@@ -131,6 +131,21 @@
         </v-list>
       </v-menu>
 
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>
+              mdi-arm-flex
+            </v-icon>
+          </v-btn>
+        </template>
+
+        <v-list :dark="this.$store.state.colorVariant">
+          <v-list-item link v-on:click="$router.push('gmpanel')">
+            <v-list-item-title>GM Panel</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
 
       <v-spacer></v-spacer>
 
@@ -229,20 +244,6 @@ export default Vue.extend({
       //@ts-ignore
       this.$refs.openXml?.click();
     },
-    // detectMimeType: function (b64: string) {
-    //   const signatures = {
-    //     JVBERi0: "application/pdf",
-    //     R0lGODdh: "image/gif",
-    //     R0lGODlh: "image/gif",
-    //     iVBORw0KGgo: "image/png"
-    //   };
-    //
-    //   for (let s in signatures) {
-    //     if (b64.indexOf(s) === 0) {
-    //       return signatures[s];
-    //     }
-    //   }
-    // },
     saveHook: function (host: string) {
       this.$store.state.server.host = host;
 
