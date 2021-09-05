@@ -1,186 +1,11 @@
 <template>
   <div id="app" >
   <v-app :class="this.$store.state.colorVariant ? 'theme--dark' : 'theme--light'">
-    <v-navigation-drawer
-        app
-        permanent
-        expand-on-hover
-        style="max-height: 100%"
-        :mini-variant.sync="clipped"
-        :dark="this.$store.state.colorVariant"
-    >
-      <v-list v-if="this.$store.state.player !== undefined">
-        <v-list-item class="px-2">
-          <v-img style="border-radius: 5px" :src="playerAvatar"/>
-        </v-list-item>
 
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title class="text-h6">
-              {{ this.$store.state.player.familyData.mon }} {{ this.$store.state.player.familyData.name }}
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              {{ this.$store.state.player.familyData.clan }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-
-      <v-divider></v-divider>
-
-      <v-list
-          nav
-          dense
-      >
-        <v-list-item-group v-model="selectedMenu">
-          <v-list-item link v-on:click="$router.push('main')" >
-            <v-list-item-icon>
-              <v-icon>mdi-dice-multiple</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Roll</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item link v-on:click="$router.push('background')" :disabled="this.$store.state.player === undefined">
-            <v-list-item-icon>
-              <v-icon>mdi-account-circle</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Background</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item link v-on:click="$router.push('personal-traits')" :disabled="this.$store.state.player === undefined">
-            <v-list-item-icon>
-              <v-icon>mdi-yin-yang</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Personal Traits</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item link v-on:click="$router.push('techniques')" :disabled="this.$store.state.player === undefined">
-            <v-list-item-icon>
-              <v-icon>mdi-cards-playing-outline</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Techniques</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item link v-on:click="$router.push('equipment')" :disabled="this.$store.state.player === undefined">
-            <v-list-item-icon>
-              <v-icon>mdi-bag-personal</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Equipment</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item link v-on:click="$router.push('advancement')" :disabled="this.$store.state.player === undefined">
-            <v-list-item-icon>
-              <v-icon>mdi-school</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Advancement</v-list-item-title>
-          </v-list-item>
-
-          <v-spacer/>
-
-          <v-list-item link v-on:click="$router.push('settings')">
-            <v-list-item-icon>
-              <v-icon>mdi-cog</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Settings</v-list-item-title>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-app-bar app dense :dark="this.$store.state.colorVariant">
-      <v-img :src="this.getClanImage()" max-width="35px"></v-img>
-
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>
-              mdi-file
-            </v-icon>
-          </v-btn>
-        </template>
-
-        <v-list :dark="this.$store.state.colorVariant">
-          <v-list-item link disabled>
-            <v-list-item-title>New</v-list-item-title>
-          </v-list-item>
-          <v-list-item link disabled>
-            <v-list-item-title>Open</v-list-item-title>
-          </v-list-item>
-          <v-list-item link disabled>
-            <v-list-item-title>Save</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>
-              mdi-tools
-            </v-icon>
-          </v-btn>
-        </template>
-
-        <v-list :dark="this.$store.state.colorVariant">
-          <v-list-item link disabled>
-            <v-list-item-title>Open application data folder</v-list-item-title>
-          </v-list-item>
-          <v-list-item link v-on:click="loadXml()">
-            <v-list-item-title>Import XML</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>
-              mdi-arm-flex
-            </v-icon>
-          </v-btn>
-        </template>
-
-        <v-list :dark="this.$store.state.colorVariant">
-          <v-list-item link v-on:click="$router.push('gmpanel')">
-            <v-list-item-title>GM Panel</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-      <v-spacer></v-spacer>
-
-      <v-btn v-if="!isElectron()" color="success" v-on:click="openGithub()">Download</v-btn>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>
-              mdi-discord
-            </v-icon>
-          </v-btn>
-        </template>
-
-        <v-list :dark="this.$store.state.colorVariant">
-            <template v-for="server in $store.state.server.hostList">
-              <v-list-item link :key="server.text + uuid.v4()" v-on:click="saveHook(server.value)">
-                <v-list-item-title>
-                  <v-icon v-if="$store.state.server.host === server.value">mdi-chevron-right</v-icon>
-                  {{server.text}}
-                </v-list-item-title>
-              </v-list-item>
-            </template>
-        </v-list>
-      </v-menu>
-    </v-app-bar>
+    <SideMenu/>
+    <TopMenu/>
 
     <v-main>
-      <input
-          id="openXml"
-          ref="openXml"
-          type="file"
-          accept=".xml"
-          @change="onFileChanged"
-          style="display: none"
-      >
       <v-container fluid>
         <transition name="fade">
           <router-view/>
@@ -192,74 +17,13 @@
 </template>
 
 <script lang="ts">
-import {getClanColor, getClanMon, getHook} from '@/domain/common';
 import Vue from 'vue';
-import {LoadCardService} from '@/domain/services/load-card.service';
+import SideMenu from '@/components/menu/SideMenu.vue';
+import TopMenu from '@/components/menu/TopMenu.vue';
 
 export default Vue.extend({
   name: 'App',
-  computed: {
-    playerAvatar() {
-      if (this.$store.state.player === undefined) {
-        return '';
-      }
-
-      // return 'data:' + this.detectMimeType(this.$store.state.player.image) + 'image/png;charset=utf-8;base64,' + this.$store.state.player.image;
-      return 'data:image/png;charset=utf-8;base64,' + this.$store.state.player.portraitImage;
-    },
-  },
-  data: () => {
-    return {
-      uuid: require('uuid'),
-      selectedMenu: 0,
-      xmlFile: undefined,
-      hook: getHook(),
-      clipped: true,
-    };
-  },
-  watch: {
-    xmlFile: async function (val) {
-      if (val === undefined || val === '') {
-        return;
-      }
-
-      const xml = new DOMParser().parseFromString(await val.text(), 'application/xml');
-      this.$store.state.player = await LoadCardService.importCard(xml);
-
-    },
-  },
-  methods: {
-    onFileChanged: function (file: File | null) {
-      if (file === null) {
-        return;
-      }
-
-      //@ts-ignore
-      this.xmlFile = file?.target?.files[0];
-    },
-    isElectron: function (): boolean {
-      return navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
-    },
-    loadXml: function () {
-      //@ts-ignore
-      this.$refs.openXml?.click();
-    },
-    saveHook: function (host: string) {
-      this.$store.state.server.host = host;
-
-      localStorage.setItem('server', JSON.stringify(this.$store.state.server));
-    },
-    getClanImage: function () {
-      console.log('getClanMon(this.$store.state.player.familyData.clan)', getClanMon(this.$store.state.player?.familyData?.clan));
-      return getClanMon(this.$store.state.player?.familyData?.clan);
-    },
-    getColor: function () {
-      return getClanColor(this.$store.state.player?.familyData?.clan);
-    },
-    openGithub: function () {
-      window.open('https://github.com/MJKruszewski/rokugan-manager-app/releases', '_blank');
-    },
-  },
+  components: {TopMenu, SideMenu},
 });
 </script>
 
@@ -286,18 +50,6 @@ body {
 }
 *::-webkit-scrollbar-thumb {
   box-shadow: inset 0 0 6px rgba(146, 146, 146, 0.6);
-}
-
-.background-custom {
-  /*width: 100%;*/
-  /*height: 100%;*/
-  /*background-image: url("./assets/background.jpg") ;*/
-  /*background-repeat: no-repeat;*/
-  /*background-size: cover;*/
-
-  /*top: 0px !important;*/
-  /*position: fixed;*/
-  /*overflow: auto;*/
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity .2s ease;

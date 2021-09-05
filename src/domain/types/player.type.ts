@@ -99,6 +99,7 @@ export type Bond = {
     book: Book;
     page: string;
     rank: number;
+    customValue?: string;
 }
 
 export type Technique = {
@@ -122,6 +123,7 @@ export type PersonalTrait = {
     ring: string;
     book: Book;
     page: string;
+    customValue?: string;
 }
 
 export type Equipment = {

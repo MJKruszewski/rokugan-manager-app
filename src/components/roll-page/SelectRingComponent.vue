@@ -17,7 +17,7 @@
           single-select
           hide-default-header
           :headers="[
-                           {text: 'Name', value: 'name'},
+                           {text: 'Name', value: 'name', width: 50},
                            {text: 'Description', value: 'description'},
                            {text: 'Value', value: 'value'},
                         ]"
@@ -26,8 +26,6 @@
           @click:row="ringSelect"
       >
         <template v-slot:[`item.name`]="{ item }">
-          <v-row justify="start" align="center">
-            <v-col :md="2">
               <v-tooltip right>
                 <template v-slot:activator="{ on, attrs }">
                   <v-img v-bind="attrs"
@@ -38,18 +36,10 @@
                 </template>
                 <span>{{ getLocalStanceTooltip(item.name.toLowerCase()) }}</span>
               </v-tooltip>
-
-
-            </v-col>
-            <v-col class="hidden-sm-and-down" :md="3">
-              {{ item.name }}
-            </v-col>
-
-          </v-row>
         </template>
-<!--        <template v-slot:[`item.description`]="{ item }">-->
-<!--          <b>{{ getDescriptionRing(item.name) }}</b>-->
-<!--        </template>-->
+        <template v-slot:[`item.description`]="{ item }">
+          <b>{{ getDescriptionRing(item.name) }}</b>
+        </template>
         <template v-slot:[`item.value`]="{ item }">
           <b>{{item.value}}</b>
         </template>

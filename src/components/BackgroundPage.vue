@@ -155,6 +155,25 @@
           >
             <v-card-title style="justify-content: space-between;">
               <b>Bonds:</b>
+                <div style="display: inline-flex;">
+                  <AddBond/>
+                  <v-btn
+                      color="success"
+                      style="margin-right: 7px"
+                      :disabled="bondSelect === undefined || bondSelect.length === 0"
+                      @click="upgradeBond"
+                  >
+                    Upgrade
+                  </v-btn>
+                  <v-btn
+                      color="warning"
+                      style="margin-right: 7px"
+                      :disabled="bondSelect === undefined || bondSelect.length === 0"
+                      @click="removeBond"
+                  >
+                    Remove
+                  </v-btn>
+                </div>
             </v-card-title>
             <v-divider/>
 
@@ -163,7 +182,10 @@
                   class="elevation-4"
                   disable-pagination
                   hide-default-footer
+                  show-select
                   single-select
+                  item-key="name"
+                  v-model="bondSelect"
                   :headers="bondsHeaders"
                   :dark="this.$store.state.colorVariant"
                   :items="this.getBonds()"
@@ -211,14 +233,18 @@
 <script lang="ts">
 import Vue from 'vue';
 import OpenBookComponent from '@/components/OpenBookComponent.vue';
+import AddBond from '@/components/AddBond.vue';
+import {Advance} from '@/domain/types/player.type';
 
 export default Vue.extend({
   name: 'BackgroundPage',
   components: {
+    AddBond,
     OpenBookComponent,
   },
   data: () => {
     return {
+      bondSelect: undefined,
       bondsHeaders: [
         {
           text: 'Name',
@@ -236,6 +262,64 @@ export default Vue.extend({
     };
   },
   methods: {
+    upgradeBond() {
+      if (this.bondSelect === undefined || this.bondSelect.length <= 0) {
+        return;
+      }
+
+      const selected = this.bondSelect[0];
+
+      if (selected.rank >= 5) {
+        return;
+      }
+
+      for (let i = 0; i < this.$store.state.player.bonds.length; i++) {
+        const bond = this.$store.state.player.bonds[i];
+
+        if (bond.name === selected.name && bond.rank === selected.rank) {
+          bond.rank++;
+
+          this.$store.state.player.advances.push({
+            type: 'Bond Upgrade',
+            name: bond.name,
+            kind: 'none',
+            cost: bond.rank * 2,
+          } as Advance);
+
+          break;
+        }
+      }
+
+      this.bondSelect = [];
+    },
+    removeBond() {
+      if (this.bondSelect === undefined || this.bondSelect.length <= 0) {
+        return;
+      }
+
+      const selected = this.bondSelect[0];
+
+      for (let i = 0; i < this.$store.state.player.bonds.length; i++) {
+        const bond = this.$store.state.player.bonds[i];
+
+        if (bond.name === selected.name && bond.rank === selected.rank) {
+          this.$store.state.player.bonds.splice(i, 1);
+
+          for (let j = 0; j < this.$store.state.player.abilities.length; j++) {
+            const ability = this.$store.state.player.abilities[j];
+
+            if (ability.source === bond.name) {
+              this.$store.state.player.abilities.splice(j, 1);
+              break;
+            }
+          }
+
+          break;
+        }
+      }
+
+      this.bondSelect = [];
+    },
     getBonds() {
       if (this.$store.state.player === undefined) {
         return [];

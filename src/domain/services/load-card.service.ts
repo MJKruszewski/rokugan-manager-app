@@ -274,8 +274,8 @@ export class LoadCardService {
             anxieties: [],
             adversities: [],
             distinctions: [],
-            bonds: [],
             passions: [],
+            bonds: [],
             social: {
                 glory: Number.parseInt(xml.getElementsByTagName('Social')[0].getAttribute('glory') || '0'),
                 honor: Number.parseInt(xml.getElementsByTagName('Social')[0].getAttribute('honor') || '0'),
