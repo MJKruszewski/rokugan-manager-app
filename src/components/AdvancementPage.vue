@@ -352,7 +352,7 @@ export default Vue.extend({
 
       this.techniquesList = AdvanceService.getPossibleTechniques(this.selectedAdvanceSublist, this.isRemoveAllRestrictions, this.$store.state.player);
     },
-    curriculumClick(item) {
+    curriculumClick(item: any) {
       this.dialog = true;
       this.schoolSelect = item;
     },
