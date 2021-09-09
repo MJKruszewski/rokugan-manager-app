@@ -184,7 +184,7 @@
                   hide-default-footer
                   show-select
                   single-select
-                  item-key="name"
+                  item-key="id"
                   v-model="bondSelect"
                   :headers="bondsHeaders"
                   :dark="this.$store.state.colorVariant"
@@ -234,7 +234,8 @@
 import Vue from 'vue';
 import OpenBookComponent from '@/components/OpenBookComponent.vue';
 import AddBond from '@/components/AddBond.vue';
-import {Advance} from '@/domain/types/player.type';
+import {Advance, Bond} from '@/domain/types/player.type';
+import * as uuid from 'uuid';
 
 export default Vue.extend({
   name: 'BackgroundPage',
@@ -244,7 +245,7 @@ export default Vue.extend({
   },
   data: () => {
     return {
-      bondSelect: undefined,
+      bondSelect: [],
       bondsHeaders: [
         {
           text: 'Name',
@@ -267,7 +268,7 @@ export default Vue.extend({
         return;
       }
 
-      const selected = this.bondSelect[0];
+      const selected: Bond = this.bondSelect[0];
 
       if (selected.rank >= 5) {
         return;
@@ -297,7 +298,7 @@ export default Vue.extend({
         return;
       }
 
-      const selected = this.bondSelect[0];
+      const selected: Bond = this.bondSelect[0];
 
       for (let i = 0; i < this.$store.state.player.bonds.length; i++) {
         const bond = this.$store.state.player.bonds[i];
@@ -325,7 +326,12 @@ export default Vue.extend({
         return [];
       }
 
-      return this.$store.state.player.bonds;
+      return this.$store.state.player.bonds.map((item: Bond, index: number) => {
+        return {
+          ...item,
+          id: index,
+        };
+      });
     },
     changeAvatar() {
       //todo

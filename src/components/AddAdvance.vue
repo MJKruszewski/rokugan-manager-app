@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-      v-model="dialog"
+      v-model="this.dialog"
       persistent
       :dark="this.$store.state.colorVariant"
       max-width="600px"
@@ -44,7 +44,7 @@
         <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+            @click="$emit('close')"
         >
           Close
         </v-btn>
@@ -63,12 +63,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {PersonalTraitsService, Trait} from '@/domain/services/personal-traits.service';
-import {Ability, Bond, Book, PersonalTrait} from '@/domain/types/player.type';
-import {BondsService, JsonBond} from '@/domain/services/bonds.service';
+import {BondsService} from '@/domain/services/bonds.service';
 
 export default Vue.extend({
-  name: 'AddBond',
+  name: 'AddAdvance',
   data: () => {
     return {
       dialog: false,
@@ -77,39 +75,16 @@ export default Vue.extend({
       traits: BondsService.getBonds().map((item) => item.name),
     };
   },
+  props: {
+    schoolSelect: Object,
+  },
   methods: {
     saveDistinction: function () {
       if (this.selectedDistinction.length <= 0) {
         return;
       }
 
-      let jsonBond: JsonBond | undefined = BondsService.getBond(this.selectedDistinction);
-
-      if (jsonBond === undefined) {
-        return;
-      }
-
-      const bond: Bond = {
-        book: jsonBond.reference.book as Book,
-        page: jsonBond.reference.page.toString(),
-        name: jsonBond.name,
-        ability: jsonBond.ability,
-        rank: 1,
-      };
-
-      if (this.nameDistinction !== null && this.nameDistinction.length > 0) {
-        bond.customValue = this.nameDistinction;
-      }
-
-      this.$store.state.player.bonds.push(bond);
-      this.$store.state.player.abilities.push({
-        name: jsonBond.ability,
-        book: jsonBond.reference.book,
-        page: jsonBond.reference.page.toString(),
-        source: jsonBond.name,
-        description: '',
-      } as Ability);
-      this.dialog = false;
+      this.$emit('close');
     },
   },
 });

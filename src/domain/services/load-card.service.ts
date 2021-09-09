@@ -119,6 +119,8 @@ export class LoadCardService {
     }
 
     private static prepareBonds(xml: Document, placeholder: Player) {
+        let advancesForRank = Array.from(xml.getElementsByTagName('Advances')[0].children);
+
         for (const child of xml.getElementsByTagName('Advances')[0].children) {
             const advance: string = child.getAttribute('value') || '';
 
@@ -145,7 +147,9 @@ export class LoadCardService {
                 ability: template.ability,
             };
 
-            bond.rank = LoadCardService.calculateBondRank(xml, bond);
+            const result = LoadCardService.calculateBondRank(advancesForRank, xml, bond);
+            advancesForRank = result.advancesForRank;
+            bond.rank = result.rank;
 
             placeholder.bonds.push(bond);
         }
@@ -153,20 +157,42 @@ export class LoadCardService {
         console.log('placeholder.abilities', placeholder.abilities);
     }
 
-    private static calculateBondRank(xml: Document, ability: Bond): number {
+    private static calculateBondRank(advancesForRank: Array<any>, xml: Document, ability: Bond): { rank:number, advancesForRank: Array<any> } {
+        const cleanup: string[] = [];
         let rank = 1;
 
-        for (const child of xml.getElementsByTagName('Advances')[0].children) {
+        for (const child of advancesForRank) {
             const attribute: string = child.getAttribute('value') || '';
 
             if (!attribute.includes('Bond Upgrade|' + ability.name + '|')) {
                 continue;
             }
 
+            cleanup.push(attribute);
             rank++;
+
+            if (rank === 5) {
+                break;
+            }
         }
 
-        return rank;
+        for (let i = 0; i < cleanup.length; i++) {
+            for (let j = 0; j < advancesForRank.length; j++) {
+                const attribute: string = advancesForRank[j].getAttribute('value') || '';
+
+                if (attribute !== cleanup[i]) {
+                    continue;
+                }
+
+                advancesForRank.splice(j, 1);
+                break;
+            }
+        }
+
+        return {
+            rank,
+            advancesForRank,
+        };
     }
 
     private static prepareInventory(xml: Document, placeholder: Player) {

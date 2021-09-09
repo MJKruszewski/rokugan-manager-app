@@ -23,11 +23,12 @@
         <v-container>
           <v-row>
             <v-col cols="12">
-              <v-select
+              <v-autocomplete
                   :items="traits"
                   v-model="selectedDistinction"
-                  label="Distinction:"
-              ></v-select>
+                  :label="this.type + ':'"
+                  placeholder="Start typing"
+              ></v-autocomplete>
             </v-col>
             <v-col cols="12" v-if="selectedDistinction.includes('[')">
               <v-text-field
@@ -64,7 +65,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import {PersonalTraitsService, Trait} from '@/domain/services/personal-traits.service';
-import {PersonalTrait} from '@/domain/types/player.type';
+import {Advance, Book, PersonalTrait} from '@/domain/types/player.type';
 
 export default Vue.extend({
   name: 'AddPersonalTrait',
@@ -81,16 +82,11 @@ export default Vue.extend({
   },
   methods: {
     saveDistinction: function () {
-      //     anxieties: [],
-      //     adversities: [],
-      //     distinctions: [],
-      //     passions: [],
-
       if (this.selectedDistinction.length <= 0) {
         return;
       }
 
-      let distinction: Trait;
+      let distinction: Trait | undefined;
 
       switch (this.type) {
         case 'anxieties':
@@ -103,17 +99,24 @@ export default Vue.extend({
           distinction = PersonalTraitsService.getPassion(this.selectedDistinction);
           break;
         case 'distinctions':
+        default:
           distinction = PersonalTraitsService.getDistinction(this.selectedDistinction);
           break;
       }
 
+      if (distinction === undefined) {
+        return;
+      }
+
       const trait: PersonalTrait = {
-        book: distinction.reference.book,
-        page: distinction.reference.page,
+        book: distinction.reference.book as Book,
+        page: distinction.reference.page.toString(),
         ring: distinction.ring,
         name: distinction.name,
-        types: distinction.types,
-        type: this.type.charAt(0).toUpperCase() + this.type.slice(1).toLowerCase(),
+        types: distinction.types.join(', '),
+        shortDesc: '',
+        desc: '',
+        type: (this.type.charAt(0).toUpperCase() + this.type.slice(1).toLowerCase() )as 'Distinctions' | 'Anxieties' | 'Passions' | 'Adversities',
       };
 
       if (this.nameDistinction !== null && this.nameDistinction.length > 0) {
@@ -121,7 +124,19 @@ export default Vue.extend({
       }
 
       this.$store.state.player[this.type].push(trait);
+
+      if (this.type === 'passions') {
+        this.$store.state.player.advances.push({
+          cost: 3,
+          kind: 'curriculum',
+          name: distinction?.name,
+          type: 'Passion',
+        } as Advance);
+      }
+
       this.dialog = false;
+      this.selectedDistinction = '';
+      this.nameDistinction = '';
     },
   },
 });

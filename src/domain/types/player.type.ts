@@ -107,7 +107,7 @@ export type Technique = {
     desc: string;
     shortDesc: string;
     restriction: string;
-    type: 'Kata' | 'Kih\u014d' | 'Invocations' | 'Rituals' | 'Sh\u016bji' | 'Mah\u014d' | 'Ninjutsu' | 'Signature Scrolls' | 'Astradhari Techniques' | 'Inversions';
+    type: 'Kata' | 'Kih\u014d' | 'Invocations' | 'Rituals' | 'Sh\u016bji' | 'Mah\u014d' | 'Ninjutsu' | 'Signature Scrolls' | 'Astradhari Techniques' | 'Inversions' | 'Item Patterns';
     subtype: string;
     book: Book;
     page: string;

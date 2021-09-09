@@ -623,7 +623,7 @@ export default Vue.extend({
         embeds: [
           {
             content: 'perkele',
-            title: this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon + ' resolved!',
+            title: this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon + ' resolved a roll!',
             color: this.HEXToVBColor(this.getColor()),
             description: (this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '' && this.$store.state.mainRoll.dc > 0 ? 'TN of a roll: ' + this.$store.state.mainRoll.dc : 'TN is unknown - player gets 1 void point') + '\n'
                 + (this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '' ? ((this.$store.state.mainRoll.dc <= this.$store.state.mainRoll.success) ? 'Bushi overcomes challenge!' : 'Bushi is unsuccessful in his/her attempt') + '\n\n' : '')

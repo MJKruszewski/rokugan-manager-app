@@ -32,12 +32,11 @@
                   disable-pagination
                   hide-default-footer
                   single-select
-                  item-key="name"
                   v-model="distinctionSelect"
                   show-select
                   :headers="headers"
                   :dark="this.$store.state.colorVariant"
-                  :items="$store.state.player.distinctions"
+                  :items="$store.state.player.distinctions.map((item, index) => { return {...item, id: index} })"
               >
                 <template v-slot:[`item.name`]="{ item }">
                   <template v-if="item.name.includes('[') && item.customValue !== undefined && item.customValue.length > 0">
@@ -86,13 +85,12 @@
                   class="elevation-4"
                   disable-pagination
                   v-model="passionsSelect"
-                  item-key="name"
                   hide-default-footer
                   show-select
                   single-select
                   :headers="headers"
                   :dark="this.$store.state.colorVariant"
-                  :items="this.$store.state.player.passions"
+                  :items="this.$store.state.player.passions.map((item, index) => { return {...item, id: index} })"
               >
                 <template v-slot:[`item.book`]="{ item }">
                   <OpenBookComponent :item="item"/>
@@ -137,13 +135,12 @@
                   class="elevation-4"
                   disable-pagination
                   v-model="adversitiesSelect"
-                  item-key="name"
                   show-select
                   hide-default-footer
                   single-select
                   :headers="headers"
                   :dark="this.$store.state.colorVariant"
-                  :items="this.$store.state.player.adversities"
+                  :items="this.$store.state.player.adversities.map((item, index) => { return {...item, id: index} })"
               >
                 <template v-slot:[`item.book`]="{ item }">
                   <OpenBookComponent :item="item"/>
@@ -185,12 +182,11 @@
                   disable-pagination
                   hide-default-footer
                   v-model="anxietiesSelect"
-                  item-key="name"
                   show-select
                   single-select
                   :headers="headers"
                   :dark="this.$store.state.colorVariant"
-                  :items="this.$store.state.player.anxieties"
+                  :items="this.$store.state.player.anxieties.map((item, index) => { return {...item, id: index} })"
               >
                 <template v-slot:[`item.book`]="{ item }">
                   <OpenBookComponent :item="item"/>
@@ -264,7 +260,7 @@ export default Vue.extend({
         return;
       }
 
-      const trait = this.adversitiesSelect[0];
+      const trait: PersonalTrait = this.adversitiesSelect[0];
 
       for (let i = 0; i < this.$store.state.player.adversities.length; i++) {
         const tmp = this.$store.state.player.adversities[i];
@@ -281,7 +277,7 @@ export default Vue.extend({
         return;
       }
 
-      const trait = this.anxietiesSelect[0];
+      const trait: PersonalTrait = this.anxietiesSelect[0];
 
       for (let i = 0; i < this.$store.state.player.anxieties.length; i++) {
         const tmp = this.$store.state.player.anxieties[i];
@@ -298,7 +294,7 @@ export default Vue.extend({
         return;
       }
 
-      const trait = this.passionsSelect[0];
+      const trait: PersonalTrait = this.passionsSelect[0];
 
       for (let i = 0; i < this.$store.state.player.passions.length; i++) {
         const tmp = this.$store.state.player.passions[i];
@@ -315,7 +311,7 @@ export default Vue.extend({
         return;
       }
 
-      const trait = this.distinctionSelect[0];
+      const trait: PersonalTrait = this.distinctionSelect[0];
 
       for (let i = 0; i < this.$store.state.player.distinctions.length; i++) {
         const tmp = this.$store.state.player.distinctions[i];
