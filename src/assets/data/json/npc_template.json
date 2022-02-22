@@ -1,0 +1,172 @@
+[
+  {
+    "id": "loyal_bushi",
+    "name": "Loyal Bushi",
+    "description": "",
+    "demeanor": "assertive",
+    "conflict": {
+      "combat": 4,
+      "intrigue": 2
+    },
+    "advantages": [
+      {
+        "name": "Tested in War",
+        "skill": "Martial",
+        "ring": "Earth",
+        "types": [
+          "Mental",
+          "Physical"
+        ]
+      },
+      {
+        "name": "Sworn to Bushidō:",
+        "skill": "Social",
+        "ring": "Void",
+        "types": [
+          "Mental"
+        ]
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Hot-Tempered",
+        "skill": "Social",
+        "ring": "Water",
+        "types": [
+          "Mental"
+        ]
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Crescent Moon Style",
+        "type": "Kata"
+      },
+      {
+        "name": "Sworn Protector",
+        "type": "Custom"
+      }
+    ],
+    "weapons": [
+      {
+        "name": "Katana",
+        "type": "Swords"
+      },
+      {
+        "name": "Yumi",
+        "type": "Bows"
+      }
+    ],
+    "armors": [
+      "Lacquered Armor"
+    ],
+    "rings": {
+      "air": 2,
+      "fire": 3,
+      "earth": 3,
+      "water": 3,
+      "void": 2
+    },
+    "wealth": {
+      "zeni": 0,
+      "koku": 5,
+      "bu": 5
+    },
+    "skills": {
+      "artisan": 1,
+      "martial": 3,
+      "scholar": 2,
+      "social": 1,
+      "trade": 0
+    },
+    "statistics": {
+      "endurance": 12,
+      "composure": 9,
+      "focus": 5,
+      "vigilance": 3
+    },
+    "social": {
+      "honor": 55,
+      "glory": 50,
+      "status": 39
+    },
+    "reference": {
+      "book": "Core",
+      "page": 312
+    }
+  },
+  {
+    "id": "humble_peasant",
+    "name": "Humble Peasant",
+    "description": "",
+    "demeanor": "shrewd",
+    "conflict": {
+      "combat": 1,
+      "intrigue": 1
+    },
+    "advantages": [
+      {
+        "name": "Salt of the Earth",
+        "skill": "Trade",
+        "ring": "Earth",
+        "types": [
+          "Interpersonal",
+          "Physical"
+        ]
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Deferential",
+        "skill": "Social",
+        "ring": "Water",
+        "types": [
+          "Interpersonal",
+          "Mental"
+        ]
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Overlooked",
+        "type": "Custom"
+      }
+    ],
+    "weapons": [],
+    "armors": [],
+    "rings": {
+      "air": 1,
+      "fire": 2,
+      "earth": 2,
+      "water": 2,
+      "void": 1
+    },
+    "wealth": {
+      "zeni": 2,
+      "koku": 0,
+      "bu": 0
+    },
+    "skills": {
+      "artisan": 0,
+      "martial": 0,
+      "scholar": 0,
+      "social": 1,
+      "trade": 2
+    },
+    "statistics": {
+      "endurance": 4,
+      "composure": 4,
+      "focus": 3,
+      "vigilance": 2
+    },
+    "social": {
+      "honor": 20,
+      "glory": 25,
+      "status": 15
+    },
+    "reference": {
+      "book": "Core",
+      "page": 313
+    }
+  }
+]

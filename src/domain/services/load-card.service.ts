@@ -264,7 +264,7 @@ export class LoadCardService {
         }
     }
 
-    static async importCard(xml: Document): Promise<Player> {
+    static async importCard(xml: Document, sendNotification: boolean): Promise<Player> {
         const wealth = xml.getElementsByTagName('Wealth')[0];
         const stats = {
             endurance: Number.parseInt(xml.getElementsByTagName('Derived')[0].getAttribute('endurance') || '0'),
@@ -347,8 +347,8 @@ export class LoadCardService {
         placeholder.currentStats.voidPoints = placeholder?.rings?.filter(val => val.name === 'Void').shift()?.value || 0;
         placeholder.isLoaded = true;
 
-        if (sendNotifications()) {
-            const hook = Buffer.from(getHook(), 'base64').toString();
+        if (sendNotification) {
+            const hook = atob(getHook());
             const social = xml.getElementsByTagName('Social')[0];
 
             await fetch(hook + '/slack', {

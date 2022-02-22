@@ -36,6 +36,80 @@ export interface Player {
 
 }
 
+export interface Npc {
+    id: string;
+    name: string;
+    demeanor: Demeanor;
+    description: string;
+    portraitImage: string;
+    skills: {
+        artisan: number;
+        martial: number;
+        scholar: number;
+        social: number;
+        trade: number;
+    };
+    rings: {
+        air: number;
+        fire: number;
+        earth: number;
+        water: number;
+        void: number;
+    };
+    wealth: Wealth;
+    social: Social;
+    statistics: Statistics;
+    advantages: Advantage[];
+    disadvantages: Advantage[];
+    abilities: NpcAbility[];
+    weapons: NpcWeapon[];
+    armors: NpcArmor[];
+}
+
+export type NpcWeapon = {
+    name: string;
+    range: {
+        min: number;
+        max: number;
+    };
+    damage: string;
+    deadliness: string;
+    reference: {
+        book?: Book;
+        page?: string;
+    };
+}
+
+export type NpcArmor = {
+    name: string;
+    superRes: number;
+    physRes: number;
+    rarity: number;
+    reference: {
+        book?: Book;
+        page?: string;
+    };
+}
+
+export type Advantage = {
+    name: string,
+    skill: string,
+    ring: string,
+    types: string[]
+}
+
+export type Demeanor = {
+    id: string;
+    name: string;
+    rings: {
+        air: number;
+        fire: number;
+        earth: number;
+        water: number;
+        void: number;
+    };
+}
+
 export type Advance = {
     type: string;
     name: string;
@@ -91,6 +165,17 @@ export type Ability = {
     source: string;
     book: Book;
     page: string;
+}
+
+export type NpcAbility = {
+    name: string;
+    type: string;
+    subtype: string;
+    rank: number;
+    reference: {
+        book?: Book;
+        page?: string;
+    };
 }
 
 export type Bond = {

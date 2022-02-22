@@ -157,6 +157,7 @@ export class PlayerService {
     }
 
     public static getPlayerSchool(store: Player): SchoolTemplate | undefined {
+        // @ts-ignore
         return schools.find(item => {
             return item.name === store.familyData.school;
         }) as SchoolTemplate | undefined;

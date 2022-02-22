@@ -96,7 +96,7 @@ export default Vue.extend({
       }
 
       const playerStore = this.$store.state.player;
-      const hook = Buffer.from(getHook(), 'base64').toString();
+      const hook = atob(getHook());
 
       fetch(hook + '/slack', {
         method: 'POST',
@@ -126,7 +126,7 @@ export default Vue.extend({
     },
     sendInfo: function () {
       const playerStore: Player = this.$store.state.player;
-      const hook = Buffer.from(getHook(), 'base64').toString();
+      const hook = atob(getHook());
 
       fetch(hook + '/slack', {
         method: 'POST',

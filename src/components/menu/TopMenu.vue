@@ -10,27 +10,27 @@
     >
     <v-img :src="this.getClanImage()" max-width="35px"></v-img>
 
-    <v-menu offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn icon v-bind="attrs" v-on="on">
-          <v-icon>
-            mdi-file
-          </v-icon>
-        </v-btn>
-      </template>
+<!--    <v-menu offset-y>-->
+<!--      <template v-slot:activator="{ on, attrs }">-->
+<!--        <v-btn icon v-bind="attrs" v-on="on">-->
+<!--          <v-icon>-->
+<!--            mdi-file-->
+<!--          </v-icon>-->
+<!--        </v-btn>-->
+<!--      </template>-->
 
-      <v-list :dark="this.$store.state.colorVariant">
-        <v-list-item link disabled>
-          <v-list-item-title>New</v-list-item-title>
-        </v-list-item>
-        <v-list-item link disabled>
-          <v-list-item-title>Open</v-list-item-title>
-        </v-list-item>
-        <v-list-item link disabled>
-          <v-list-item-title>Save</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+<!--      <v-list :dark="this.$store.state.colorVariant">-->
+<!--        <v-list-item link disabled>-->
+<!--          <v-list-item-title>New</v-list-item-title>-->
+<!--        </v-list-item>-->
+<!--        <v-list-item link disabled>-->
+<!--          <v-list-item-title>Open</v-list-item-title>-->
+<!--        </v-list-item>-->
+<!--        <v-list-item link disabled>-->
+<!--          <v-list-item-title>Save</v-list-item-title>-->
+<!--        </v-list-item>-->
+<!--      </v-list>-->
+<!--    </v-menu>-->
 
     <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
@@ -47,22 +47,6 @@
         </v-list-item>
         <v-list-item link v-on:click="loadXml()">
           <v-list-item-title>Import XML</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-
-    <v-menu offset-y>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn icon v-bind="attrs" v-on="on">
-          <v-icon>
-            mdi-arm-flex
-          </v-icon>
-        </v-btn>
-      </template>
-
-      <v-list :dark="this.$store.state.colorVariant">
-        <v-list-item link v-on:click="$router.push('gmpanel')">
-          <v-list-item-title>GM Panel</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -95,7 +79,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {getClanColor, getClanMon, getHook} from '@/domain/common';
+import {getClanColor, getClanMon, getHook, sendNotifications} from '@/domain/common';
 import {LoadCardService} from '@/domain/services/load-card.service';
 
 export default Vue.extend({
@@ -116,7 +100,7 @@ export default Vue.extend({
       }
 
       const xml = new DOMParser().parseFromString(await val.text(), 'application/xml');
-      this.$store.state.player = await LoadCardService.importCard(xml);
+      this.$store.state.player = await LoadCardService.importCard(xml, sendNotifications());
 
     },
   },
@@ -125,7 +109,6 @@ export default Vue.extend({
       if (file === null) {
         return;
       }
-
       //@ts-ignore
       this.xmlFile = file?.target?.files[0];
     },

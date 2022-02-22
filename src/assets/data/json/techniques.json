@@ -616,10 +616,10 @@
         ]
     },
     {
-        "name": "Kih\u014d",
+        "name": "Kihō",
         "subcategories": [
             {
-                "name": "Earth Kih\u014d",
+                "name": "Earth Kihō",
                 "techniques": [
                     {
                         "name": "Cleansing Spirit",
@@ -669,7 +669,7 @@
                 ]
             },
             {
-                "name": "Air Kih\u014d",
+                "name": "Air Kihō",
                 "techniques": [
                     {
                         "name": "Air Fist",
@@ -710,7 +710,7 @@
                 ]
             },
             {
-                "name": "Fire Kih\u014d",
+                "name": "Fire Kihō",
                 "techniques": [
                     {
                         "name": "Breaking Blow",
@@ -760,7 +760,7 @@
                 ]
             },
             {
-                "name": "Water Kih\u014d",
+                "name": "Water Kihō",
                 "techniques": [
                     {
                         "name": "Freezing the Lifeblood",
@@ -810,7 +810,7 @@
                 ]
             },
             {
-                "name": "Void Kih\u014d",
+                "name": "Void Kihō",
                 "techniques": [
                     {
                         "name": "Death Touch",
@@ -1116,7 +1116,7 @@
                         "xp": 3
                     },
                     {
-                        "name": "Jur\u014djin's Balm",
+                        "name": "Jurōjin's Balm",
                         "rank": 1,
                         "reference": {
                             "book": "Core",
@@ -1152,7 +1152,7 @@
                         "xp": 3
                     },
                     {
-                        "name": "Tetsub\u014d of Earth",
+                        "name": "Tetsubō of Earth",
                         "rank": 1,
                         "reference": {
                             "book": "Core",
@@ -1387,7 +1387,7 @@
                 "name": "Water Invocations",
                 "techniques": [
                     {
-                        "name": "B\u014d of Water",
+                        "name": "Bō of Water",
                         "rank": 1,
                         "reference": {
                             "book": "Core",
@@ -2712,7 +2712,7 @@
         ]
     },
     {
-        "name": "Mah\u014d",
+        "name": "Mahō",
         "subcategories": [
             {
                 "name": "",

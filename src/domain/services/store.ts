@@ -3,7 +3,7 @@ import {AppStore, Server} from '@/domain/types/app-store.type';
 import {MainRoll} from '@/domain/types/main-roll.type';
 import * as servers from '@/servers.json';
 
-const currentVersion = 'v7';
+const currentVersion = 'v8';
 let store: LocalStore|undefined = undefined;
 
 export class LocalStore extends Vuex.Store<AppStore> {
@@ -37,6 +37,11 @@ export function getStore(): LocalStore {
                 SL: null,
             },
         } as Server,
+
+        gmData: {
+            players: [],
+            npcs: [],
+        },
 
         mainRoll: {
             currentVersion: currentVersion,

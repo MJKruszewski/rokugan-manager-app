@@ -3,7 +3,6 @@
     "target": "esnext",
     "module": "esnext",
 
-    "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
 
@@ -17,7 +16,7 @@
 //    "declarationMap": true,
 //    "noImplicitAny": true,
     "resolveJsonModule": true,
-
+    "strict": true,
     "importHelpers": true,
     "allowJs": true,
     "skipLibCheck": true,
@@ -25,8 +24,10 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
+
     "types": [
-      "webpack-env"
+      "webpack-env",
+      "node"
     ],
     "paths": {
       "@/*": [

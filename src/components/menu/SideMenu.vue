@@ -31,42 +31,42 @@
         dense
     >
       <v-list-item-group v-model="selectedMenu">
-        <v-list-item link v-on:click="$router.push('main')" >
+        <v-list-item link v-on:click="$router.push({path: '/'})" >
           <v-list-item-icon>
             <v-icon>mdi-dice-multiple</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Roll</v-list-item-title>
         </v-list-item>
 
-        <v-list-item link v-on:click="$router.push('background')" :disabled="this.$store.state.player === undefined">
+        <v-list-item link v-on:click="$router.push({path: '/background'})" :disabled="this.$store.state.player === undefined">
           <v-list-item-icon>
             <v-icon>mdi-account-circle</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Background</v-list-item-title>
         </v-list-item>
 
-        <v-list-item link v-on:click="$router.push('personal-traits')" :disabled="this.$store.state.player === undefined">
+        <v-list-item link v-on:click="$router.push({path: '/personal-traits'})" :disabled="this.$store.state.player === undefined">
           <v-list-item-icon>
             <v-icon>mdi-yin-yang</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Personal Traits</v-list-item-title>
         </v-list-item>
 
-        <v-list-item link v-on:click="$router.push('techniques')" :disabled="this.$store.state.player === undefined">
+        <v-list-item link v-on:click="$router.push({path: '/techniques'})" :disabled="this.$store.state.player === undefined">
           <v-list-item-icon>
             <v-icon>mdi-cards-playing-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Techniques</v-list-item-title>
         </v-list-item>
 
-        <v-list-item link v-on:click="$router.push('equipment')" :disabled="this.$store.state.player === undefined">
+        <v-list-item link v-on:click="$router.push({path: '/equipment'})" :disabled="this.$store.state.player === undefined">
           <v-list-item-icon>
             <v-icon>mdi-bag-personal</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Equipment</v-list-item-title>
         </v-list-item>
 
-        <v-list-item link v-on:click="$router.push('advancement')" :disabled="this.$store.state.player === undefined">
+        <v-list-item link v-on:click="$router.push({path: '/advancement'})" :disabled="this.$store.state.player === undefined">
           <v-list-item-icon>
             <v-icon>mdi-school</v-icon>
           </v-list-item-icon>
@@ -75,7 +75,14 @@
 
         <v-spacer/>
 
-        <v-list-item link v-on:click="$router.push('settings')">
+        <v-list-item link v-on:click="$router.push({path: '/gmpanel'})">
+          <v-list-item-icon>
+            <v-icon>mdi-arm-flex</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>GM Panel</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item link v-on:click="$router.push({path: '/settings'})">
           <v-list-item-icon>
             <v-icon>mdi-cog</v-icon>
           </v-list-item-icon>

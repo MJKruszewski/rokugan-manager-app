@@ -66,6 +66,10 @@ export function getClanMon(clan: string): any {
             return require('../assets/img/mon/scorpion.webp');
         case 'Unicorn':
             return require('../assets/img/mon/unicorn.webp');
+        case 'Badger':
+            return require('../assets/img/mon/badger.webp');
+        case 'Falcon':
+            return require('../assets/img/mon/falcon.webp');
     }
 
     return require('../assets/img/mon/emperor.webp');
@@ -87,6 +91,10 @@ export function getClanColor(clan: string): string {
             return '#ff0000';
         case 'Crab':
             return '#0163b1';
+        case 'Badger':
+            return '#acacac';
+        case 'Falcon':
+            return '#00bd00';
     }
 
     return '#696969';

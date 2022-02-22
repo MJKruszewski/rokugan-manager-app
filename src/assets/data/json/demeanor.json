@@ -1,0 +1,82 @@
+[
+  {
+    "id": "shrewd",
+    "name": "Shrewd",
+    "rings": {
+      "air": 2,
+      "fire": -2,
+      "earth": 0,
+      "water": 0,
+      "void": 0
+    },
+    "unmask": "Panicked Retreat",
+    "reference": {
+      "book": "Core",
+      "page": 310
+    }
+  },
+  {
+    "id": "ambitious",
+    "name": "Ambitious",
+    "rings": {
+      "air": 0,
+      "fire": 2,
+      "earth": 0,
+      "water": -2,
+      "void": 0
+    },
+    "unmask": "Bend principles",
+    "reference": {
+      "book": "Core",
+      "page": 310
+    }
+  },
+  {
+    "id": "assertive",
+    "name": "Assertive",
+    "rings": {
+      "air": -2,
+      "fire": 0,
+      "earth": 2,
+      "water": 0,
+      "void": 0
+    },
+    "unmask": "Rage",
+    "reference": {
+      "book": "Core",
+      "page": 310
+    }
+  },
+  {
+    "id": "detached",
+    "name": "Detached",
+    "rings": {
+      "air": 0,
+      "fire": 1,
+      "earth": 1,
+      "water": 0,
+      "void": -2
+    },
+    "unmask": "Expose an Opening",
+    "reference": {
+      "book": "Core",
+      "page": 310
+    }
+  },
+  {
+    "id": "gruff",
+    "name": "Gruff",
+    "rings": {
+      "air": 0,
+      "fire": 0,
+      "earth": 2,
+      "water": 2,
+      "void": 0
+    },
+    "unmask": "Inappropriate Outburst",
+    "reference": {
+      "book": "Core",
+      "page": 310
+    }
+  }
+]

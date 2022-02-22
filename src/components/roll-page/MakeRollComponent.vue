@@ -202,7 +202,7 @@ import {getBlackImage, getClanColor, getExplosions, getHook, getWhiteImage, send
 import mergeImages from 'merge-images-horizontally-with-text/dist/index.es2015';
 // noinspection TypeScriptCheckImport
 //@ts-ignore
-import randomNumber from 'random-number-csprng-2';
+import {randomInt} from 'd3-random';
 
 import Vue from 'vue';
 
@@ -297,7 +297,7 @@ export default Vue.extend({
       this.$store.state.mainRoll.selectedDistinction = null;
 
       for (let i = 0; i < this.$store.state.mainRoll.selectedSkillValue; i++) {
-        let result = await randomNumber(1, 8);
+        let result = await randomInt(1, 8);
 
         this.$store.state.mainRoll.wDices.push({
           id: this.uuid.v4(),
@@ -306,7 +306,7 @@ export default Vue.extend({
       }
 
       for (let i = 0; i < this.$store.state.mainRoll.assistWhite; i++) {
-        let result = await randomNumber(1, 8);
+        let result = await randomInt(1, 8);
 
         this.$store.state.mainRoll.bDices.push({
           id: this.uuid.v4(),
@@ -315,7 +315,7 @@ export default Vue.extend({
       }
 
       for (let i = 0; i < this.$store.state.mainRoll.selectedRingValue; i++) {
-        let result = await randomNumber(1, 6);
+        let result = await randomInt(1, 6);
 
         this.$store.state.mainRoll.bDices.push({
           id: this.uuid.v4(),
@@ -324,7 +324,7 @@ export default Vue.extend({
       }
 
       for (let i = 0; i < this.$store.state.mainRoll.assistBlack; i++) {
-        let result = await randomNumber(1, 6);
+        let result = await randomInt(1, 6);
 
         this.$store.state.mainRoll.bDices.push({
           id: this.uuid.v4(),
@@ -333,7 +333,7 @@ export default Vue.extend({
       }
 
       for (let i = 0; i < this.$store.state.mainRoll.voidPoints; i++) {
-        let result = await randomNumber(1, 6);
+        let result = await randomInt(1, 6);
         let id = this.uuid.v4();
 
         this.$store.state.mainRoll.bDices.push({
@@ -381,7 +381,7 @@ export default Vue.extend({
       }));
       formData.append('file', imageBlob, 'roll.png');
 
-      await axios.post(Buffer.from(getHook(), 'base64').toString(), formData, {
+      await axios.post(atob(getHook()), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -421,7 +421,7 @@ export default Vue.extend({
 
       switch (dice.img) {
         case 'blacket.png':
-          rand = await randomNumber(1, 6);
+          rand = await randomInt(1, 6);
           id = this.uuid.v4();
 
           this.$store.state.mainRoll.bExplodedDices.push({
@@ -435,7 +435,7 @@ export default Vue.extend({
         case 'whitee.png':
         case 'whiteeo.png':
         case 'whiteet.png':
-          rand = await randomNumber(1, 8);
+          rand = await randomInt(1, 8);
           id = this.uuid.v4();
 
           this.$store.state.mainRoll.wExplodedDices.push({
@@ -464,18 +464,18 @@ export default Vue.extend({
     },
     finishReroll: function (selected: string | null) {
       this.$store.state.mainRoll.wDices.filter((dice: Dice) => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async (dice: Dice) => {
-        let result = await randomNumber(1, 8);
+        let result = await randomInt(1, 8);
 
         dice.img = getWhiteImage(result);
       });
       this.$store.state.mainRoll.bDices.filter((dice: Dice) => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async (dice: Dice) => {
-        let result = await randomNumber(1, 6);
+        let result = await randomInt(1, 6);
 
         dice.img = getBlackImage(result);
       });
 
       if (sendNotifications()) {
-        const hook = Buffer.from(getHook(), 'base64').toString();
+        const hook = atob(getHook());
 
         fetch(hook + '/slack', {
           method: 'POST',
@@ -638,7 +638,7 @@ export default Vue.extend({
       }));
       formData.append('file', imageBlob, 'roll.png');
 
-      await axios.post(Buffer.from(getHook(), 'base64').toString(), formData, {
+      await axios.post(atob(getHook()), formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

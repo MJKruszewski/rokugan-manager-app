@@ -1,5 +1,5 @@
 import {MainRoll} from '@/domain/types/main-roll.type';
-import {Player} from '@/domain/types/player.type';
+import {Npc, Player} from '@/domain/types/player.type';
 
 export type Server = {
     hostList: {
@@ -22,11 +22,18 @@ export type Server = {
     };
 };
 
+export type GmData = {
+    players?: Player[];
+    npcs?: Npc[];
+}
+
 export interface AppStore {
     colorVariant: boolean;
     textVariant: string;
 
     server: Server;
+
+    gmData: GmData;
 
     mainRoll: MainRoll;
     player?: Player;
