@@ -1,12 +1,12 @@
 <template>
   <v-row>
-    <v-col :sm="12" :md="6">
+    <v-col :sm="12" :md="4">
       <v-row>
         <GmPlayersList/>
       </v-row>
     </v-col>
 
-    <v-col :sm="12" :md="6">
+    <v-col :sm="12" :md="8">
       <v-row>
         <GmNpcList/>
       </v-row>

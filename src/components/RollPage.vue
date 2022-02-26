@@ -21,7 +21,7 @@
       </v-row>
       <v-row class="mt-5">
         <v-col :cols="12">
-          <MakeRollComponent/>
+          <MakeRollComponent :player="this.$store.state.player" :npc="false" />
         </v-col>
       </v-row>
       <v-row class="mt-5">

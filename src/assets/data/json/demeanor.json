@@ -70,13 +70,45 @@
       "air": 0,
       "fire": 0,
       "earth": 2,
-      "water": 2,
+      "water": -2,
       "void": 0
     },
     "unmask": "Inappropriate Outburst",
     "reference": {
       "book": "Core",
       "page": 310
+    }
+  },
+  {
+    "id": "courageous",
+    "name": "Courageous",
+    "rings": {
+      "air": 2,
+      "fire": 0,
+      "earth": -2,
+      "water": 0,
+      "void": 0
+    },
+    "unmask": "Angry Dismay",
+    "reference": {
+      "book": "SL",
+      "page": 144
+    }
+  },
+  {
+    "id": "honorable",
+    "name": "Honorable",
+    "rings": {
+      "air": 0,
+      "fire": 2,
+      "earth": -2,
+      "water": 0,
+      "void": 0
+    },
+    "unmask": "Honor’s Challenge",
+    "reference": {
+      "book": "FoV",
+      "page": 142
     }
   }
 ]

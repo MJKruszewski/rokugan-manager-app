@@ -64,6 +64,12 @@ export interface Npc {
     abilities: NpcAbility[];
     weapons: NpcWeapon[];
     armors: NpcArmor[];
+    currentStats: CurrentStatistics;
+    template: string;
+    reference: {
+        book?: Book;
+        page?: string;
+    };
 }
 
 export type NpcWeapon = {

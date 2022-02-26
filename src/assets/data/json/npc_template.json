@@ -19,7 +19,7 @@
         ]
       },
       {
-        "name": "Sworn to Bushidō:",
+        "name": "Sworn to Bushidō",
         "skill": "Social",
         "ring": "Void",
         "types": [
@@ -95,6 +95,7 @@
       "page": 312
     }
   },
+
   {
     "id": "humble_peasant",
     "name": "Humble Peasant",
@@ -167,6 +168,538 @@
     "reference": {
       "book": "Core",
       "page": 313
+    }
+  },
+
+  {
+    "id": "seasoned_courtier",
+    "name": "Seasoned Courtier",
+    "description": "",
+    "demeanor": "shrewd",
+    "conflict": {
+      "combat": 1,
+      "intrigue": 5
+    },
+    "advantages": [
+      {
+        "name": "Inexhaustible Politeness",
+        "skill": "Social",
+        "ring": "Air",
+        "types": [
+          "Interpersonal"
+        ]
+      },
+      {
+        "name": "Wealth and Resources",
+        "skill": "Trade",
+        "ring": "Water",
+        "types": [
+          "Material"
+        ]
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Sheltered from War",
+        "skill": "Martial",
+        "ring": "Fire",
+        "types": [
+          "Mental"
+        ]
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Fanning the Flames",
+        "type": "Shūji"
+      },
+      {
+        "name": "Whispering Winds",
+        "type": "Custom"
+      }
+    ],
+    "weapons": [
+      {
+        "name": "Wakizashi",
+        "type": "Swords"
+      }
+    ],
+    "armors": [
+      "Ceremonial Clothes"
+    ],
+    "rings": {
+      "air": 4,
+      "fire": 2,
+      "earth": 2,
+      "water": 3,
+      "void": 2
+    },
+    "wealth": {
+      "zeni": 0,
+      "koku": 0,
+      "bu": 0
+    },
+    "skills": {
+      "artisan": 3,
+      "martial": 0,
+      "scholar": 2,
+      "social": 3,
+      "trade": 0
+    },
+    "statistics": {
+      "endurance": 6,
+      "composure": 12,
+      "focus": 6,
+      "vigilance": 4
+    },
+    "social": {
+      "honor": 60,
+      "glory": 50,
+      "status": 39
+    },
+    "reference": {
+      "book": "Core",
+      "page": 313
+    }
+  },
+
+  {
+    "id": "scholary_shugenja",
+    "name": "Scholary Shugenja",
+    "description": "",
+    "demeanor": "ambitious",
+    "conflict": {
+      "combat": 4,
+      "intrigue": 3
+    },
+    "advantages": [
+      {
+        "name": "Mystical Knowledge",
+        "skill": "Scholar",
+        "ring": "Void",
+        "types": [
+          "Mental"
+        ]
+      },
+      {
+        "name": "Holy Personage",
+        "skill": "Social",
+        "ring": "Void",
+        "types": [
+          "Interpersonal"
+        ]
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Scholar's Physique",
+        "skill": "Martial",
+        "ring": "Earth",
+        "types": [
+          "Physical"
+        ]
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Path to Inner Peace",
+        "type": "Invocations"
+      },
+      {
+        "name": "The Fires from Within",
+        "type": "Invocations"
+      },
+      {
+        "name": "Disciple of Secret Lore",
+        "type": "Custom"
+      }
+    ],
+    "weapons": [
+      {
+        "name": "Wakizashi",
+        "type": "Swords"
+      }
+    ],
+    "armors": [
+      "Sanctified Robes"
+    ],
+    "rings": {
+      "air": 3,
+      "fire": 3,
+      "earth": 3,
+      "water": 3,
+      "void": 3
+    },
+    "wealth": {
+      "zeni": 0,
+      "koku": 0,
+      "bu": 0
+    },
+    "skills": {
+      "artisan": 3,
+      "martial": 0,
+      "scholar": 2,
+      "social": 3,
+      "trade": 0
+    },
+    "statistics": {
+      "endurance": 10,
+      "composure": 12,
+      "focus": 6,
+      "vigilance": 3
+    },
+    "social": {
+      "honor": 60,
+      "glory": 45,
+      "status": 39
+    },
+    "reference": {
+      "book": "Core",
+      "page": 314
+    }
+  },
+
+  {
+    "id": "vile_trickster",
+    "name": "Vile Trickster (Lesser Oni)",
+    "description": "",
+    "demeanor": "shrewd",
+    "conflict": {
+      "combat": 4,
+      "intrigue": 8
+    },
+    "advantages": [
+      {
+        "name": "Unholy Might",
+        "skill": "Martial",
+        "ring": "Fire",
+        "types": [
+          "Physical",
+          "Spiritual"
+        ]
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Sickening Visage",
+        "skill": "Social",
+        "ring": "Water",
+        "types": [
+          "Interpersonal"
+        ]
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Trickery of Jigoku",
+        "type": "Custom"
+      }
+    ],
+    "weapons": [
+      {
+        "name": "Cruel Talons",
+        "type": "Custom",
+        "reference": {
+          "book": "SL",
+          "page": 134
+        },
+        "range": {
+          "min": 0,
+          "max": 1
+        },
+        "damage": 5,
+        "deadliness": 4,
+        "grips": [],
+        "qualities": [
+          "Unholy"
+        ]
+      }
+    ],
+    "armors": [
+      {
+        "name": "Demonic hide",
+        "type": "Custom",
+        "reference": {
+          "book": "SL",
+          "page": 134
+        },
+        "resistance_values": [
+          {
+            "category": "Physical",
+            "value": 2
+          },
+          {
+            "category": "Supernatural",
+            "value": 2
+          }
+        ],
+        "qualities": ["Unholy"]
+      }
+    ],
+    "rings": {
+      "air": 4,
+      "fire": 3,
+      "earth": 2,
+      "water": 3,
+      "void": 3
+    },
+    "wealth": {
+      "zeni": 0,
+      "koku": 0,
+      "bu": 0
+    },
+    "skills": {
+      "artisan": 0,
+      "martial": 2,
+      "scholar": 1,
+      "social": 3,
+      "trade": 1
+    },
+    "statistics": {
+      "endurance": 12,
+      "composure": 14,
+      "focus": 8,
+      "vigilance": 4
+    },
+    "social": {
+      "honor": 0,
+      "glory": 6,
+      "status": 0
+    },
+    "reference": {
+      "book": "SL",
+      "page": 134
+    }
+  },
+
+  {
+    "id": "savage_brute",
+    "name": "Savage Brute (Lesser Oni)",
+    "description": "",
+    "demeanor": "shrewd",
+    "conflict": {
+      "combat": 10,
+      "intrigue": 3
+    },
+    "advantages": [
+      {
+        "name": "Unholy Might",
+        "skill": "Martial",
+        "ring": "Fire",
+        "types": [
+          "Physical",
+          "Spiritual"
+        ]
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Sickening Visage",
+        "skill": "Social",
+        "ring": "Water",
+        "types": [
+          "Interpersonal"
+        ]
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Savagery of Jigoku",
+        "type": "Custom"
+      }
+    ],
+    "weapons": [
+      {
+        "name": "Corrupted Tetsubō",
+        "type": "Custom",
+        "reference": {
+          "book": "SL",
+          "page": 135
+        },
+        "range": {
+          "min": 1,
+          "max": 2
+        },
+        "damage": 8,
+        "deadliness": 3,
+        "grips": [],
+        "qualities": [
+          "Unholy",
+          "Durable"
+        ]
+      }
+    ],
+    "armors": [
+      {
+        "name": "Thick demonic hide",
+        "type": "Custom",
+        "reference": {
+          "book": "SL",
+          "page": 135
+        },
+        "resistance_values": [
+          {
+            "category": "Physical",
+            "value": 3
+          },
+          {
+            "category": "Supernatural",
+            "value": 3
+          }
+        ],
+        "qualities": ["Unholy"]
+      }
+    ],
+    "rings": {
+      "air": 2,
+      "fire": 5,
+      "earth": 4,
+      "water": 2,
+      "void": 2
+    },
+    "wealth": {
+      "zeni": 0,
+      "koku": 0,
+      "bu": 0
+    },
+    "skills": {
+      "artisan": 0,
+      "martial": 3,
+      "scholar": 0,
+      "social": 0,
+      "trade": 1
+    },
+    "statistics": {
+      "endurance": 18,
+      "composure": 12,
+      "focus": 7,
+      "vigilance": 2
+    },
+    "social": {
+      "honor": 0,
+      "glory": 3,
+      "status": 0
+    },
+    "reference": {
+      "book": "SL",
+      "page": 135
+    }
+  },
+
+  {
+    "id": "warlord_of_jigoku",
+    "name": "Warlord of Jigoku (Powerful Oni)",
+    "description": "",
+    "demeanor": "arrogant",
+    "conflict": {
+      "combat": 14,
+      "intrigue": 10
+    },
+    "advantages": [
+      {
+        "name": "Aura of Terror",
+        "skill": "Social",
+        "ring": "Void",
+        "types": [
+          "Spiritual"
+        ]
+      }
+    ],
+    "disadvantages": [
+      {
+        "name": "Sickening Visage",
+        "skill": "Social",
+        "ring": "Water",
+        "types": [
+          "Interpersonal"
+        ]
+      }
+    ],
+    "abilities": [
+      {
+        "name": "Lord of Jigoku",
+        "type": "Custom"
+      },
+      {
+        "name": "Stolen Name",
+        "type": "Custom"
+      }
+    ],
+    "weapons": [
+      {
+        "name": "Massive Claws",
+        "type": "Custom",
+        "reference": {
+          "book": "SL",
+          "page": 136
+        },
+        "range": {
+          "min": 1,
+          "max": 2
+        },
+        "damage": 9,
+        "deadliness": 8,
+        "grips": [],
+        "qualities": [
+          "Razor-Edged",
+          "Unholy"
+        ]
+      }
+    ],
+    "armors": [
+      {
+        "name": "Demonic hide and Pit-forged armor",
+        "type": "Custom",
+        "reference": {
+          "book": "SL",
+          "page": 136
+        },
+        "resistance_values": [
+          {
+            "category": "Physical",
+            "value": 5
+          },
+          {
+            "category": "Supernatural",
+            "value": 5
+          }
+        ],
+        "qualities": ["Unholy"]
+      }
+    ],
+    "rings": {
+      "air": 4,
+      "fire": 6,
+      "earth": 6,
+      "water": 4,
+      "void": 4
+    },
+    "wealth": {
+      "zeni": 0,
+      "koku": 0,
+      "bu": 0
+    },
+    "skills": {
+      "artisan": 0,
+      "martial": 4,
+      "scholar": 4,
+      "social": 3,
+      "trade": 2
+    },
+    "statistics": {
+      "endurance": 24,
+      "composure": 20,
+      "focus": 10,
+      "vigilance": 4
+    },
+    "social": {
+      "honor": 0,
+      "glory": 9,
+      "status": 0
+    },
+    "reference": {
+      "book": "SL",
+      "page": 136
     }
   }
 ]

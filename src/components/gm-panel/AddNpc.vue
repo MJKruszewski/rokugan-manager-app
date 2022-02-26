@@ -6,18 +6,19 @@
       max-width="1000px"
   >
     <template v-slot:activator="{ on, attrs }">
-      <v-btn
-          color="primary"
+      <v-btn color="primary"
           dark
+          :rounded="edit"
           v-bind="attrs"
           v-on="on"
       >
-        Add
+        <v-icon v-if="edit">mdi-pencil</v-icon>
+        <b v-else>Add</b>
       </v-btn>
     </template>
     <v-card>
       <v-card-title>
-        <span class="text-h5">Add NPC</span>
+        <span class="text-h5">{{ edit ? 'Edit NPC' : 'Add NPC' }}</span>
       </v-card-title>
       <v-card-text>
         <v-container>
@@ -26,18 +27,18 @@
               <v-autocomplete
                   label="Base template"
                   dark
-                  :items="this.templates"
+                  :items="templates"
                   v-model="selectedTemplate"
                   v-on:change="setTemplate"
               />
             </v-col>
             <v-col cols="12">
-              <v-file-input         id="npcImage"
-                                    ref="npcImage"
-                                    type="file"
-                                    v-model="files"
-                                    placeholder="Portrait"
-                                    v-on:change="onFileChanged"
+              <v-file-input id="npcImage"
+                            ref="npcImage"
+                            type="file"
+                            v-model="files"
+                            placeholder="Portrait"
+                            v-on:change="onFileChanged"
               ></v-file-input>
             </v-col>
 
@@ -50,6 +51,7 @@
               <v-stepper-step
                   :complete="e1 > 1"
                   step="1"
+                  editable
               >
                 Base data
               </v-stepper-step>
@@ -59,13 +61,14 @@
               <v-stepper-step
                   :complete="e1 > 2"
                   step="2"
+                  editable
               >
                 Abilities
               </v-stepper-step>
 
               <v-divider></v-divider>
 
-              <v-stepper-step step="3">
+              <v-stepper-step step="3" editable>
                 Equipment
               </v-stepper-step>
             </v-stepper-header>
@@ -81,7 +84,7 @@
                     <v-col sm="12" md="4">
                       <v-text-field
                           label="Name"
-                          v-model="this.name"
+                          v-model="name"
                           :rules="[v => !!v || 'Field is required',]"
                           required
                       ></v-text-field>
@@ -91,7 +94,7 @@
                           label="Honor"
                           type="number"
                           :rules="[v => !(v < 0) || 'Field is required',]"
-                          v-model="this.honor"
+                          v-model="honor"
                           required
                       >
                         <v-img slot="prepend"
@@ -104,7 +107,7 @@
                           label="Glory"
                           type="number"
                           :rules="[v => !(v < 0) || 'Field is required',]"
-                          v-model="this.glory"
+                          v-model="glory"
                           required
                       >
                         <v-img slot="prepend"
@@ -117,7 +120,7 @@
                           label="Status"
                           type="number"
                           :rules="[v => !(v < 0) || 'Field is required',]"
-                          v-model="this.status"
+                          v-model="status"
                           required
                       >
                         <v-img slot="prepend"
@@ -130,7 +133,7 @@
                           label="Demeanor"
                           dark
                           :rules="[v => !!v || 'Field is required',]"
-                          :items="this.demeanors"
+                          :items="demeanors"
                           v-model="demeanor"
                           required
                       />
@@ -153,7 +156,7 @@
                             label="Air"
                             type="number"
                             :rules="[v => !(v < 1) || 'Field is required',]"
-                            v-model="this.air"
+                            v-model="air"
                             min="1"
                             required
                         >
@@ -167,7 +170,7 @@
                             label="Fire"
                             :rules="[v => !(v < 1) || 'Field is required',]"
                             type="number"
-                            v-model="this.fire"
+                            v-model="fire"
                             min="1"
                             required
                         >
@@ -181,7 +184,7 @@
                             label="Water"
                             type="number"
                             :rules="[v => !(v < 1) || 'Field is required',]"
-                            v-model="this.water"
+                            v-model="water"
                             min="1"
                             required
                         >
@@ -195,7 +198,7 @@
                             label="Earth"
                             type="number"
                             :rules="[v => !(v < 1) || 'Field is required',]"
-                            v-model="this.earth"
+                            v-model="earth"
                             min="1"
                             required
                         >
@@ -209,7 +212,7 @@
                             label="Void"
                             type="number"
                             :rules="[v => !(v < 1) || 'Field is required',]"
-                            v-model="this.void"
+                            v-model="localVoid"
                             min="1"
                             required
                         >
@@ -229,7 +232,7 @@
                             label="Endurance"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.endurance"
+                            v-model="endurance"
                             min="1"
                             required
                         >
@@ -240,7 +243,7 @@
                             label="Composure"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.composure"
+                            v-model="composure"
                             min="1"
                             required
                         >
@@ -251,7 +254,7 @@
                             label="Focus"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.focus"
+                            v-model="focus"
                             min="1"
                             required
                         >
@@ -262,7 +265,7 @@
                             label="Vigilance"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.vigilance"
+                            v-model="vigilance"
                             min="1"
                             required
                         >
@@ -276,7 +279,7 @@
                             label="Artisan"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.artisan"
+                            v-model="artisan"
                             min="0"
                             required
                         ></v-text-field>
@@ -286,7 +289,7 @@
                             label="Martial"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.martial"
+                            v-model="martial"
                             min="0"
                             required
                         ></v-text-field>
@@ -296,7 +299,7 @@
                             label="Scholar"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.scholar"
+                            v-model="scholar"
                             min="0"
                             required
                         ></v-text-field>
@@ -306,7 +309,7 @@
                             label="Social"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.social"
+                            v-model="social"
                             min="0"
                             required
                         ></v-text-field>
@@ -316,7 +319,7 @@
                             label="Trade"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.trade"
+                            v-model="trade"
                             min="0"
                             required
                         ></v-text-field>
@@ -332,7 +335,7 @@
                             label="Koku"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.koku"
+                            v-model="koku"
                             min="0"
                             required
                         >
@@ -343,7 +346,7 @@
                             label="Bu"
                             :rules="[v => !(v < 0) || 'Field is required',]"
                             type="number"
-                            v-model="this.bu"
+                            v-model="bu"
                             min="0"
                             required
                         >
@@ -354,7 +357,7 @@
                             label="Zeni"
                             type="number"
                             :rules="[v => !(v < 0) || 'Field is required',]"
-                            v-model="this.zeni"
+                            v-model="zeni"
                             min="0"
                             required
                         >
@@ -489,7 +492,7 @@
                             color="warning"
                             style="margin-right: 7px"
                             :disabled="abilitiesSelected.length === 0"
-                            @click="removeWeapon"
+                            @click="removeAbility"
                         >
                           Remove
                         </v-btn>
@@ -661,7 +664,7 @@
                               value: 'reference',
                             },
                           ]"
-                          :dark="this.$store.state.colorVariant"
+                          :dark="$store.state.colorVariant"
                           :items="armors"
                       >
                         <template v-slot:[`item.reference`]="{ item }">
@@ -716,6 +719,20 @@ export default Vue.extend({
     AddNpcWeapon,
     AddNpcArmor,
   },
+  props: {
+    edit: Boolean,
+    npc: Object,
+  },
+  created() {
+    const val: Npc|undefined|null = this.npc;
+
+    this.loadEdit(val);
+  },
+  watch: {
+    npc: function (val: Npc|undefined|null) {
+        this.loadEdit(val);
+    },
+  },
   data() {
     return {
       uuid: require('uuid'),
@@ -751,7 +768,7 @@ export default Vue.extend({
       fire: 1,
       earth: 1,
       water: 1,
-      void: 1,
+      localVoid: 1,
 
       koku: 0,
       bu: 0,
@@ -766,6 +783,8 @@ export default Vue.extend({
       focus: 1,
       vigilance: 1,
 
+      reference: {} as Npc['reference'],
+
       files: [],
     };
   },
@@ -778,6 +797,90 @@ export default Vue.extend({
     },
   },
   methods: {
+    loadEdit: function (val: Npc|undefined|null) {
+      if (val === undefined || val === null || !this.edit) {
+        return;
+      }
+
+      //@ts-ignore
+      this.selectedTemplate = val.template;
+      this.name = val.name;
+      this.demeanor = val.demeanor.name;
+      this.description = val.description;
+      this.portraitImage = val.portraitImage;
+      this.artisan = val.skills.artisan;
+      this.martial = val.skills.martial;
+      this.scholar = val.skills.scholar;
+      this.social = val.skills.social;
+      this.trade = val.skills.trade;
+      this.armors = val.armors;
+      this.armorsSelected = new Array<NpcArmor>();
+      this.weapons = val.weapons;
+      this.weaponSelected = new Array<NpcWeapon>();
+      this.advantages = val.advantages;
+      this.advantagesSelected = new Array<Advantage>();
+      this.disadvantages = val.disadvantages;
+      this.disadvantagesSelected = new Array<Advantage>();
+      this.abilities = val.abilities;
+      this.abilitiesSelected = new Array<NpcAbility>();
+      this.air = val.rings.air;
+      this.fire = val.rings.fire;
+      this.earth = val.rings.earth;
+      this.water = val.rings.water;
+      this.localVoid = val.rings.void;
+      this.koku = val.wealth.koku;
+      this.bu = val.wealth.bu;
+      this.zeni = val.wealth.zeni;
+      this.glory = val.social.glory;
+      this.status = val.social.status;
+      this.honor = val.social.honor;
+      this.endurance = val.statistics.endurance;
+      this.composure = val.statistics.composure;
+      this.focus = val.statistics.focus;
+      this.vigilance = val.statistics.vigilance;
+    },
+    clean: function() {
+      this.e1 = 1;
+      this.dialog = false;
+      this.valid = true;
+      this.selectedTemplate = undefined;
+      this.name = '';
+      this.demeanor = '';
+      this.description = '';
+      this.portraitImage = '';
+      this.artisan = 0;
+      this.martial = 0;
+      this.scholar = 0;
+      this.social = 0;
+      this.trade = 0;
+      this.armors = new Array<NpcArmor>();
+      this.armorsSelected = new Array<NpcArmor>();
+      this.weapons = new Array<NpcWeapon>();
+      this.weaponSelected = new Array<NpcWeapon>();
+      this.advantages = new Array<Advantage>();
+      this.advantagesSelected = new Array<Advantage>();
+      this.disadvantages = new Array<Advantage>();
+      this.disadvantagesSelected = new Array<Advantage>();
+      this.abilities = new Array<NpcAbility>();
+      this.abilitiesSelected = new Array<NpcAbility>();
+      this.air = 1;
+      this.fire = 1;
+      this.earth = 1;
+      this.water = 1;
+      this.localVoid = 1;
+      this.koku = 0;
+      this.bu = 0;
+      this.zeni = 0;
+      this.glory = 0;
+      this.status = 0;
+      this.honor = 0;
+      this.endurance = 1;
+      this.composure = 1;
+      this.focus = 1;
+      this.vigilance = 1;
+
+      this.files = [];
+    },
     onFileChanged: async function () {
       if (this.files === null) {
         return;
@@ -952,7 +1055,7 @@ export default Vue.extend({
       this.fire = template.rings.fire;
       this.earth = template.rings.earth;
       this.water = template.rings.water;
-      this.void = template.rings.void;
+      this.localVoid = template.rings.void;
 
       this.advantages = [...template.advantages];
       this.disadvantages = [...template.disadvantages];
@@ -992,10 +1095,7 @@ export default Vue.extend({
                 break;
               }
             }
-
-            break;
           }
-          break;
         }
       }
 
@@ -1003,6 +1103,48 @@ export default Vue.extend({
 
       const weapons = [];
       for (const weapon of template.weapons) {
+        if (weapon.type === 'Custom') {
+          let damage = '';
+          let deadlines = '';
+
+          //@ts-ignore
+          for (const grip of weapon.grips) {
+            for (const effect of grip.effects) {
+              if (effect.attribute === 'damage' && effect?.value_increase) {
+                //@ts-ignore
+                damage = '/' + (weapon.damage + effect?.value_increase).toString();
+              }
+
+              if (effect.attribute === 'deadliness' && effect?.value_increase) {
+                //@ts-ignore
+                deadlines = '/' + (weapon.deadliness + effect.value_increase).toString();
+              }
+            }
+          }
+          weapons.push({
+            name: weapon.name,
+            //@ts-ignore
+            damage: weapon.damage.toString() + damage,
+            //@ts-ignore
+            deadliness: weapon.deadliness.toString() + deadlines,
+            range: {
+              //@ts-ignore
+              min: weapon.range.min,
+              //@ts-ignore
+              max: weapon.range.max,
+            },
+            reference: {
+              //@ts-ignore
+              book: weapon.reference.book as Book,
+              //@ts-ignore
+              page: weapon.reference.page.toString(),
+            },
+          } as NpcWeapon);
+
+          continue;
+        }
+
+
         for (const group of weaponsTemplates) {
           if (group.name !== weapon.type) {
             continue;
@@ -1051,6 +1193,38 @@ export default Vue.extend({
       const armors = [];
 
       for (const armor of template.armors) {
+        if (typeof armor === 'object' && armor?.type === 'Custom') {
+          let phys = 0;
+          let superNatural = 0;
+
+          //@ts-ignore
+          for (const resistanceValue of armor.resistance_values) {
+            if (resistanceValue.category === 'Physical') {
+              phys = resistanceValue.value;
+            }
+
+            if (resistanceValue.category === 'Supernatural') {
+              superNatural = resistanceValue.value;
+            }
+          }
+
+          armors.push({
+            //@ts-ignore
+            name: armor.name,
+            superRes: superNatural,
+            physRes: phys,
+            rarity: 0,
+            reference: {
+              //@ts-ignore
+              book: armor.reference.book as Book,
+              //@ts-ignore
+              page: armor.reference.page.toString(),
+            },
+          });
+
+          continue;
+        }
+
         for (const armorTemplate of armorsTemplates) {
           if (armor !== armorTemplate.name) {
             continue;
@@ -1060,11 +1234,11 @@ export default Vue.extend({
           let superNatural = 0;
 
           for (const resistanceValue of armorTemplate.resistance_values) {
-            if (resistanceValue.category === 'Physical'){
+            if (resistanceValue.category === 'Physical') {
               phys = resistanceValue.value;
             }
 
-            if (resistanceValue.category === 'Supernatural'){
+            if (resistanceValue.category === 'Supernatural') {
               superNatural = resistanceValue.value;
             }
           }
@@ -1100,6 +1274,11 @@ export default Vue.extend({
       this.composure = template.statistics.composure;
       this.focus = template.statistics.focus;
       this.vigilance = template.statistics.vigilance;
+      this.reference = {
+        book: template.reference.book as Book,
+        page: template.reference.page.toString(),
+      };
+      console.log('this.reference', this.reference);
 
     },
 
@@ -1125,8 +1304,8 @@ export default Vue.extend({
       if (demeanor === undefined) {
         return;
       }
-
-      this.$store.state.gmData.npcs.push({
+      let preparedData = {
+        template: this.selectedTemplate as string | undefined,
         id: this.uuid.v4(),
         name: this.name,
         description: this.description,
@@ -1141,7 +1320,7 @@ export default Vue.extend({
           fire: this.fire,
           earth: this.earth,
           water: this.water,
-          void: this.void,
+          void: this.localVoid,
         },
         wealth: {
           zeni: this.zeni,
@@ -1161,10 +1340,20 @@ export default Vue.extend({
           focus: this.focus,
           vigilance: this.vigilance,
         },
+        currentStats: {
+          endurance: this.endurance,
+          composure: this.composure,
+          focus: this.focus,
+          vigilance: this.vigilance,
+          voidPoints: 0,
+        },
         social: {
           honor: this.honor,
           glory: this.glory,
           status: this.status,
+        },
+        reference: {
+          ...this.reference,
         },
         demeanor: demeanor !== undefined ? {
           id: demeanor.id,
@@ -1177,7 +1366,18 @@ export default Vue.extend({
             void: demeanor.rings.void,
           },
         } : undefined,
-      } as Npc);
+      } as Npc;
+
+      if (this.edit) {
+        this.$store.state.gmData.npcs[this.$store.state.gmData.npcs.indexOf(this.npc)] = preparedData;
+      } else {
+        this.$store.state.gmData.npcs.push(preparedData);
+        this.clean();
+      }
+
+      this.$emit('refresh');
+      //@ts-ignore
+      this.$refs.form.reset();
       this.dialog = false;
     },
   },

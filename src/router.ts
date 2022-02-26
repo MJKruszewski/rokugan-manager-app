@@ -9,6 +9,7 @@ import SettingsPage from '@/components/SettingsPage.vue';
 import GmPanel from '@/components/GmPanel.vue';
 import ShopPage from '@/components/ShopPage.vue';
 import PlayerDetailsPage from '@/components/gm-panel/PlayerDetailsPage.vue';
+import NpcDetailsPage from '@/components/gm-panel/NpcDetailsPage.vue';
 
 export function getRouter(): VueRouter {
     return new VueRouter({
@@ -24,6 +25,7 @@ export function getRouter(): VueRouter {
             {path: '/settings', alias: 'settings', component: SettingsPage},
             {path: '/gmpanel', alias: 'gmpanel', component: GmPanel},
             {path: '/gmpanel-player/:id', alias: 'gmpanelplayer', component: PlayerDetailsPage, props: true},
+            {path: '/gmpanel-npc/:id', alias: 'gmpanelplayer', component: NpcDetailsPage, props: true},
         ],
     });
 } 

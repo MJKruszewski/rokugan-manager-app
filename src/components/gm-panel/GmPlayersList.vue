@@ -25,7 +25,7 @@
       <v-card-text>
         <v-row>
           <template v-for="player in players">
-            <v-col :key="player.name" :md="3" :sm="6">
+            <v-col :key="player.name" :md="6" :sm="6">
               <v-card
                   class="mx-auto my-12"
                   max-width="374"

@@ -146,9 +146,6 @@ export default Vue.extend({
 
       this.dialog = false;
     },
-    selectSublist() {
-      this.advanceSublistOptions = AdvanceService.getPossibleAdvances('Technique', this.$store.state.player);
-    },
     loadSubcategories() {
       for (const group of techniques) {
         if (group.name !== this.selectedAdvanceSublist) {

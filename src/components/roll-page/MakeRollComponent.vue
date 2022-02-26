@@ -10,9 +10,31 @@
     </v-card-title>
     <v-divider/>
 
-    <v-card-text v-if="$store.state.player !== undefined">
-      <v-row>
+    <v-card-text v-if="isPlayerPresent">
+      <v-row v-if="npc">
+        <v-col :sm="12" :md="6" >
+          <v-select
+              :dark="this.$store.state.colorVariant"
+              label="Select ring:"
+              :disabled="$store.state.mainRoll.isDuringRoll"
+              v-model="$store.state.mainRoll.selectedRing"
+              v-on:change="setRingValue"
+              :items="['Air', 'Fire', 'Water', 'Earth', 'Void']"
+          />
+        </v-col>
         <v-col :sm="12" :md="6">
+          <v-select
+              :dark="this.$store.state.colorVariant"
+              label="Select skill:"
+              :disabled="$store.state.mainRoll.isDuringRoll"
+              v-model="$store.state.mainRoll.selectedSkill"
+              v-on:change="setSkillValue"
+              :items="['Artisan', 'Social', 'Martial', 'Scholar', 'Trade']"
+          />
+        </v-col>
+      </v-row>
+      <v-row v-else>
+        <v-col :sm="12" :md="6" >
           <v-text-field
               label="Selected ring:"
               :value="$store.state.mainRoll.selectedRing"
@@ -64,12 +86,12 @@
           />
         </v-col>
 
-        <v-col :sm="12" :md="3">
+        <v-col :sm="12" :md="3" v-if="this.npc === false">
           <v-text-field
               id="void"
               label="Use void points:"
               min="0"
-              :max="$store.state.player.currentStats.voidPoints"
+              :max="localPlayer.currentStats.voidPoints"
               :disabled="this.$store.state.mainRoll.isDuringRoll"
               v-model="$store.state.mainRoll.voidPoints"
               type="number"
@@ -89,7 +111,7 @@
               :disabled="$store.state.mainRoll.rerollStarted || $store.state.mainRoll.selectedIds.length > 0"
               v-model="$store.state.mainRoll.selectedRerollOption"
               v-on:change="selectRerollOptions"
-              :items="['Ability', 'Adversity', 'Anxiety', 'Distinction']"
+              :items="rerollCause"
           />
         </v-col>
         <v-col>
@@ -119,7 +141,7 @@
       <template v-for="dice in this.$store.state.mainRoll.wDices">
         <img
             :class="{ selected : $store.state.mainRoll.selectedIds.includes(dice.id), 'selected-to-reroll': $store.state.mainRoll.selectedToRerollIds.includes(dice.id) }"
-            v-on:click="selectDice(dice)" width="40px" height="40px" :src="require('./../../assets/img/dice/' + dice.img)"
+            v-on:click="selectDice(dice)" width="40px" height="40px" :src="require('../../assets/img/dice/' + dice.img)"
             :key="dice.id"/>&nbsp;
       </template>
       <template v-for="dice in this.$store.state.mainRoll.bDices">
@@ -129,7 +151,7 @@
                 'selected-to-reroll': $store.state.mainRoll.selectedToRerollIds.includes(dice.id),
                 'selected-void': $store.state.mainRoll.selectedIds.includes(dice.id) && $store.state.mainRoll.voidDicesHelper.includes(dice.id),
             }"
-            v-on:click="selectDice(dice)" width="40px" height="40px" :src="require('./../../assets/img/dice/' + dice.img)"
+            v-on:click="selectDice(dice)" width="40px" height="40px" :src="require('../../assets/img/dice/' + dice.img)"
             :key="dice.id"/>&nbsp;
       </template>
 
@@ -140,11 +162,11 @@
 
       <template v-for="dice in this.$store.state.mainRoll.wExplodedDices">
         <img :class="{ selected : $store.state.mainRoll.selectedIds.includes(dice.id) }" v-on:click="selectDice(dice)"
-             width="40px" height="40px" :src="require('./../../assets/img/dice/' + dice.img)" :key="dice.id"/>&nbsp;
+             width="40px" height="40px" :src="require('../../assets/img/dice/' + dice.img)" :key="dice.id"/>&nbsp;
       </template>
       <template v-for="dice in this.$store.state.mainRoll.bExplodedDices">
         <img :class="{ selected : $store.state.mainRoll.selectedIds.includes(dice.id) }" v-on:click="selectDice(dice)"
-             width="40px" height="40px" :src="require('./../../assets/img/dice/' + dice.img)" :key="dice.id"/>&nbsp;
+             width="40px" height="40px" :src="require('../../assets/img/dice/' + dice.img)" :key="dice.id"/>&nbsp;
       </template>
 
       <br/>
@@ -208,7 +230,7 @@ import Vue from 'vue';
 
 import axios from 'axios';
 import {Dice} from '@/domain/types/dice.type';
-import {Ability, PersonalTrait} from '@/domain/types/player.type';
+import {Ability, Advantage, Npc, PersonalTrait, Player} from '@/domain/types/player.type';
 import { Ring } from '@/domain/types/ring.type';
 
 
@@ -216,14 +238,38 @@ const explosions = getExplosions();
 
 export default Vue.extend({
   name: 'MakeRollComponent',
+  props: {
+    player: Object,
+    npc: Boolean,
+  },
   data() {
     return {
+      localPlayer: {} as Player | Npc,
       hook: getHook(),
       uuid: require('uuid'),
       isSendingResult: false,
     };
   },
+  created() {
+    this.localPlayer = this.player;
+  },
+  watch: {
+    player: function(val) {
+      if (val === undefined || val === '') {
+        return;
+      }
+
+      this.localPlayer = val;
+    },
+  },
   computed: {
+    rerollCause: function () {
+      if (this.npc) {
+        return ['Ability', 'Advantage', 'Disadvantage'];
+      }
+
+      return ['Ability', 'Adversity', 'Anxiety', 'Distinction'];
+    },
     hasAnyExplosions: function () {
       if (this.$store.state.mainRoll.isDuringRoll === false || this.$store.state.mainRoll.totalExplosions >= this.countPossibleExplosions()) {
         return false;
@@ -272,12 +318,38 @@ export default Vue.extend({
     },
   },
   methods: {
-    roll: async function () {
-      if (this.$store.state.mainRoll.isDuringRoll) {
-        return;
-      }
+    isPlayerPresent: function () {
+      return this.localPlayer !== undefined && Object.keys(this.localPlayer).length > 0;
+    },
+    setRingValue: function (newRing: string) {
+      //@ts-ignore
+      this.$store.state.mainRoll.selectedRingValue = (this.localPlayer as Npc).rings[newRing.toLowerCase()];
 
-      this.$store.state.mainRoll.isDuringRoll = true;
+      this.$store.state.mainRoll.bDices = [];
+      this.$store.state.mainRoll.selectedIds = [];
+
+      for (let i = 0; i < this.$store.state.mainRoll.selectedRingValue; i++) {
+        this.$store.state.mainRoll.bDices.push({
+          id: this.uuid.v4(),
+          img: 'black.png',
+        });
+      }
+    },
+    setSkillValue: function (val: string) {
+      //@ts-ignore
+      this.$store.state.mainRoll.selectedSkillValue = (this.localPlayer as Npc).skills[val.toLowerCase()];
+
+      this.$store.state.mainRoll.wDices = [];
+      this.$store.state.mainRoll.selectedIds = [];
+
+      for (let i = 0; i < this.$store.state.mainRoll.selectedSkillValue; i++) {
+        this.$store.state.mainRoll.wDices.push({
+          id: this.uuid.v4(),
+          img: 'white.png',
+        });
+      }
+    },
+    cleanState: function () {
       this.$store.state.mainRoll.wDices = [];
       this.$store.state.mainRoll.bDices = [];
       this.$store.state.mainRoll.rerollLock = [];
@@ -295,9 +367,20 @@ export default Vue.extend({
       this.$store.state.mainRoll.currentReroll = null;
       this.$store.state.mainRoll.selectedAnxiety = null;
       this.$store.state.mainRoll.selectedDistinction = null;
+    },
+    roll: async function () {
+      if (this.$store.state.mainRoll.isDuringRoll) {
+        return;
+      }
+
+      this.$store.state.mainRoll.isDuringRoll = true;
+      this.cleanState();
+
+      const randomWhiteFunction = await randomInt(1, 8);
+      const randomBlackFunction = await randomInt(1, 6);
 
       for (let i = 0; i < this.$store.state.mainRoll.selectedSkillValue; i++) {
-        let result = await randomInt(1, 8);
+        let result = randomWhiteFunction();
 
         this.$store.state.mainRoll.wDices.push({
           id: this.uuid.v4(),
@@ -306,7 +389,7 @@ export default Vue.extend({
       }
 
       for (let i = 0; i < this.$store.state.mainRoll.assistWhite; i++) {
-        let result = await randomInt(1, 8);
+        let result = randomWhiteFunction();
 
         this.$store.state.mainRoll.bDices.push({
           id: this.uuid.v4(),
@@ -315,7 +398,7 @@ export default Vue.extend({
       }
 
       for (let i = 0; i < this.$store.state.mainRoll.selectedRingValue; i++) {
-        let result = await randomInt(1, 6);
+        let result = randomBlackFunction();
 
         this.$store.state.mainRoll.bDices.push({
           id: this.uuid.v4(),
@@ -324,7 +407,7 @@ export default Vue.extend({
       }
 
       for (let i = 0; i < this.$store.state.mainRoll.assistBlack; i++) {
-        let result = await randomInt(1, 6);
+        let result = randomBlackFunction();
 
         this.$store.state.mainRoll.bDices.push({
           id: this.uuid.v4(),
@@ -333,7 +416,7 @@ export default Vue.extend({
       }
 
       for (let i = 0; i < this.$store.state.mainRoll.voidPoints; i++) {
-        let result = await randomInt(1, 6);
+        let result = randomBlackFunction();
         let id = this.uuid.v4();
 
         this.$store.state.mainRoll.bDices.push({
@@ -354,7 +437,7 @@ export default Vue.extend({
         ...this.$store.state.mainRoll.bExplodedDices,
       ].forEach((dice) => {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        dices.push(require('./../../assets/img/mini/' + dice.img));
+        dices.push(require('../../assets/img/mini/' + dice.img));
       });
 
       const b64 = await mergeImages(dices, {color: '#f000'});
@@ -367,7 +450,7 @@ export default Vue.extend({
         embeds: [
           {
             content: 'perkele',
-            title: this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon + ' first roll!',
+            title: this.getSamuraiName() + ' first roll!',
             color: this.HEXToVBColor(this.getColor()),
             description: (this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '' ? ((this.$store.state.mainRoll.dc <= this.$store.state.mainRoll.success) ? 'Bushi overcomes challenge!' : 'Bushi is unsuccessful in his/her attempt') + '\n\n' : '')
                 + 'Samurai used ring of: ' + this.$store.state.mainRoll.selectedRing + '(' + this.$store.state.mainRoll.selectedRingValue + ')' + '\n'
@@ -421,7 +504,7 @@ export default Vue.extend({
 
       switch (dice.img) {
         case 'blacket.png':
-          rand = await randomInt(1, 6);
+          rand = await randomInt(1, 6)();
           id = this.uuid.v4();
 
           this.$store.state.mainRoll.bExplodedDices.push({
@@ -435,7 +518,7 @@ export default Vue.extend({
         case 'whitee.png':
         case 'whiteeo.png':
         case 'whiteet.png':
-          rand = await randomInt(1, 8);
+          rand = await randomInt(1, 8)();
           id = this.uuid.v4();
 
           this.$store.state.mainRoll.wExplodedDices.push({
@@ -464,12 +547,12 @@ export default Vue.extend({
     },
     finishReroll: function (selected: string | null) {
       this.$store.state.mainRoll.wDices.filter((dice: Dice) => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async (dice: Dice) => {
-        let result = await randomInt(1, 8);
+        let result = await randomInt(1, 8)();
 
         dice.img = getWhiteImage(result);
       });
       this.$store.state.mainRoll.bDices.filter((dice: Dice) => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async (dice: Dice) => {
-        let result = await randomInt(1, 6);
+        let result = await randomInt(1, 6)();
 
         dice.img = getBlackImage(result);
       });
@@ -488,7 +571,7 @@ export default Vue.extend({
             attachments: [
               {
                 fields: [],
-                title: this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon,
+                title: this.getSamuraiName(),
                 color: this.getColor(),
                 text: 'Bushi makes a reroll of his/her ' + this.$store.state.mainRoll.selectedToRerollIds.length + ' dices due to: ' + selected,
               },
@@ -516,16 +599,28 @@ export default Vue.extend({
     selectRerollOptions: function (val: string) {
       switch (val.toLowerCase()) {
         case 'ability':
-          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.abilities.map((item: Ability) => item.name);
+          //@ts-ignore
+          this.$store.state.mainRoll.selectedRerollOptionList = this.localPlayer.abilities.map((item: Ability) => item.name);
           break;
         case 'anxiety':
-          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.anxieties.map((item: PersonalTrait) => item.name);
+          //@ts-ignore
+          this.$store.state.mainRoll.selectedRerollOptionList = this.localPlayer.anxieties.map((item: PersonalTrait) => item.name);
           break;
         case 'adversity':
-          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.adversities.map((item: PersonalTrait) => item.name);
+          //@ts-ignore
+          this.$store.state.mainRoll.selectedRerollOptionList = this.localPlayer.adversities.map((item: PersonalTrait) => item.name);
           break;
         case 'distinction':
-          this.$store.state.mainRoll.selectedRerollOptionList = this.$store.state.player.distinctions.map((item: PersonalTrait) => item.name);
+          //@ts-ignore
+          this.$store.state.mainRoll.selectedRerollOptionList = this.localPlayer.distinctions.map((item: PersonalTrait) => item.name);
+          break;
+        case 'advantage':
+          //@ts-ignore
+          this.$store.state.mainRoll.selectedRerollOptionList = this.localPlayer.advantages.map((item: Advantage) => item.name);
+          break;
+        case 'disadvantage':
+          //@ts-ignore
+          this.$store.state.mainRoll.selectedRerollOptionList = this.localPlayer.disadvantages.map((item: Advantage) => item.name);
           break;
       }
 
@@ -550,7 +645,7 @@ export default Vue.extend({
     },
     canRoll: function () {
       return this.$store.state.mainRoll.isDuringRoll
-          || !this.$store.state.player.isLoaded
+          || ('isLoaded' in this.localPlayer && !this.localPlayer.isLoaded && this.npc === false)
           || this.$store.state.mainRoll.selectedRing === 'none'
           || this.$store.state.mainRoll.rerollStarted;
     },
@@ -591,6 +686,13 @@ export default Vue.extend({
       const result = /^#?([a-f\d]{2}[a-f\d]{2}[a-f\d]{2})$/i.exec(hex);
       return result ? parseInt(result[1], 16) : null;
     },
+    getSamuraiName: function (): string {
+      if ('familyData' in this.localPlayer) {
+        return this.localPlayer.familyData.clan + ' ' + this.localPlayer.familyData.name + ' from ' + this.localPlayer.familyData.mon;
+      }
+
+      return this.localPlayer.name;
+    },
     sendResultDiscord: async function () {
       if (this.$store.state.mainRoll.isDuringRoll === false) {
         return;
@@ -610,12 +712,28 @@ export default Vue.extend({
         return this.$store.state.mainRoll.selectedIds.includes(dice.id);
       }).forEach((dice) => {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        dices.push(require('./../../assets/img/mini/' + dice.img));
+        dices.push(require('../../assets/img/mini/' + dice.img));
       });
 
       const b64 = await mergeImages(dices, {color: '#f000'});
       const formData = new FormData();
       let imageBlob = await (await fetch(b64)).blob();
+
+      let description = '';
+
+      if (this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '' && this.$store.state.mainRoll.dc > 0) {
+        description = 'TN of a roll: ' + this.$store.state.mainRoll.dc + '\n';
+      } else {
+        description = this.npc ? 'GM hide NPC TN \n' : 'TN is unknown - player gets 1 void point \n';
+      }
+
+      const bushi = this.npc ? 'NPC' : 'Bushi';
+
+      if (this.$store.state.mainRoll.dc <= this.$store.state.mainRoll.success && this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '') {
+        description += bushi + ' overcomes challenge!' + '\n\n';
+      } else if (this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '') {
+        description += bushi + ' is unsuccessful in his/her attempt' + '\n\n';
+      }
 
       formData.append('payload_json', JSON.stringify({
         username: 'Kami Bayushi',
@@ -623,10 +741,9 @@ export default Vue.extend({
         embeds: [
           {
             content: 'perkele',
-            title: this.$store.state.player.familyData.clan + ' ' + this.$store.state.player.familyData.name + ' from ' + this.$store.state.player.familyData.mon + ' resolved a roll!',
+            title: this.getSamuraiName() + ' resolved a roll!',
             color: this.HEXToVBColor(this.getColor()),
-            description: (this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '' && this.$store.state.mainRoll.dc > 0 ? 'TN of a roll: ' + this.$store.state.mainRoll.dc : 'TN is unknown - player gets 1 void point') + '\n'
-                + (this.$store.state.mainRoll.dc !== undefined && this.$store.state.mainRoll.dc !== '' ? ((this.$store.state.mainRoll.dc <= this.$store.state.mainRoll.success) ? 'Bushi overcomes challenge!' : 'Bushi is unsuccessful in his/her attempt') + '\n\n' : '')
+            description: description
                 + 'Success: ' + this.$store.state.mainRoll.success + '\n'
                 + 'Strife: ' + this.$store.state.mainRoll.strife + '\n'
                 + 'Opportunities: ' + this.$store.state.mainRoll.opportunities + '\n',
@@ -645,18 +762,24 @@ export default Vue.extend({
       });
 
       if (this.$store.state.mainRoll.dc === undefined || this.$store.state.mainRoll.dc === '' || this.$store.state.mainRoll.dc <= 0) {
-        this.$store.state.player.currentStats.voidPoints = parseInt(this.$store.state.player.currentStats.voidPoints) + 1;
+        this.localPlayer.currentStats.voidPoints = parseInt(this.localPlayer.currentStats.voidPoints.toString()) + 1;
       }
 
-      if (this.$store.state.player.currentStats.voidPoints > this.$store.state.player.rings.filter((val: Ring) => val.name === 'Void').shift().value) {
-        this.$store.state.player.currentStats.voidPoints = this.$store.state.player.rings.filter((val: Ring) => val.name === 'Void').shift().value;
+      if (
+          Array.isArray(this.localPlayer.rings)
+          && this.localPlayer.rings !== undefined
+          // @ts-ignore
+          && this.localPlayer.currentStats.voidPoints > this.localPlayer.rings.filter((val: Ring) => val.name === 'Void').shift().value
+      ) {
+        // @ts-ignore
+        this.localPlayer.currentStats.voidPoints = this.localPlayer.rings.filter((val: Ring) => val.name === 'Void').shift().value;
       }
 
-      this.$store.state.player.currentStats.composure = this.$store.state.player.currentStats.composure - this.$store.state.mainRoll.strife;
-      this.$store.state.player.currentStats.voidPoints = this.$store.state.player.currentStats.voidPoints - this.$store.state.mainRoll.voidPoints;
+      this.localPlayer.currentStats.composure = this.localPlayer.currentStats.composure - this.$store.state.mainRoll.strife;
+      this.localPlayer.currentStats.voidPoints = this.localPlayer.currentStats.voidPoints - this.$store.state.mainRoll.voidPoints;
 
-      if (this.$store.state.player.currentStats.composure < 0){
-        this.$store.state.player.currentStats.composure = 0;
+      if (this.localPlayer.currentStats.composure < 0){
+        this.localPlayer.currentStats.composure = 0;
       }
 
       this.$store.state.mainRoll.isDuringRoll = false;
@@ -667,12 +790,18 @@ export default Vue.extend({
       this.$store.state.mainRoll.rerollLock = [];
 
       localStorage.setItem('mainRoll', JSON.stringify(this.$store.state.mainRoll));
-      localStorage.setItem('player', JSON.stringify(this.$store.state.player));
+      if (!this.npc) {
+        localStorage.setItem('player', JSON.stringify(this.localPlayer));
+      }
 
       this.isSendingResult = false;
     },
     getColor: function () {
-      return getClanColor(this.$store.state.player.familyData.clan);
+      if ('familyData' in this.localPlayer) {
+        return getClanColor(this.localPlayer.familyData.clan);
+      }
+
+      return getClanColor('');
     },
     calculateStats: function () {
       const merged = [

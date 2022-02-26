@@ -15,7 +15,7 @@
       <v-card-title style="justify-content: space-between;">
         <b>Npc:</b>
         <div>
-          <AddNpc/>
+          <AddNpc :edit="false" :npc="null"/>
           &nbsp;
           <v-btn
               color="info"
@@ -36,12 +36,10 @@
       </v-card-title>
       <v-card-text>
         <v-row>
-          <template v-for="player in players">
-            <v-col :key="player.id" :md="3" :sm="6">
+          <template v-for="player in npcs">
+            <v-col :key="player.id" :md="3" :sm="12">
               <v-card
                   class="mx-auto my-12"
-                  max-width="374"
-
               >
                 <template slot="progress">
                   <v-progress-linear
@@ -59,21 +57,26 @@
                 <v-card-title>{{ player.name }}</v-card-title>
 
                 <v-card-text>
-                </v-card-text>
-
-
-                <v-card-actions>
+                  <v-btn
+                      color="red"
+                      rounded
+                      v-on:click="deleteNpc(player.id)"
+                  >
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                  &nbsp;
+                  <AddNpc :edit="true" :npc="player" v-on:refresh="refresh"/>
+                  &nbsp;
                   <v-btn
                       outlined
                       rounded
-                      text
                       v-on:click="$router.push({
-                            path: '/gmpanel-npc/' + players.indexOf(player),
+                            path: '/gmpanel-npc/' + npcs.indexOf(player),
                           })"
                   >
-                    Details
+                    <v-icon>mdi-account-details</v-icon>
                   </v-btn>
-                </v-card-actions>
+                </v-card-text>
               </v-card>
             </v-col>
           </template>
@@ -95,44 +98,36 @@ export default Vue.extend({
   components: {AddNpc},
   data: () => {
     return {
-      xmlFiles: undefined,
-      players: new Array<Npc>(),
+      npcs: new Array<Npc>(),
     };
   },
   beforeMount() {
-    this.players = this.$store.state.gmData.npcs;
-  },
-  watch: {
-    xmlFiles: async function (val) {
-      if (val === undefined || val === '') {
-        return;
-      }
-
-      this.players = [];
-
-      for (const tmp of val) {
-        // const xml = new DOMParser().parseFromString(await tmp.text(), 'application/xml');
-        // this.players.push(await LoadCardService.importCard(xml, false));
-      }
-
-      this.$store.state.gmData.players = this.players;
-    },
+    this.npcs = this.$store.state.gmData.npcs;
   },
   methods: {
+    deleteNpc: function(id: string) {
+      this.$store.state.gmData.npcs = this.$store.state.gmData.npcs.filter((item: Npc) => item.id !== id);
+      this.npcs = this.$store.state.gmData.npcs;
+    },
+    refresh: function () {
+      this.npcs = [];
+      this.npcs = this.$store.state.gmData.npcs;
+    },
     getAvatar: function (player: Npc) {
-      if (player === undefined) {
-        return '';
+      if (player === undefined || player.portraitImage === undefined || player.portraitImage.length <= 0) {
+        return require('../../assets/img/npc/placeholder.jpg');
       }
 
       return 'data:image/png;charset=utf-8;base64,' + player.portraitImage;
     },
-    onFileChanged: function (file: File | null) {
+    onFileChanged: async function (file: File | null) {
       if (file === null) {
         return;
       }
 
       //@ts-ignore
-      this.xmlFiles = file?.target?.files;
+      this.$store.state.gmData.npcs = JSON.parse(await file?.target?.files[0].text());
+      this.npcs = this.$store.state.gmData.npcs;
     },
     importXmls: function () {
       //@ts-ignore
