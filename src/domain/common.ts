@@ -165,7 +165,7 @@ export function getKami(kami?: string, isIcon?: boolean): { username: string, av
             break;
         case 'Yotogi':
             username = 'Fortuna Yotogi';
-            url = 'http://l5r.sunflux.pl/jaszczomp.jpg';
+            url = 'https://l5r.sunflux.pl/jaszczomp.jpg';
             break;
     }
 
