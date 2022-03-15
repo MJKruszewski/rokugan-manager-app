@@ -3,7 +3,6 @@ import {Ring} from '@/domain/types/ring.type';
 import {Skill} from '@/domain/types/skill.type';
 
 export function getWhiteImage(val: number): string {
-    return 'whiteet.png';
     switch (val) {
         case 1:
             return 'white.png';
