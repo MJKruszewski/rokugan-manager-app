@@ -1,7 +1,9 @@
 //Import card from paper blossoms XML
-import {getClanColor, getHook, sendNotifications} from '@/domain/common';
+import {getClanColor, getClanKami, getHook, getKami, HEXToVBColor, sendNotifications} from '@/domain/common';
 import {Advance, Armor, Bond, Book, Equipment, Player, Technique, Weapon} from '@/domain/types/player.type';
 import parsedBonds from '../../assets/data/json/bonds.json';
+import {Ring} from '@/domain/types/ring.type';
+import axios from 'axios';
 
 export class LoadCardService {
     private static preparePersonalTraits(xml: Document, placeholder: Player) {
@@ -348,31 +350,40 @@ export class LoadCardService {
         placeholder.isLoaded = true;
 
         if (sendNotification) {
-            const hook = atob(getHook());
             const social = xml.getElementsByTagName('Social')[0];
+            const formData = new FormData();
+            let image = {};
 
-            await fetch(hook + '/slack', {
-                method: 'POST',
-                mode: 'no-cors',
+            if (placeholder.portraitImage !== undefined && placeholder.portraitImage.length > 0) {
+                const imageBlob = await (await fetch('data:image/png;charset=utf-8;base64,' + placeholder.portraitImage)).blob();
+                image = {
+                    image: {
+                        url: 'attachment://player.png',
+                    },
+                };
+                formData.append('files[0]', imageBlob, 'player.png');
+            }
+
+            formData.append('payload_json', JSON.stringify({
+                ...getKami(getClanKami(xml.getElementsByTagName('Clan')[0].getAttribute('value') || '')),
+                embeds: [
+                    {
+                        content: 'perkele',
+                        title: placeholder.familyData.clan + ' ' + placeholder.familyData.name + ' from ' + placeholder.familyData.mon,
+                        color: HEXToVBColor(getClanColor(placeholder.familyData.clan)),
+                        description: 'Enters a dojo in glory!\n\n'
+                            + 'Glory: ' + social.getAttribute('glory') + '\n'
+                            + 'Honor: ' + social.getAttribute('honor') + '\n'
+                            + 'Status: ' + social.getAttribute('status') + '\n',
+                        ...image,
+                    },
+                ],
+            }));
+
+            await axios.post(atob(getHook()), formData, {
                 headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'multipart/form-data',
                 },
-                body: JSON.stringify({
-                    attachments: [
-                        {
-                            fields: [],
-                            title: placeholder.familyData.clan + ' ' + placeholder.familyData.name + ' from ' + placeholder.familyData.mon,
-                            color: getClanColor(placeholder.familyData.clan),
-                            text: 'Enters a dojo in glory!\n\n'
-                                + 'Glory: ' + social.getAttribute('glory') + '\n'
-                                + 'Honor: ' + social.getAttribute('honor') + '\n'
-                                + 'Status: ' + social.getAttribute('status') + '\n',
-                        },
-                    ],
-                    icon_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
-                    username: 'Kami Bayushi',
-                }),
             });
         }
 

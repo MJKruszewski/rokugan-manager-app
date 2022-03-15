@@ -58,10 +58,13 @@
 </template>
 
 <script lang="ts">
-import {getClanColor, getHook} from '@/domain/common';
+import {getClanColor, getHook, getKami, HEXToVBColor} from '@/domain/common';
 import Vue from 'vue';
 import {Ring} from '@/domain/types/ring.type';
 import {Player} from '@/domain/types/player.type';
+import axios from 'axios';
+//@ts-ignore
+import mergeImages from 'merge-images-horizontally-with-text/dist/index.es2015';
 
 export default Vue.extend({
   name: 'SamuraiStatus',
@@ -114,8 +117,7 @@ export default Vue.extend({
               text: 'Bends under pressure! (Unmasking)',
             },
           ],
-          icon_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
-          username: 'Kami Bayushi',
+          ...getKami(this.$store?.state?.kami, true),
         }),
       });
     },
@@ -124,31 +126,40 @@ export default Vue.extend({
     getColor: function () {
       return getClanColor(this.$store.state.player.familyData.clan);
     },
-    sendInfo: function () {
+    sendInfo: async function () {
       const playerStore: Player = this.$store.state.player;
-      const hook = atob(getHook());
+      const formData = new FormData();
+      let image = {};
 
-      fetch(hook + '/slack', {
-        method: 'POST',
-        mode: 'no-cors',
+      if (this.$store.state.player.portraitImage !== undefined && this.$store.state.player.portraitImage.length > 0) {
+        let imageBlob = await (await fetch('data:image/png;charset=utf-8;base64,' + this.$store.state.player.portraitImage)).blob();
+        image = {
+          image: {
+            url: 'attachment://player.png',
+          },
+        };
+        formData.append('files[0]', imageBlob, 'player.png');
+      }
+
+      formData.append('payload_json', JSON.stringify({
+        ...getKami(this.$store?.state?.kami),
+        embeds: [
+          {
+            content: 'perkele',
+            title: 'Status of ' + playerStore.familyData.name + ' from ' + playerStore.familyData.mon,
+            color: HEXToVBColor(this.getColor()),
+            description: 'Endurance: ' + playerStore.currentStats.endurance + '/' + playerStore.stats.endurance + '\n'
+                + 'Composure: ' + playerStore.currentStats.composure + '/' + playerStore.stats.composure + '\n'
+                + 'Void points: ' + playerStore.currentStats.voidPoints + '/' + this.$store.state.player.rings.filter((val: Ring) => val.name === 'Void').shift().value + '\n\n',
+            ...image,
+          },
+        ],
+      }));
+
+      await axios.post(atob(getHook()), formData, {
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
-        body: JSON.stringify({
-          attachments: [
-            {
-              fields: [],
-              title: 'Status of ' + playerStore.familyData.name + ' from ' + playerStore.familyData.mon,
-              color: this.getColor(),
-              text: 'Endurance: ' + playerStore.currentStats.endurance + '/' + playerStore.stats.endurance + '\n'
-                  + 'Composure: ' + playerStore.currentStats.composure + '/' + playerStore.stats.composure + '\n'
-                  + 'Void points: ' + playerStore.currentStats.voidPoints + '/' + this.$store.state.player.rings.filter((val: Ring) => val.name === 'Void').shift().value + '\n\n',
-            },
-          ],
-          icon_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
-          username: 'Kami Bayushi',
-        }),
       });
     },
   },

@@ -18,6 +18,7 @@ export function getStore(): LocalStore {
     const appStore: AppStore = {
         colorVariant: true,
         textVariant: 'white',
+        kami: 'bayushi',
 
         player: undefined,
         server: typeof server.host !== 'undefined' && server.currentVersion === currentVersion ? server : {

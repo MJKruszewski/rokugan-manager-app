@@ -3,23 +3,32 @@ import {Ring} from '@/domain/types/ring.type';
 import {Skill} from '@/domain/types/skill.type';
 
 export function getWhiteImage(val: number): string {
+    return 'whiteet.png';
     switch (val) {
         case 1:
             return 'white.png';
         case 2:
-            return 'whitee.png';
+            return 'white.png';
         case 3:
-            return 'whiteet.png';
+            return 'whiteo.png';
         case 4:
             return 'whiteo.png';
         case 5:
-            return 'whites.png';
+            return 'whiteo.png';
         case 6:
-            return 'whiteso.png';
+            return 'whitest.png';
         case 7:
             return 'whitest.png';
         case 8:
-            return 'whiteeo.png';
+            return 'whites.png';
+        case 9:
+            return 'whites.png';
+        case 10:
+            return 'whiteso.png';
+        case 11:
+            return 'whiteet.png';
+        case 12:
+            return 'whitee.png';
     } 
 
     return '';
@@ -36,15 +45,15 @@ export function getBlackImage(val: number): string {
         case 1:
             return 'black.png';
         case 2:
-            return 'blacket.png';
+            return 'blackot.png';
         case 3:
             return 'blacko.png';
         case 4:
-            return 'blackot.png';
+            return 'blackst.png';
         case 5:
             return 'blacks.png';
         case 6:
-            return 'blackst.png';
+            return 'blacket.png';
     }
 
     return '';
@@ -98,6 +107,76 @@ export function getClanColor(clan: string): string {
     }
 
     return '#696969';
+}
+
+export function getClanKami(clan?: string): string {
+    switch (clan) {
+        case 'Lion':
+            return 'Akodo';
+        case 'Crane':
+            return 'Doji';
+        case 'Scorpion':
+            return 'Bayushi';
+        case 'Unicorn':
+            return 'Bayushi';
+        case 'Dragon':
+            return 'Bayushi';
+        case 'Phoenix':
+            return 'Shiba';
+        case 'Crab':
+            return 'Hida';
+        case 'Badger':
+            return 'Hida';
+        case 'Falcon':
+            return 'Yotogi';
+    }
+
+    return 'Bayushi';
+}
+
+export function HEXToVBColor(hex: string) {
+    const result = /^#?([a-f\d]{2}[a-f\d]{2}[a-f\d]{2})$/i.exec(hex);
+    return result ? parseInt(result[1], 16) : null;
+}
+
+export function getKami(kami?: string, isIcon?: boolean): { username: string, avatar_url?: string, icon_url?: string } {
+    let username = 'Kami Bayushi';
+    let url = 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png';
+
+    switch (kami) {
+        case 'Fu Leng':
+            username = 'Kami Fu Leng';
+            url = 'https://static.wikia.nocookie.net/l5r/images/3/33/Fu_Leng.jpg/revision/latest/scale-to-width-down/200?cb=20080229115412';
+            break;
+        case 'Shiba':
+            username = 'Kami Shiba';
+            url = 'http://www.shibapedigree.com/pics/medium/2262/med_593e39dd1c3c3.jpg';
+            break;
+        case 'Akodo':
+            username = 'Kami Akodo';
+            url = 'https://m.media-amazon.com/images/I/81a+Xx8J3qL._AC_SX522_.jpg';
+            break;
+        case 'Hida':
+            username = 'Kami Hida';
+            url = 'https://static.wikia.nocookie.net/onepiece/images/9/96/Hasami_Anime_Infobox.png/revision/latest/scale-to-width-down/350?cb=20190124190340&path-prefix=pl';
+            break;
+        case 'Doji':
+            username = 'Kami Doji';
+            url = 'http://4.bp.blogspot.com/-38ui6OEXrjs/TiLjMaMkBZI/AAAAAAAAA8k/_oJ_NMaGBSg/s1600/konata+lucky+star2.jpg';
+            break;
+        case 'Yotogi':
+            username = 'Fortuna Yotogi';
+            url = 'http://l5r.sunflux.pl/jaszczomp.jpg';
+            break;
+    }
+
+    return !isIcon ? {
+        username: username,
+        avatar_url: url,
+    } : {
+        username: username,
+        icon_url: url,
+    };
 }
 
 export function getStanceTooltip(stance: string): string {
@@ -158,8 +237,8 @@ export function getRings(): Ring[] {
     return [
         {'name': 'Air', 'value': 1},
         {'name': 'Earth', 'value': 1},
-        {'name': 'Fire',  'value': 1},
-        {'name': 'Water',  'value': 1},
+        {'name': 'Fire', 'value': 1},
+        {'name': 'Water', 'value': 1},
         {'name': 'Void', 'value': 1},
     ];
 }

@@ -618,7 +618,7 @@
 import Vue from 'vue';
 import OpenBookComponent from '@/components/OpenBookComponent.vue';
 import {Bond, CurrentStatistics, Npc, Player} from '@/domain/types/player.type';
-import {getHook, getRingDescription, getStanceTooltip} from '@/domain/common';
+import {getHook, getKami, getRingDescription, getStanceTooltip} from '@/domain/common';
 import demeanorTemplates from '@/assets/data/json/demeanor.json';
 import MakeRollComponent from '@/components/roll-page/MakeRollComponent.vue';
 import AddNpc from '@/components/gm-panel/AddNpc.vue';
@@ -658,8 +658,7 @@ export default Vue.extend({
               text: 'Bends under pressure! (Unmasking)',
             },
           ],
-          icon_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
-          username: 'Kami Bayushi',
+          ...getKami(this.$store?.state?.kami, true),
         }),
       });
     },

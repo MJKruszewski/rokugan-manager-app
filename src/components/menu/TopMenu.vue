@@ -9,7 +9,6 @@
         style="display: none"
     >
     <v-img :src="this.getClanImage()" max-width="35px"></v-img>
-
 <!--    <v-menu offset-y>-->
 <!--      <template v-slot:activator="{ on, attrs }">-->
 <!--        <v-btn icon v-bind="attrs" v-on="on">-->
@@ -79,7 +78,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {getClanColor, getClanMon, getHook, sendNotifications} from '@/domain/common';
+import {getClanColor, getClanKami, getClanMon, getHook, sendNotifications} from '@/domain/common';
 import {LoadCardService} from '@/domain/services/load-card.service';
 
 export default Vue.extend({
@@ -100,8 +99,8 @@ export default Vue.extend({
       }
 
       const xml = new DOMParser().parseFromString(await val.text(), 'application/xml');
+      this.$store.state.kami = getClanKami(xml.getElementsByTagName('Clan')[0].getAttribute('value') || '');
       this.$store.state.player = await LoadCardService.importCard(xml, sendNotifications());
-
     },
   },
   methods: {

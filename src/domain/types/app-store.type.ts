@@ -30,6 +30,7 @@ export type GmData = {
 export interface AppStore {
     colorVariant: boolean;
     textVariant: string;
+    kami: string;
 
     server: Server;
 

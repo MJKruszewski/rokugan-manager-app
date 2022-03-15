@@ -8,7 +8,7 @@
       :dark="this.$store.state.colorVariant"
   >
     <v-list v-if="this.$store.state.player !== undefined">
-      <v-list-item class="px-2">
+      <v-list-item class="px-2" v-if="this.$store.state.player.portraitImage !== undefined && this.$store.state.player.portraitImage.length > 0">
         <v-img style="border-radius: 5px" :src="playerAvatar"/>
       </v-list-item>
 
@@ -115,7 +115,7 @@ export default Vue.extend({
   },
   computed: {
     playerAvatar() {
-      if (this.$store.state.player === undefined) {
+      if (this.$store.state.player === undefined || this.$store.state.player.portraitImage === undefined || this.$store.state.player.portraitImage.length <= 0) {
         return '';
       }
 

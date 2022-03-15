@@ -13,6 +13,13 @@
             <v-divider/>
 
             <v-card-text>
+              <v-select
+                  label="Kami"
+                  v-model="$store.state.kami"
+                  :items="['Bayushi', 'Doji', 'Fu Leng', 'Shiba', 'Hida', 'Akodo', 'Yotogi']"
+                  required
+                  style="max-width: 150px"
+              ></v-select>
               <v-file-input
                 label="Core Rules Book:"
                 placeholder="Select your file"

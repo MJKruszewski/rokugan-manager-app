@@ -10,7 +10,7 @@
     </v-card-title>
     <v-divider/>
 
-    <v-card-text v-if="isPlayerPresent">
+    <v-card-text v-if="isPlayerPresent()">
       <v-row v-if="npc">
         <v-col :sm="12" :md="6" >
           <v-select
@@ -91,7 +91,7 @@
               id="void"
               label="Use void points:"
               min="0"
-              :max="localPlayer.currentStats.voidPoints"
+              :max="localPlayer !== undefined ? localPlayer.currentStats.voidPoints : 0"
               :disabled="this.$store.state.mainRoll.isDuringRoll"
               v-model="$store.state.mainRoll.voidPoints"
               type="number"
@@ -218,7 +218,15 @@
   </v-card>
 </template>
 <script lang="ts">
-import {getBlackImage, getClanColor, getExplosions, getHook, getWhiteImage, sendNotifications} from '@/domain/common';
+import {
+  getBlackImage,
+  getClanColor,
+  getExplosions,
+  getHook,
+  getKami,
+  getWhiteImage,
+  sendNotifications,
+} from '@/domain/common';
 // noinspection TypeScriptCheckImport
 //@ts-ignore
 import mergeImages from 'merge-images-horizontally-with-text/dist/index.es2015';
@@ -376,7 +384,7 @@ export default Vue.extend({
       this.$store.state.mainRoll.isDuringRoll = true;
       this.cleanState();
 
-      const randomWhiteFunction = await randomInt(1, 8);
+      const randomWhiteFunction = await randomInt(1, 12);
       const randomBlackFunction = await randomInt(1, 6);
 
       for (let i = 0; i < this.$store.state.mainRoll.selectedSkillValue; i++) {
@@ -445,8 +453,7 @@ export default Vue.extend({
       let imageBlob = await (await fetch(b64)).blob();
 
       formData.append('payload_json', JSON.stringify({
-        username: 'Kami Bayushi',
-        avatar_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
+        ...getKami(this.$store?.state?.kami),
         embeds: [
           {
             content: 'perkele',
@@ -518,7 +525,7 @@ export default Vue.extend({
         case 'whitee.png':
         case 'whiteeo.png':
         case 'whiteet.png':
-          rand = await randomInt(1, 8)();
+          rand = await randomInt(1, 12)();
           id = this.uuid.v4();
 
           this.$store.state.mainRoll.wExplodedDices.push({
@@ -547,7 +554,7 @@ export default Vue.extend({
     },
     finishReroll: function (selected: string | null) {
       this.$store.state.mainRoll.wDices.filter((dice: Dice) => this.$store.state.mainRoll.selectedToRerollIds.includes(dice.id)).forEach(async (dice: Dice) => {
-        let result = await randomInt(1, 8)();
+        let result = await randomInt(1, 12)();
 
         dice.img = getWhiteImage(result);
       });
@@ -576,8 +583,7 @@ export default Vue.extend({
                 text: 'Bushi makes a reroll of his/her ' + this.$store.state.mainRoll.selectedToRerollIds.length + ' dices due to: ' + selected,
               },
             ],
-            icon_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
-            username: 'Kami Bayushi',
+            ...getKami(this.$store?.state?.kami, true),
           }),
         });
       }
@@ -661,7 +667,14 @@ export default Vue.extend({
       }
 
       if (this.$store.state.mainRoll.isExplosionStarted) {
-        return;
+        const merged = [
+          ...this.$store.state.mainRoll.wExplodedDices,
+          ...this.$store.state.mainRoll.bExplodedDices,
+        ].map(item => item.id);
+
+        if (!merged.includes(val.id) || this.$store.state.mainRoll.explodedHelper.includes(val.id)) {
+          return;
+        }
       }
 
       if (this.$store.state.mainRoll.selectedIds.includes(val.id)) {
@@ -673,7 +686,11 @@ export default Vue.extend({
 
       const modifier = this.$store.state.mainRoll.selectedIds.filter((id: string) => this.$store.state.mainRoll.voidDicesHelper.includes(id));
 
-      if (this.$store.state.mainRoll.selectedIds.length - modifier.length >= this.$store.state.mainRoll.selectedRingValue && !this.$store.state.mainRoll.voidDicesHelper.includes(val.id)) {
+      if (
+          !this.$store.state.mainRoll.isExplosionStarted
+          && this.$store.state.mainRoll.selectedIds.length - modifier.length >= this.$store.state.mainRoll.selectedRingValue
+          && !this.$store.state.mainRoll.voidDicesHelper.includes(val.id)
+      ) {
         return;
       }
 
@@ -736,8 +753,7 @@ export default Vue.extend({
       }
 
       formData.append('payload_json', JSON.stringify({
-        username: 'Kami Bayushi',
-        avatar_url: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Scorpion_and_the_frog_kurzon.png',
+        ...getKami(this.$store?.state?.kami),
         embeds: [
           {
             content: 'perkele',
