@@ -18,9 +18,10 @@ name: 'OpenBookComponent',
     openBook(book: Book, page: number) {
       const adjusted = parseInt(page.toString()) + 1;
       console.log('open: ', this.$store.state.server.bookFiles[book] + '#page=' + adjusted);
-      window.open(this.$store.state.server.bookFiles[book] + '#page=' + adjusted, 'modal', 'width=1000,height=800,nodeIntegration=no');
+
+      window.open(this.$store.state.server.bookFiles[book] + '#page=' + adjusted, 'modal', 'webSecurity=no,width=1000,height=800,plugins=true,nodeIntegration=no');
+      },
     },
-  },
 });
 </script>
 

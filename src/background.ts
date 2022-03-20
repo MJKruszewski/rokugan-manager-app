@@ -1,11 +1,12 @@
 'use strict';
 
-import { app, protocol, BrowserWindow, globalShortcut  } from 'electron';
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
-const isDevelopment = process.env.NODE_ENV !== 'production';
-import { autoUpdater } from 'electron-updater';
+import {app, BrowserWindow, globalShortcut, protocol} from 'electron';
+import {createProtocol} from 'vue-cli-plugin-electron-builder/lib';
+import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
+import {autoUpdater} from 'electron-updater';
 import unhandled from 'electron-unhandled';
+
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -21,6 +22,7 @@ async function createWindow() {
     minHeight: 600,
     webPreferences: {
       plugins: true,
+      allowRunningInsecureContent: true,
       webSecurity: false,
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -65,7 +67,6 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
